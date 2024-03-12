@@ -1,92 +1,82 @@
-# Turismo Rural - Frontend
+# Configurando o ambiente de desenvolvimento
 
+## 1. Android Studio
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+- Download do **Android Studio** em [https://developer.android.com/studio](https://developer.android.com/studio).
+- Durante a instalação, certifique-se de selecionar os seguintes componentes:
 ```
-cd existing_repo
-git remote add origin https://tools.ages.pucrs.br/o-turismo-rural-em-s-o-francisco-de-paula/turismo-rural-frontend.git
-git branch -M main
-git push -uf origin main
+   Android SDK Platform
+   Android SDK Command-line Tools
+   Android SDK Build-Tools
+   Android SDK Platform-Tools
+   Android Emulator
+```
+## 2. SDK do Flutter
+- Download do SDK do Flutter em [Flutter SDK archive](https://docs.flutter.dev/release/archive?tab=windows).
+- Extraia o arquivo para um local qualquer (e.g., `C:\Flutter`).
+- Adicione nas variáveis de ambiente do sistema.
+    - Abra as variáveis de sistema no menu iniciar (i.e., digitando 'var' e enter).
+    - Selecione a variável **Path** em usuários ou sistema, e aperte editar.
+    - Adicione o dirétorio do SDK do Flutter concatenando com **\bin** (e.g. `C:\Flutter\bin`).
+- Execute `flutter doctor` no terminal para verificar a instalação.
+
+## 3. Escolha um editor
+
+### VS Code (Recomendado)
+
+- Download do VS Code em [https://code.visualstudio.com/](https://code.visualstudio.com/).
+- Instale as extensões do Flutter e do Dart no menu à esquerda.
+- Use a opção `Dart: Use Recommended Settings` acessando `CTRL + SHIFT + P`.
+
+### Android Studio
+
+- Pode ser mais conveniente já que a IDE é integrada com o emulador android.
+
+## 4. Configurações Finais
+
+- Execute `flutter pub get` para baixar as dependências necessárias.
+- Execute `dart run husky install` para inicializar o husky (nossa ferramenta que gerencia git hooks).
+- Crie um arquivo `.env` na raiz do projeto para as variáveis de ambiente. Se foi criada corretamente, deve estar sendo ignorado pelo git.
+- (Recomendado) Instale o plugin do GitHub Copilot no editor ou IDE escolhida. Alunos da PUCRS têm acesso gratuito a partir do [GitHub Education](https://education.github.com/).
+
+# Executando o projeto
+
+### VS Code
+
+Pode executar o projeto utilizando dispositivo físico ou emulador. Lembre-se que é importante que o aplicativo esteja responsivo e funcional em telas de diversos tamanhos.
+- **Smartphone Android:** Desbloqueie o modo desenvolvedor conforme [aqui](https://developer.android.com/studio/debug/dev-options) e habilite USB debugging/depuração USB.
+- **Emulador:**
+  - Abra o Android Studio.
+  - Acesse Virtual Device Manager.
+  - Crie um dispositivo virtual (recomendado: **Pixel 7** e **VanillaIceCream**).
+  - Inicie o emulador.
+- Escolha o dispositivo de execução no menu inferior direito (OBS: Utilizar navegador como dispositivo é apenas para deploy web e não nos serve.).
+- Execute o projeto com `flutter run --dart-define-from-file=.env` ou apertando F5.
+
+# Padrões de desenvolvimento
+
+## Conventional Commits
+Estamos utilizando o padrão [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) baseado em [@commitlint/config-conventional](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines). 
+- Os commits devem seguir `<tipo>(<escopo>): <mensagem>`;
+- Escopo é a abreviação da user story com hífen e dois dígitos (e.g., us-01); 
+- Mensagens de commit não podem ultrapassar 72 caracteres e devem ser escritas no imperativo; 
+- Tipo é conforme abaixo:
+```
+build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+docs: Documentation only changes
+feat: A new feature
+fix: A bug fix
+perf: A code change that improves performance
+refactor: A code change that neither fixes a bug nor adds a feature
+style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+test: Adding missing tests or correcting existing tests
 ```
 
-## Integrate with your tools
+## Merge Requests
 
-- [ ] [Set up project integrations](https://tools.ages.pucrs.br/o-turismo-rural-em-s-o-francisco-de-paula/turismo-rural-frontend/-/settings/integrations)
+O título do merge request deve seguir o mesmo formato acima. Os MRs precisam passar todos os jobs no pipeline e, após isso, podem ser mergeados por um AGES III. É obrigatório submeter o MR no formato definido pelo template.
 
-## Collaborate with your team
+## Branches
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+As branches para desenvolvimento devem ser feitas a partir da `develop`. Os nomes de branch devem seguir `<tipo>/<escopo>/<descrição>`, onde a descrição **deve ser breve** e com hífen no lugar dos espaços. Tipo e escopo são definidos conforme dito anteriormente.
