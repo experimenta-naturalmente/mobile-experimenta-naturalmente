@@ -31,6 +31,7 @@ if (project.hasProperty('dart-defines')) {
             [(pair.first()): pair.last()]
         }
 }
+String googleMapsApiKey = dartEnvironmentVariables.containsKey('GOOGLE_MAPS_API_KEY') ? dartEnvironmentVariables.GOOGLE_MAPS_API_KEY : ''
 
 android {
     namespace "com.example.turismo_rural_frontend"
@@ -58,8 +59,8 @@ android {
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        manifestPlaceholders.googleMapsApiKey = dartEnvironmentVariables.GOOGLE_MAPS_API_KEY
+        versionName flutterVersionName        
+        manifestPlaceholders.googleMapsApiKey = googleMapsApiKey
     }
 
     buildTypes {
