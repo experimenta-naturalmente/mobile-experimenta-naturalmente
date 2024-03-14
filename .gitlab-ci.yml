@@ -1,11 +1,65 @@
-code_quality:
-  stage: test
-  image: "cirrusci/flutter:1.22.5"
-  before_script:
-    - pub global activate dart_code_metrics
+image: "ghcr.io/cirruslabs/flutter:stable"
+
+stages:
+  - validate_commit
+  - analyze_and_test
+  - preview
+
+cache:
+  key: "${CI_COMMIT_REF_SLUG}"
+  paths:
+    - .pub-cache/global_packages
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+before_script:
+  - flutter pub get
+
+validate_commit_message:
+  stage: validate_commit
   script:
-    - metrics lib -r codeclimate  > gl-code-quality-report.json
+    - mkdir -p .git
+    - echo $CI_COMMIT_MESSAGE > .git/COMMIT_EDITMSG
+    - dart run .husky/validate_commit.dart
   artifacts:
+    when: on_failure
+    paths:
+      - .git/COMMIT_EDITMSG
+  only:
+    - branches
+
+code_quality:
+  stage: analyze_and_test
+  before_script:
+    - export PATH="$PATH":"$HOME/.pub-cache/bin"
+    - flutter pub global activate dart_code_metrics  
+  script:
+    - metrics lib -r codeclimate > gl-code-quality-report.json
+  artifacts:
+    when: always
     reports:
       codequality: gl-code-quality-report.json
+
+analyze:
+  stage: analyze_and_test
+  before_script:
+    - touch .env
+  script:
+    - flutter analyze --fatal-infos --fatal-warnings
+
+test:
+  stage: analyze_and_test
+  before_script:
+    - export PATH="$PATH":"$HOME/.pub-cache/bin"
+    - flutter pub global activate junitreport
+    - touch .env
+  script:    
+    - flutter test --machine --coverage | tojunit -o report.xml
+    - lcov --summary coverage/lcov.info
+    - genhtml coverage/lcov.info --output=coverage
+  coverage: '/lines\.*: \d+\.\d+\%/'
+  artifacts:
+    name: "${CI_COMMIT_REF_NAME}_coverage"
+    paths:
+      - coverage/
+    reports:
+      junit: report.xml

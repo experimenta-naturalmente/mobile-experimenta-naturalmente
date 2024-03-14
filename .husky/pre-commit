@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+printf "\nRunning pre-commit hook...\n\n"
+
 dart format .
 dart analyze --fatal-infos --fatal-warnings .
+echo "Running tests..."
+flutter test
+
+printf "Pre-commit hook finished!\n\n"
