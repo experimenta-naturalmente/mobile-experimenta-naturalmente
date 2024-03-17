@@ -1,9 +1,7 @@
-image: "ghcr.io/cirruslabs/flutter:stable"
-
 stages:
-  - validate_commit
   - analyze_and_test
   - preview
+  - deploy
 
 cache:
   key: "${CI_COMMIT_REF_SLUG}"
@@ -11,23 +9,8 @@ cache:
     - .pub-cache/global_packages
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-before_script:
-  - flutter pub get
-
-validate_commit_message:
-  stage: validate_commit
-  script:
-    - mkdir -p .git
-    - echo $CI_COMMIT_MESSAGE > .git/COMMIT_EDITMSG
-    - dart run .husky/validate_commit.dart
-  artifacts:
-    when: on_failure
-    paths:
-      - .git/COMMIT_EDITMSG
-  only:
-    - branches
-
 code_quality:
+  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -38,15 +21,21 @@ code_quality:
     when: always
     reports:
       codequality: gl-code-quality-report.json
+  only:
+    - merge_requests
 
 analyze:
+  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - touch .env
   script:
     - flutter analyze --fatal-infos --fatal-warnings
+  only:
+    - merge_requests
 
 test:
+  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -63,3 +52,55 @@ test:
       - coverage/
     reports:
       junit: report.xml
+
+deploy-preview:
+  stage: preview
+  image: node:latest
+  script:
+    - npm install --global vercel
+    - touch .env
+    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+    - vercel build --token=$VERCEL_TOKEN
+    - vercel deploy --prebuilt  --token=$VERCEL_TOKEN > deployment-url.txt
+  after_script:
+    - echo "[Commenting on Merge Request]"
+    - DEPLOYMENT_URL_CONTENT=$(cat deployment-url.txt)
+    - |
+      NEW_LINE=$'\n'
+      JOB_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID"
+      if [ "$CI_JOB_STATUS" == "success" ]; then
+       BOT_MESSAGE="### :heavy_check_mark: Seu deploy de preview está disponível para visualização, $CI_COMMIT_AUTHOR !${NEW_LINE}Acesse pela URL: $DEPLOYMENT_URL_CONTENT"
+      else
+       BOT_MESSAGE="### :x: Que vergonha ! O deploy de preview falhou, $CI_COMMIT_AUTHOR !${NEW_LINE} Veja os [logs do job]($JOB_URL) e descubra o que aconteceu."
+      fi
+      curl -X POST \
+        -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+        --form "body=$BOT_MESSAGE" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+    - rm deployment-url.txt
+  only:
+    - merge_requests
+
+deploy_dev:
+  image: "ghcr.io/cirruslabs/flutter:stable"
+  stage: deploy
+  script:
+    - echo "🔝🔝 Deploying to DEV environment... 🚀"
+    - flutter build web
+  environment:
+    name: dev
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: always
+
+deploy_prod:
+  image: "ghcr.io/cirruslabs/flutter:stable"
+  stage: deploy
+  script:
+    - echo "🔝🔝 Deploying to PROD environment... 🚀"
+    - flutter build web --release
+  environment:
+    name: prod
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always

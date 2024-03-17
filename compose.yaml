@@ -30,22 +30,28 @@ services:
       - ./gitlab-runner/config:/etc/gitlab-runner
 
   # PROD Frontend
-  #todo
   prod-frontend:
-    image: alpine:latest
+    image: nginx:alpine
     ports:
       - "80:80"
+    volumes:
+      - ./build/web:/usr/share/nginx/html:ro
     environment:
       - ENV=PROD
+    depends_on:
+      - gitlab-runner
 
   # DEV Frontend
-  #todo
   dev-frontend:
-    image: alpine:latest
+    image: nginx:alpine
     ports:
-      - "8082:80"
+      - "9000:80"
+    volumes:
+      - ./build/web:/usr/share/nginx/html:ro
     environment:
       - ENV=DEV
+    depends_on:
+      - gitlab-runner
 
   # MR Preview
   #todo
