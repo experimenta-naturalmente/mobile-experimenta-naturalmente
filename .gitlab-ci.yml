@@ -1,3 +1,5 @@
+image: "ghcr.io/cirruslabs/flutter:stable"
+
 stages:
   - analyze_and_test
   - preview
@@ -10,7 +12,6 @@ cache:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 code_quality:
-  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -25,7 +26,6 @@ code_quality:
     - merge_requests
 
 analyze:
-  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - touch .env
@@ -35,7 +35,6 @@ analyze:
     - merge_requests
 
 test:
-  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -55,7 +54,7 @@ test:
 
 deploy-preview:
   stage: preview
-  image: node:latest
+  image: node:bookworm
   script:
     - npm install --global vercel
     - touch .env
@@ -63,15 +62,15 @@ deploy-preview:
     - vercel build --token=$VERCEL_TOKEN
     - vercel deploy --prebuilt  --token=$VERCEL_TOKEN > deployment-url.txt
   after_script:
-    - echo "[Commenting on Merge Request]"
+    - echo "🔝🔝 Deploying to Vercel... 🚀"
     - DEPLOYMENT_URL_CONTENT=$(cat deployment-url.txt)
     - |
       NEW_LINE=$'\n'
       JOB_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID"
       if [ "$CI_JOB_STATUS" == "success" ]; then
-       BOT_MESSAGE="### :heavy_check_mark: Seu deploy de preview está disponível para visualização, $CI_COMMIT_AUTHOR !${NEW_LINE}Acesse pela URL: $DEPLOYMENT_URL_CONTENT"
+       BOT_MESSAGE="### ✔️ 🔥🔥 DEPLOY DE PREVIEW PRONTO !! 🔥🔥 ✔️${NEW_LINE}🚀🚀🚀 URL: $DEPLOYMENT_URL_CONTENT 👻👻"
       else
-       BOT_MESSAGE="### :x: Que vergonha ! O deploy de preview falhou, $CI_COMMIT_AUTHOR !${NEW_LINE} Veja os [logs do job]($JOB_URL) e descubra o que aconteceu."
+       BOT_MESSAGE="### ✖️ Oh no.. 😵 O deploy de preview falhou 😵 ✖️${NEW_LINE} Veja os [logs do job]($JOB_URL) e descubra o que aconteceu."
       fi
       curl -X POST \
         -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
@@ -82,10 +81,10 @@ deploy-preview:
     - merge_requests
 
 deploy_dev:
-  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: deploy
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
+    - touch .env
     - flutter build web
   environment:
     name: dev
@@ -94,10 +93,10 @@ deploy_dev:
       when: always
 
 deploy_prod:
-  image: "ghcr.io/cirruslabs/flutter:stable"
   stage: deploy
   script:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
+    - touch .env
     - flutter build web --release
   environment:
     name: prod

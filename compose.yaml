@@ -52,12 +52,3 @@ services:
       - ENV=DEV
     depends_on:
       - gitlab-runner
-
-  # MR Preview
-  #todo
-  mr-preview:
-    image: alpine:latest
-    ports:
-      - "8083:8080"
-    environment:
-      - ENV=DEV
