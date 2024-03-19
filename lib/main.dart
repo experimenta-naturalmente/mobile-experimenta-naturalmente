@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/home.dart';
 
 import 'core/maps/data/google_maps_api.dart';
-import 'core/maps/domain/i_maps_service.dart';
+import 'core/maps/maps.dart';
 
 void main() {
   runApp(const MainApp());

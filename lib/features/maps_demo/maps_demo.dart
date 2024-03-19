@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:turismo_rural_frontend/core/maps/domain/entities/marker.dart';
-import 'package:turismo_rural_frontend/core/maps/domain/i_maps_service.dart';
+import 'package:turismo_rural_frontend/core/maps/domain/marker.dart';
+import 'package:turismo_rural_frontend/core/maps/maps.dart';
 
 class MapsDemo extends StatelessWidget {
   const MapsDemo({super.key});

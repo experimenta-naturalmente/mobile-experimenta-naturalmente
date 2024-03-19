@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../domain/i_maps_service.dart';
-import '/core/maps/domain/entities/marker.dart' as m;
+import '../maps.dart';
+import '/core/maps/domain/marker.dart' as m;
 
 class GoogleMapsService implements IMapsService {
   Marker _createMarker(m.Marker marker) {

@@ -79,6 +79,7 @@ deploy-preview:
     - rm deployment-url.txt
   only:
     - merge_requests
+  allow_failure: true
 
 deploy_dev:
   stage: deploy
