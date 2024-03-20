@@ -10,7 +10,7 @@ class MapsDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     final IMapsService mapService =
         Provider.of<IMapsService>(context, listen: false);
-    Set<Marker> markers = <Marker>{
+    final Set<Marker> markers = <Marker>{
       Marker(
         id: 'ChIJmSj5GY_bGJURAEMs_vnDqi8',
         lat: -29.4513165,

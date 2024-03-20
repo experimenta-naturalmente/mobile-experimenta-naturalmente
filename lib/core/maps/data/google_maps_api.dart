@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../maps.dart';
-import '/core/maps/domain/marker.dart' as m;
+import 'package:turismo_rural_frontend/core/maps/domain/marker.dart' as m;
+import 'package:turismo_rural_frontend/core/maps/maps.dart';
 
 class GoogleMapsService implements IMapsService {
   Marker _createMarker(m.Marker marker) {
