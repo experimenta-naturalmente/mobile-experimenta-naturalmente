@@ -6,6 +6,10 @@ dynamic main() {
   final commitMessage = commitFile.readAsStringSync().trimRight();
   print('Message -> $commitMessage');
 
+  if (commitMessage.startsWith('Merge')) {
+    exit(0);
+  }
+
   final RegExp regExp = RegExp(
       r'^(feat|fix|test|docs|style|refactor|perf|build|ci)\((no-ref|us-\d{2})\): .*$');
 
