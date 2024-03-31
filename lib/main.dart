@@ -4,17 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
-import 'package:turismo_rural_frontend/features/attractions/data/interfaces/i_attraction_repository.dart';
-import 'package:turismo_rural_frontend/features/attractions/data/repositories/attraction_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/bloc/experiences_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+  final AppTheme _appThemes = AppTheme();
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +25,21 @@ class MainApp extends StatelessWidget {
         Provider<IMapsService>(
           create: (context) => GoogleMapsService(),
         ),
-        Provider<IAttractionRepository>(
-          create: (context) => AttractionRepository(),
+        Provider<IExperienceRepository>(
+          create: (context) => ExperienceRepository(),
         ),
       ],
       child: BlocProvider(
-        create: (context) => ExperienceBloc(
-          attractionRepository: context.read<IAttractionRepository>(),
-        ),
+        create: (context) {
+          final experienceBloc = ExperienceBloc(
+            experienceRepository: context.read<IExperienceRepository>(),
+          );
+          experienceBloc.add(LoadExperienceCategories());
+          return experienceBloc;
+        },
         child: MaterialApp(
           title: 'São Chico Turismo',
-          theme: AppTheme.lightTheme,
+          theme: _appThemes.lightTheme,
           home: const MainScreen(),
         ),
       ),

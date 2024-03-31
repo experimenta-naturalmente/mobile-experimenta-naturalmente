@@ -1,3 +1,1 @@
-enum ExperienceType {
-  attraction,
-}
+enum ExperienceType { spot, event }

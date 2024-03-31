@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/home.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +20,6 @@ class _MainScreenState extends State<MainScreen> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -35,9 +35,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: const <Widget>[
         HomeScreen(title: "aaaaa"),
-        HomeScreen(title: "bbbbbb"),
-
-        /// Home page
+        ExperiencesScreen(),
       ][currentPageIndex],
     );
   }

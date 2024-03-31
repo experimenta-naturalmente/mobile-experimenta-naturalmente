@@ -6,52 +6,63 @@ class DoubleCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        SizedBox(
-          width: screenWidth,
-          height: screenHeight * 0.2,
-        ),
-        Expanded(
-          child: Stack(
-            children: [
-              SizedBox(
-                width: screenWidth,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SvgPicture.asset(
-                        'assets/backgrounds/circle2.svg',
-                        alignment: Alignment.bottomLeft,
-                        height: double.infinity,
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context).primaryColor.withOpacity(0.35),
-                          BlendMode.srcIn,
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: screenWidth,
+            height: screenHeight * 0.3,
+          ),
+          SizedBox(
+            height: screenHeight,
+            child: Stack(
+              children: [
+                OverflowBox(
+                  child: SizedBox(
+                    width: screenWidth,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SvgPicture.asset(
+                            'assets/backgrounds/circle2.svg',
+                            alignment: Alignment.bottomLeft,
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer
+                                  .withOpacity(0.8),
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: screenWidth * 0.2),
+                      ],
                     ),
-                    SizedBox(width: screenWidth * 0.4),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.55,
-                child: SvgPicture.asset(
-                  'assets/backgrounds/circle1.svg',
-                  alignment: Alignment.topRight,
-                  fit: BoxFit.fitHeight,
-                  height: double.infinity,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).primaryColor.withOpacity(0.2),
-                    BlendMode.srcIn,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: screenHeight * 0.5,
+                  child: SvgPicture.asset(
+                    'assets/backgrounds/circle1.svg',
+                    alignment: Alignment.topRight,
+                    fit: BoxFit.fitHeight,
+                    height: double.infinity,
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context)
+                          .colorScheme
+                          .secondaryContainer
+                          .withOpacity(0.4),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
