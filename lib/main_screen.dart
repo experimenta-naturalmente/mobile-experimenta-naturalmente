@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/home.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/signup_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -31,11 +32,16 @@ class _MainScreenState extends State<MainScreen> {
             icon: Badge(child: Icon(Icons.notifications_sharp)),
             label: 'Experience',
           ),
+          NavigationDestination(
+            icon: Badge(child: Icon(Icons.notifications_sharp)),
+            label: 'Signup',
+          ),
         ],
       ),
       body: const <Widget>[
         HomeScreen(title: "aaaaa"),
         ExperiencesScreen(),
+        SignUpCategoriesPage(),
       ][currentPageIndex],
     );
   }

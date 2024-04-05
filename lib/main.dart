@@ -8,6 +8,7 @@ import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
@@ -29,14 +30,25 @@ class MainApp extends StatelessWidget {
           create: (context) => ExperienceRepository(),
         ),
       ],
-      child: BlocProvider(
-        create: (context) {
-          final experienceBloc = ExperienceBloc(
-            experienceRepository: context.read<IExperienceRepository>(),
-          );
-          experienceBloc.add(LoadExperienceCategories());
-          return experienceBloc;
-        },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) {
+              final experienceBloc = ExperienceBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+              );
+              experienceBloc.add(LoadExperienceCategories());
+              return experienceBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final signUpBloc = SignUpBloc();
+
+              return signUpBloc;
+            },
+          ),
+        ],
         child: MaterialApp(
           title: 'São Chico Turismo',
           theme: _appThemes.lightTheme,
