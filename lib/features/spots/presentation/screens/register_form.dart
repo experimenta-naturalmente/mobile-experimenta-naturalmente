@@ -15,7 +15,6 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   String fontName = 'JosefinSans';
-
   final _formKey = GlobalKey<FormState>();
 
   // Mask
@@ -102,7 +101,6 @@ class _RegisterFormState extends State<RegisterForm> {
     if (value == null || value.isEmpty) {
       return 'CNPJ é necessário.';
     }
-
     return null;
   }
 

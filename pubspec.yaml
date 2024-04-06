@@ -13,6 +13,8 @@ dependencies:
   flutter_bloc: ^8.1.4
   flutter_svg: ^2.0.10+1
   google_maps_flutter: ^2.6.0
+  http: ^1.0.0
+  image_picker: ^1.0.7
   lorem_ipsum_generator: ^0.0.3
   mask_text_input_formatter: ^2.9.0
   nested: any
