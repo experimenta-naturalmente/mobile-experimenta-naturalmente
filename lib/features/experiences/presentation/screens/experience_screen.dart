@@ -14,9 +14,9 @@ import 'package:turismo_rural_frontend/features/experiences/presentation/widgets
 
 class ExperiencesScreen extends StatelessWidget {
   const ExperiencesScreen({super.key});
-
   // preferencialmente manter o tratamento de todos os estados direto no método de build,
   // evitar fazer tratamento de estado em outras widgets.
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExperienceBloc, ExperienceState>(
