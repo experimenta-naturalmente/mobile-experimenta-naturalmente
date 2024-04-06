@@ -14,8 +14,10 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_maps_flutter: ^2.6.0
   lorem_ipsum_generator: ^0.0.3
+  mask_text_input_formatter: ^2.9.0
   nested: any
   provider: ^6.1.2
+  validators: ^3.0.0
 
 dev_dependencies:
   bloc_test: ^9.1.7
