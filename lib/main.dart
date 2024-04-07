@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
@@ -65,6 +66,15 @@ class MainApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          locale: const Locale('pt', 'BR'),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('pt', 'BR'),
+          ],
           title: 'São Chico Turismo',
           theme: _appThemes.lightTheme,
           home: const MainScreen(),

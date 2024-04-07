@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.4
+  flutter_localizations:
+    sdk: flutter
   flutter_svg: ^2.0.10+1
   google_maps_flutter: ^2.6.0
   http: ^1.0.0
@@ -36,6 +38,7 @@ flutter:
   assets:
     - .env
     - assets/backgrounds/
+    - assets/images/
   fonts:
     - family: JosefinSans
       fonts:
