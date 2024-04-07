@@ -76,7 +76,7 @@ class ExperiencesScreen extends StatelessWidget {
   }
 
   Widget _buildExperienceListHeader(
-    List<ExperienceCategory> tabs,
+    Set<ExperienceCategory> tabs,
     ExperienceCategory selectedCategory,
     BuildContext context,
   ) {
@@ -91,21 +91,24 @@ class ExperiencesScreen extends StatelessWidget {
             hintText: 'O que você deseja buscar?',
           ),
           const SizedBox(height: 12),
-          ExperienceCategoryTabView(
-            tabs: tabs,
-            selectedCategory: selectedCategory,
-            onCategorySelected: (category) {
-              context.read<ExperienceBloc>().add(
-                    ExperienceCategoryChanged(category, tabs),
-                  );
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: ExperienceCategoryTabView(
+              tabs: tabs,
+              selectedCategory: selectedCategory,
+              onCategorySelected: (category) {
+                context.read<ExperienceBloc>().add(
+                      ExperienceCategoryChanged(category, tabs),
+                    );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildExperiencesList(List<ExperienceListItem> experiences) {
+  Widget _buildExperiencesList(Set<ExperienceListItem> experiences) {
     if (experiences.isEmpty) {
       return EmptyList();
     }
@@ -114,10 +117,10 @@ class ExperiencesScreen extends StatelessWidget {
       itemCount: experiences.length,
       itemBuilder: (BuildContext context, int index) {
         return ExperienceListItemWidget(
-          experience: experiences[index],
+          experience: experiences.elementAt(index),
           onTap: () => {
             context.read<ExperienceBloc>().add(
-                  ExperienceSelected(experiences[index]),
+                  ExperienceSelected(experiences.elementAt(index)),
                 ),
           },
         );

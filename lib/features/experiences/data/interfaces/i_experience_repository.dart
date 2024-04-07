@@ -2,9 +2,8 @@ import 'package:turismo_rural_frontend/features/experiences/data/model/experienc
 import 'package:turismo_rural_frontend/features/experiences/data/model/experience_list_item.dart';
 
 abstract class IExperienceRepository {
-  Future<List<ExperienceCategory>> fetchExperienceCategories();
-
-  Future<List<ExperienceListItem>> fetchExperiencesfromCategory(
+  Future<Set<ExperienceCategory>> fetchExperienceCategories();
+  Future<Set<ExperienceListItem>> fetchExperiencesfromCategory(
     ExperienceCategory category,
   );
 }

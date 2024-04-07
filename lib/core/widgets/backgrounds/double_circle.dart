@@ -31,8 +31,8 @@ class DoubleCircle extends StatelessWidget {
                             colorFilter: ColorFilter.mode(
                               Theme.of(context)
                                   .colorScheme
-                                  .secondaryContainer
-                                  .withOpacity(0.8),
+                                  .primaryContainer
+                                  .withOpacity(0.4),
                               BlendMode.srcIn,
                             ),
                           ),
@@ -52,8 +52,8 @@ class DoubleCircle extends StatelessWidget {
                     colorFilter: ColorFilter.mode(
                       Theme.of(context)
                           .colorScheme
-                          .secondaryContainer
-                          .withOpacity(0.4),
+                          .primaryContainer
+                          .withOpacity(0.25),
                       BlendMode.srcIn,
                     ),
                   ),

@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/model/tag.dart';
 import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_event.dart';
 import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_state.dart';
-import 'package:turismo_rural_frontend/features/spots/data/interfaces/i_tag_repository.dart';
-import 'package:turismo_rural_frontend/features/spots/data/model/tag.dart';
 
 class TagSelectionBloc extends Bloc<TagSelectionEvent, TagSelectionState> {
   final ITagRepository tagRepository;
 
   TagSelectionBloc({required this.tagRepository})
-      : super(const TagSelectionState(selectedTags: [], availableTags: {})) {
+      : super(const TagSelectionState(selectedTags: {}, availableTags: {})) {
     on<ToggleTag>(_onToggleTag);
     on<ToggleTagInitialization>(_onToggleTagInitialization);
   }
@@ -19,13 +19,12 @@ class TagSelectionBloc extends Bloc<TagSelectionEvent, TagSelectionState> {
     Emitter<TagSelectionState> emit,
   ) async {
     final toggledTag = event.tag;
-    final List<Tag> selectedTags = List.from(state.selectedTags);
-
-    if (selectedTags.contains(toggledTag)) {
-      selectedTags.remove(toggledTag);
-    } else {
-      selectedTags.add(toggledTag);
-    }
+    final selectedTags = Map<int, bool>.from(state.selectedTags);
+    selectedTags.update(
+      toggledTag.id,
+      (value) => !value,
+      ifAbsent: () => false,
+    );
 
     emit(state.copyWith(selectedTags: selectedTags));
   }
@@ -35,20 +34,22 @@ class TagSelectionBloc extends Bloc<TagSelectionEvent, TagSelectionState> {
     Emitter<TagSelectionState> emit,
   ) async {
     try {
-      final List<Tag> availableTags = await tagRepository.fetchAllTags();
+      final Set<Tag> availableTags = await tagRepository.fetchAllTags();
+      final Map<int, bool> selectedTags = {};
 
       // Agrupa as tags por categoria
-      final Map<ExperienceCategory, List<Tag>> groupedTags = {};
+      final Map<ExperienceCategory, Set<Tag>> groupedTags = {};
       for (final tag in availableTags) {
         if (!groupedTags.containsKey(tag.type)) {
-          groupedTags[tag.type] = [];
+          groupedTags[tag.type] = {};
         }
         groupedTags[tag.type]!.add(tag);
+        selectedTags[tag.id] = false;
       }
 
       emit(
         TagSelectionState(
-          selectedTags: const [],
+          selectedTags: selectedTags,
           availableTags: groupedTags,
         ),
       );

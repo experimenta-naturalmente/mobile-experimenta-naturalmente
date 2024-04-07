@@ -7,29 +7,31 @@ import 'package:turismo_rural_frontend/features/experiences/data/model/experienc
 
 class ExperienceRepository implements IExperienceRepository {
   @override
-  Future<List<ExperienceListItem>> fetchExperiencesfromCategory(
+  Future<Set<ExperienceListItem>> fetchExperiencesfromCategory(
     ExperienceCategory category,
   ) async {
     await Future.delayed(const Duration(milliseconds: 250));
     final rand = Random();
-    return List.generate(
-      10,
-      (index) => ExperienceListItem(
-        id: index,
-        name: LoremIpsumGenerator.generate(words: rand.nextInt(5) + 1),
-        description: LoremIpsumGenerator.generate(
-          paragraphs: rand.nextInt(2) + 1,
-          wordsPerParagraph: rand.nextInt(30) + 10,
+    return Set.from(
+      List.generate(
+        10,
+        (index) => ExperienceListItem(
+          id: index,
+          name: LoremIpsumGenerator.generate(words: rand.nextInt(5) + 1),
+          description: LoremIpsumGenerator.generate(
+            paragraphs: rand.nextInt(2) + 1,
+            wordsPerParagraph: rand.nextInt(30) + 10,
+          ),
+          imageUrl: 'https://picsum.photos/300/400?random=$index',
         ),
-        imageUrl: 'https://picsum.photos/300/400?random=$index',
       ),
     );
   }
 
   @override
-  Future<List<ExperienceCategory>> fetchExperienceCategories() async {
+  Future<Set<ExperienceCategory>> fetchExperienceCategories() async {
     await Future.delayed(const Duration(milliseconds: 250));
-    return <ExperienceCategory>[
+    return <ExperienceCategory>{
       const ExperienceCategory(
         id: 1,
         name: 'Hotéis',
@@ -46,6 +48,6 @@ class ExperienceRepository implements IExperienceRepository {
         id: 4,
         name: 'Eventos',
       ),
-    ];
+    };
   }
 }

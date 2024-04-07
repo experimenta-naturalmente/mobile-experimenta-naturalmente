@@ -64,9 +64,9 @@ void main() {
       'should display LoadingIndicator when experiences are loading, correct category is selected',
       (WidgetTester tester) async {
     setupMockBloc(
-      const ExperienceListLoading(
+      ExperienceListLoading(
         mockCategory2,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
     );
     await tester.pumpWidget(createTestableWidget(const ExperiencesScreen()));
@@ -84,9 +84,9 @@ void main() {
   testWidgets('should display ErrorHandler when state is ExperienceError',
       (WidgetTester tester) async {
     setupMockBloc(
-      const ExperienceListLoading(
+      ExperienceListLoading(
         mockCategory2,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
     );
     setupMockBloc(const ExperienceError('Test Error'));
@@ -98,10 +98,10 @@ void main() {
       'should display list of experiences when state is ExperienceListLoadSuccess',
       (WidgetTester tester) async {
     setupMockBloc(
-      const ExperienceListLoadSuccess(
-        [mockExperienceListItem],
+      ExperienceListLoadSuccess(
+        {mockExperienceListItem},
         mockCategory1,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
     );
     await mockNetworkImagesFor(

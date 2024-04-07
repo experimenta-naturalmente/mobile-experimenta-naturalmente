@@ -13,7 +13,7 @@ class LoadExperienceCategories extends ExperienceEvent {}
 
 class ExperienceCategoryChanged extends ExperienceEvent {
   final ExperienceCategory selectedCategory;
-  final List<ExperienceCategory> categories;
+  final Set<ExperienceCategory> categories;
 
   const ExperienceCategoryChanged(this.selectedCategory, this.categories);
 

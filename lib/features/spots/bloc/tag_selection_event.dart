@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:turismo_rural_frontend/features/spots/data/model/tag.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/model/tag.dart';
 
 abstract class TagSelectionEvent extends Equatable {
   const TagSelectionEvent();
@@ -15,7 +15,6 @@ class ToggleTagInitialization extends TagSelectionEvent {
 
 class ToggleTag extends TagSelectionEvent {
   final Tag tag;
-
   const ToggleTag(this.tag);
 
   @override

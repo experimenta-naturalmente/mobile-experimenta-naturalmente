@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 
-class SignUpCategoriesPage extends StatefulWidget {
-  const SignUpCategoriesPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignUpCategoriesPage> createState() => _CategoriesPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _CategoriesPageState extends State<SignUpCategoriesPage> {
+class _SignUpPageState extends State<SignUpPage> {
   String fontName = 'JosefinSans';
   Color startGradient = const Color.fromARGB(255, 83, 99, 60);
   Color finishGradient = const Color.fromARGB(255, 176, 209, 130);
@@ -55,7 +56,10 @@ class _CategoriesPageState extends State<SignUpCategoriesPage> {
                   Expanded(
                     child: _buildSignUpDropDownMenu(),
                   ),
-                  _buildNextButton(),
+                  SubmitButton(
+                    text: 'Avançar',
+                    onPressed: () => {},
+                  ),
                 ],
               ),
             ),
@@ -126,20 +130,6 @@ class _CategoriesPageState extends State<SignUpCategoriesPage> {
           width: 160,
         ),
       ],
-    );
-  }
-
-  Widget _buildNextButton() {
-    return SizedBox(
-      height: 60,
-      width: double.infinity,
-      child: FilledButton(
-        onPressed: () {},
-        child: const Text(
-          textScaler: TextScaler.linear(1.8),
-          'Avançar',
-        ),
-      ),
     );
   }
 }

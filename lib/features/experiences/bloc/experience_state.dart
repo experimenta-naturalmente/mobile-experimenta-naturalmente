@@ -24,15 +24,15 @@ class ExperienceError extends ExperienceState {
 
 class ExperienceListLoading extends ExperienceState {
   final ExperienceCategory selectedCategory;
-  final List<ExperienceCategory> categories;
+  final Set<ExperienceCategory> categories;
 
   const ExperienceListLoading(this.selectedCategory, this.categories);
 }
 
 class ExperienceListLoadSuccess extends ExperienceState {
-  final List<ExperienceListItem> experiences;
+  final Set<ExperienceListItem> experiences;
   final ExperienceCategory selectedCategory;
-  final List<ExperienceCategory> categories;
+  final Set<ExperienceCategory> categories;
 
   const ExperienceListLoadSuccess(
     this.experiences,

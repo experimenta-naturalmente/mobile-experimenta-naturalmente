@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/home.dart';
-import 'package:turismo_rural_frontend/features/signup/presentation/signup_screen.dart';
+import 'package:turismo_rural_frontend/features/spots/presentation/screens/signup_description.dart';
+import 'package:turismo_rural_frontend/features/spots/presentation/screens/signup_form.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,6 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -36,12 +38,17 @@ class _MainScreenState extends State<MainScreen> {
             icon: Badge(child: Icon(Icons.notifications_sharp)),
             label: 'Signup',
           ),
+          NavigationDestination(
+            icon: Badge(child: Icon(Icons.notifications_sharp)),
+            label: 'Signup',
+          ),
         ],
       ),
-      body: const <Widget>[
-        HomeScreen(title: "aaaaa"),
-        ExperiencesScreen(),
-        SignUpCategoriesPage(),
+      body: [
+        const HomeScreen(title: "aaaaa"),
+        const ExperiencesScreen(),
+        const SignUpDescription(),
+        const SignUpForm(),
       ][currentPageIndex],
     );
   }

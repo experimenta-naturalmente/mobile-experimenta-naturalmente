@@ -23,7 +23,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   ) async {
     emit(ExperienceCategoriesLoading());
     try {
-      final List<ExperienceCategory> categories =
+      final Set<ExperienceCategory> categories =
           await experienceRepository.fetchExperienceCategories();
       add(ExperienceCategoryChanged(categories.first, categories));
     } catch (e) {
@@ -37,9 +37,8 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   ) async {
     emit(ExperienceListLoading(event.selectedCategory, event.categories));
     try {
-      final List<ExperienceListItem> experienceItems =
-          await experienceRepository
-              .fetchExperiencesfromCategory(event.selectedCategory);
+      final Set<ExperienceListItem> experienceItems = await experienceRepository
+          .fetchExperiencesfromCategory(event.selectedCategory);
       emit(
         ExperienceListLoadSuccess(
           experienceItems,

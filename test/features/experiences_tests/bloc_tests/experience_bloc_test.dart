@@ -35,21 +35,21 @@ void main() {
     registerFallbackValue(const ExperienceCategory(id: 1, name: 'Category 1'));
 
     when(() => mockExperienceRepository.fetchExperienceCategories()).thenAnswer(
-      (_) async => [mockCategory1, mockCategory2],
+      (_) async => {mockCategory1, mockCategory2},
     );
 
     when(
       () =>
           mockExperienceRepository.fetchExperiencesfromCategory(mockCategory1),
     ).thenAnswer(
-      (_) async => [mockExperienceListItem],
+      (_) async => {mockExperienceListItem},
     );
 
     when(
       () =>
           mockExperienceRepository.fetchExperiencesfromCategory(mockCategory2),
     ).thenAnswer(
-      (_) async => [mockExperienceListItem2],
+      (_) async => {mockExperienceListItem2},
     );
   });
 
@@ -64,14 +64,14 @@ void main() {
     act: (bloc) => bloc.add(LoadExperienceCategories()),
     expect: () => [
       ExperienceCategoriesLoading(),
-      const ExperienceListLoading(
+      ExperienceListLoading(
         mockCategory1,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
-      const ExperienceListLoadSuccess(
-        [mockExperienceListItem],
+      ExperienceListLoadSuccess(
+        {mockExperienceListItem},
         mockCategory1,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
     ],
   );
@@ -80,23 +80,23 @@ void main() {
     build: () => experienceBloc =
         ExperienceBloc(experienceRepository: mockExperienceRepository),
     act: (bloc) => bloc.add(
-      const ExperienceCategoryChanged(
+      ExperienceCategoryChanged(
         mockCategory2,
-        [
+        {
           mockCategory1,
           mockCategory2,
-        ],
+        },
       ),
     ),
     expect: () => [
-      const ExperienceListLoading(
+      ExperienceListLoading(
         mockCategory2,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
-      const ExperienceListLoadSuccess(
-        [mockExperienceListItem2],
+      ExperienceListLoadSuccess(
+        {mockExperienceListItem2},
         mockCategory2,
-        [mockCategory1, mockCategory2],
+        {mockCategory1, mockCategory2},
       ),
     ],
   );

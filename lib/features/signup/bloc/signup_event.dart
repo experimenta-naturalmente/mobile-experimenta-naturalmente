@@ -12,7 +12,6 @@ class LoadSignUp extends SignUpEvent {}
 
 class SignUpNextPage extends SignUpEvent {
   final ExperienceCategory selectedCategory;
-
   const SignUpNextPage(this.selectedCategory);
 
   @override

@@ -7,8 +7,12 @@ import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_bloc.dart';
+import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
@@ -29,6 +33,9 @@ class MainApp extends StatelessWidget {
         Provider<IExperienceRepository>(
           create: (context) => ExperienceRepository(),
         ),
+        Provider<ITagRepository>(
+          create: (context) => TagRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -44,8 +51,16 @@ class MainApp extends StatelessWidget {
           BlocProvider(
             create: (context) {
               final signUpBloc = SignUpBloc();
-
               return signUpBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final tagSelectionBloc = TagSelectionBloc(
+                tagRepository: context.read<ITagRepository>(),
+              );
+              tagSelectionBloc.add(ToggleTagInitialization());
+              return tagSelectionBloc;
             },
           ),
         ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
 
 class ExperienceCategoryTabView extends StatelessWidget {
-  final List<ExperienceCategory> tabs;
+  final Set<ExperienceCategory> tabs;
   final ExperienceCategory selectedCategory;
   final Function(ExperienceCategory) onCategorySelected;
 
@@ -15,7 +15,8 @@ class ExperienceCategoryTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 6,
+      alignment: WrapAlignment.center,
+      spacing: 4,
       children: tabs
           .map(
             (category) => ChoiceChip(
