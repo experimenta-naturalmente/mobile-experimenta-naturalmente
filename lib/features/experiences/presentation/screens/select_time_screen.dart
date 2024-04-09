@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/features/attraction/presentation/screens/gradient_text.dart';
-import 'package:turismo_rural_frontend/features/experiences/bloc/color_bloc.dart';
-import 'package:turismo_rural_frontend/features/experiences/bloc/color_event.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/screens/time_table_screen.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/alarm_time_picker.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/color_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/color_event.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_time_selection_screen.dart';
 
 class SelectTimeScreen extends StatefulWidget {
   final String text;
@@ -47,23 +47,7 @@ class _SelectTimeScreen extends State<SelectTimeScreen> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: GradientText(
-          text: 'Cadastro',
-          gradient: LinearGradient(
-            colors: [
-              startGradient,
-              finishGradient,
-            ],
-          ),
-          style: TextStyle(
-            fontFamily: fontName,
-            fontStyle: FontStyle.normal,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF3A502C),
-            letterSpacing: 0.65,
-          ),
-        ),
+        title: const GradientText(text: 'Cadastro'),
       ),
       body: Container(
         decoration: const BoxDecoration(

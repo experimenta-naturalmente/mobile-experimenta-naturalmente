@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/tag.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_bloc.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_event.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_state.dart';
-import 'package:turismo_rural_frontend/features/spots/presentation/widgets/tag_selection_group.dart';
-import 'package:turismo_rural_frontend/main_screen.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_state.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_description.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/widgets/tag_selection_group.dart';
 
 class TagSelectionScreen extends StatelessWidget {
   final ITagRepository tagRepository = TagRepository();
@@ -18,47 +19,51 @@ class TagSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     return BlocBuilder<TagSelectionBloc, TagSelectionState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            DoubleCircle(),
-            SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: screenHeight * 0.05),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 36.0,
-                        vertical: 18.0,
+        return Drawer(
+          child: Stack(
+            children: [
+              DoubleCircle(),
+              SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: GradientText(text: 'Cadastro'),
                       ),
-                      child: Text(
-                        'Selecione algumas TAGs para o seu negócio:',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                        textAlign: TextAlign.center,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 36.0,
+                          vertical: 18.0,
+                        ),
+                        child: Text(
+                          'Selecione algumas TAGs para o seu negócio:',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        for (final category in state.availableTags.keys) ...[
-                          _buildTagGroup(
-                            context,
-                            category,
-                            state.availableTags[category] ?? {},
-                            state.selectedTags,
-                          ),
-                          const SizedBox(height: 24),
+                      Column(
+                        children: [
+                          for (final category in state.availableTags.keys) ...[
+                            _buildTagGroup(
+                              context,
+                              category,
+                              state.availableTags[category] ?? {},
+                              state.selectedTags,
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                          _getButton(context, state),
                         ],
-                        _getButton(context, state),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -101,7 +106,7 @@ class TagSelectionScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MainScreen(),
+                builder: (context) => const SignUpDescription(),
               ),
             );
           }

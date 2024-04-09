@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/model/tag.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_event.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_state.dart';
 
 class TagSelectionBloc extends Bloc<TagSelectionEvent, TagSelectionState> {
   final ITagRepository tagRepository;

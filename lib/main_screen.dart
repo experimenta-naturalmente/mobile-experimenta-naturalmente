@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
-import 'package:turismo_rural_frontend/features/home/presentation/home.dart';
-import 'package:turismo_rural_frontend/features/spots/presentation/screens/signup_description.dart';
-import 'package:turismo_rural_frontend/features/spots/presentation/screens/signup_form.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -28,27 +26,32 @@ class _MainScreenState extends State<MainScreen> {
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            label: 'Menu',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
-            label: 'Experience',
+            icon: Badge(child: Icon(Icons.grass_outlined)),
+            label: 'Experiências',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
-            label: 'Signup',
+            icon: Badge(child: Icon(Icons.map_outlined)),
+            label: 'Mapa',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
+            icon: Badge(child: Icon(Icons.favorite_outline_outlined)),
+            label: 'Favoritos',
+          ),
+          NavigationDestination(
+            icon: Badge(child: Icon(Icons.person_outlined)),
             label: 'Signup',
           ),
         ],
       ),
       body: [
-        const HomeScreen(title: "aaaaa"),
         const ExperiencesScreen(),
-        const SignUpDescription(),
-        const SignUpForm(),
+        const ExperiencesScreen(),
+        const ExperiencesScreen(),
+        const ExperiencesScreen(),
+        const LoginScreen(),
       ][currentPageIndex],
     );
   }

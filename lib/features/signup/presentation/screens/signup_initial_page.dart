@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_form.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignUpInitialPage extends StatefulWidget {
+  const SignUpInitialPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpInitialPage> createState() => _SignUpInitialState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  String fontName = 'JosefinSans';
-  Color startGradient = const Color.fromARGB(255, 83, 99, 60);
-  Color finishGradient = const Color.fromARGB(255, 176, 209, 130);
-  Color regularTextColor = const Color.fromARGB(1000, 58, 80, 44);
-  late SignUpNextPage signUpNextPage;
-
+class _SignUpInitialState extends State<SignUpInitialPage> {
   final TextEditingController categoryController = TextEditingController();
 
   @override
@@ -30,11 +26,13 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (BuildContext context, SignUpState state) {
         if (state is SignUpLoading) {
-          return Column(
-            children: [
-              _buildSignUpHeader(),
-              const LoadingIndicator(),
-            ],
+          return const Drawer(
+            child: Column(
+              children: [
+                GradientText(text: 'Cadastro'),
+                LoadingIndicator(),
+              ],
+            ),
           );
         }
         if (state is SignUpError) {
@@ -46,45 +44,36 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         }
         if (state is SignUpInitial) {
-          return Align(
-            child: SizedBox(
-              width: screenWidth * 0.7,
-              height: screenHeight * 0.8,
-              child: Column(
-                children: [
-                  _buildSignUpHeader(),
-                  Expanded(
-                    child: _buildSignUpDropDownMenu(),
-                  ),
-                  SubmitButton(
-                    text: 'Avançar',
-                    onPressed: () => {},
-                  ),
-                ],
+          return Drawer(
+            child: Align(
+              child: SizedBox(
+                width: screenWidth * 0.7,
+                height: screenHeight * 0.8,
+                child: Column(
+                  children: [
+                    const GradientText(text: 'Cadastro'),
+                    Expanded(
+                      child: _buildSignUpDropDownMenu(),
+                    ),
+                    SubmitButton(
+                      text: 'Avançar',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignUpForm(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         }
         return Container();
       },
-    );
-  }
-
-  Widget _buildSignUpHeader() {
-    return Text(
-      'Cadastro',
-      style: TextStyle(
-        fontSize: 38,
-        fontWeight: FontWeight.bold,
-        fontFamily: fontName,
-        foreground: Paint()
-          ..shader = LinearGradient(
-            colors: [
-              startGradient,
-              finishGradient,
-            ],
-          ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
-      ),
     );
   }
 
@@ -97,14 +86,9 @@ class _SignUpPageState extends State<SignUpPage> {
         Text(
           'O que você deseja cadastrar?',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.normal,
-            fontFamily: fontName,
-            color: regularTextColor,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
-        const SizedBox(height: 8), // Espaço entre o texto e o menu suspenso
+        const SizedBox(height: 32),
         DropdownMenu<String>(
           controller: categoryController,
           requestFocusOnTap: true,

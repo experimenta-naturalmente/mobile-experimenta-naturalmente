@@ -5,6 +5,7 @@ import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dar
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_initial_page.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -134,7 +135,14 @@ class LoginScreen extends StatelessWidget {
       height: 50,
       width: double.infinity, // Largura total
       child: FilledButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignUpInitialPage(),
+            ),
+          );
+        },
         child: const Text(
           'Entrar',
           textScaler: TextScaler.linear(1.2),

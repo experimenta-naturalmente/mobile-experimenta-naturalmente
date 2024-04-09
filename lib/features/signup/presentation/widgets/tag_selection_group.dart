@@ -19,6 +19,7 @@ class TagSelectionGroup extends StatelessWidget {
       child: Wrap(
         alignment: WrapAlignment.center,
         spacing: 16,
+        runSpacing: 4,
         children: tags.map((tag) {
           final isSelected = selectedTags[tag.id] ?? false;
           return ChoiceChip(

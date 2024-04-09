@@ -5,15 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
+import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_bloc.dart';
-import 'package:turismo_rural_frontend/features/spots/bloc/tag_selection_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/color_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
@@ -62,6 +64,20 @@ class MainApp extends StatelessWidget {
               );
               tagSelectionBloc.add(ToggleTagInitialization());
               return tagSelectionBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final colorBloc = ColorBloc();
+              return colorBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final loginBloc = LoginBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+              );
+              return loginBloc;
             },
           ),
         ],

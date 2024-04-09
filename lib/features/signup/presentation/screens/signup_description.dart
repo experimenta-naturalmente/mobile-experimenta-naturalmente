@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
@@ -33,45 +34,56 @@ class _SignUpDescriptionState extends State<SignUpDescription> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return Stack(
-      children: [
-        DoubleCircle(),
-        Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildDescriptionField(),
-                    const SizedBox(height: 32),
-                    _buildAttachmentsField(),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.symmetric(vertical: 32.0),
-                      child: SubmitButton(
-                        text: 'Avançar',
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ),
-                            );
-                          }
-                        },
+    return Drawer(
+      child: Stack(
+        children: [
+          DoubleCircle(),
+          Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: GradientText(text: 'Cadastro'),
+              ),
+              Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildDescriptionField(),
+                          const SizedBox(height: 32),
+                          _buildAttachmentsField(),
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            padding: const EdgeInsets.symmetric(vertical: 32.0),
+                            child: SubmitButton(
+                              text: 'Avançar',
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MainScreen(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
