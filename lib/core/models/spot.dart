@@ -1,5 +1,5 @@
 import 'package:turismo_rural_frontend/core/models/experience.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 
 abstract class Spot extends Experience {
   //final int id;

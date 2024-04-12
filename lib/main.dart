@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
+import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
@@ -12,10 +13,8 @@ import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_ex
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/color_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/tag_bloc/tag_selection_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
@@ -43,6 +42,9 @@ class MainApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => NavigationCubit(),
+          ),
+          BlocProvider(
             create: (context) {
               final experienceBloc = ExperienceBloc(
                 experienceRepository: context.read<IExperienceRepository>(),
@@ -53,30 +55,17 @@ class MainApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) {
-              final signUpBloc = SignUpBloc();
+              final signUpBloc = SignUpBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+                tagRepository: context.read<ITagRepository>(),
+              );
+              signUpBloc.add(LoadSignUp());
               return signUpBloc;
             },
           ),
           BlocProvider(
             create: (context) {
-              final tagSelectionBloc = TagSelectionBloc(
-                tagRepository: context.read<ITagRepository>(),
-              );
-              tagSelectionBloc.add(ToggleTagInitialization());
-              return tagSelectionBloc;
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              final colorBloc = ColorBloc();
-              return colorBloc;
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              final loginBloc = LoginBloc(
-                experienceRepository: context.read<IExperienceRepository>(),
-              );
+              final loginBloc = LoginBloc();
               return loginBloc;
             },
           ),
@@ -93,7 +82,7 @@ class MainApp extends StatelessWidget {
           ],
           title: 'São Chico Turismo',
           theme: _appThemes.lightTheme,
-          home: const MainScreen(),
+          home: MainScreen(),
         ),
       ),
     );

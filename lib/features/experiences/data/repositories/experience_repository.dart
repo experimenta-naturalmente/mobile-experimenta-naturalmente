@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:lorem_ipsum_generator/lorem_ipsum_generator.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 
 class ExperienceRepository implements IExperienceRepository {
   @override
@@ -34,11 +34,11 @@ class ExperienceRepository implements IExperienceRepository {
     return <ExperienceCategory>{
       const ExperienceCategory(
         id: 1,
-        name: 'Hotéis',
+        name: 'Hotel',
       ),
       const ExperienceCategory(
         id: 2,
-        name: 'Restaurantes',
+        name: 'Restaurante',
       ),
       const ExperienceCategory(
         id: 3,
@@ -46,7 +46,7 @@ class ExperienceRepository implements IExperienceRepository {
       ),
       const ExperienceCategory(
         id: 4,
-        name: 'Eventos',
+        name: 'Evento',
       ),
     };
   }

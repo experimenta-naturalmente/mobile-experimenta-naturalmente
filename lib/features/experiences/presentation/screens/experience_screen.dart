@@ -7,8 +7,8 @@ import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dar
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_category_tabview.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
 
@@ -19,59 +19,61 @@ class ExperiencesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExperienceBloc, ExperienceState>(
-      builder: (BuildContext context, ExperienceState state) {
-        if (state is ExperienceCategoriesLoading) {
-          return const LoadingIndicator();
-        }
-        if (state is ExperienceError) {
-          return ErrorHandler(
-            error: state.error,
-            onRetry: () => context.read<ExperienceBloc>().add(
-                  LoadExperienceCategories(),
+    return PopScope(
+      child: BlocBuilder<ExperienceBloc, ExperienceState>(
+        builder: (BuildContext context, ExperienceState state) {
+          if (state is ExperienceCategoriesLoading) {
+            return const LoadingIndicator();
+          }
+          if (state is ExperienceError) {
+            return ErrorHandler(
+              error: state.error,
+              onRetry: () => context.read<ExperienceBloc>().add(
+                    LoadExperienceCategories(),
+                  ),
+            );
+          }
+          if (state is ExperienceListLoading) {
+            return Stack(
+              children: [
+                OverflowBox(child: DoubleCircle()),
+                Column(
+                  children: [
+                    _buildExperienceListHeader(
+                      state.categories,
+                      state.selectedCategory,
+                      context,
+                    ),
+                    const LoadingIndicator(),
+                  ],
                 ),
-          );
-        }
-        if (state is ExperienceListLoading) {
-          return Stack(
-            children: [
-              OverflowBox(child: DoubleCircle()),
-              Column(
-                children: [
-                  _buildExperienceListHeader(
-                    state.categories,
-                    state.selectedCategory,
-                    context,
-                  ),
-                  const LoadingIndicator(),
-                ],
-              ),
-            ],
-          );
-        }
-        // testar com "is" faz com o que o dart faça type promote (eg ExperienceState -> ExperienceListLoadSuccess),
-        // por isso nao precisa de nenhum cast pra acessar as propriedades que tem dentro de alguns estados
-        if (state is ExperienceListLoadSuccess) {
-          return Stack(
-            children: [
-              DoubleCircle(),
-              Column(
-                children: [
-                  _buildExperienceListHeader(
-                    state.categories,
-                    state.selectedCategory,
-                    context,
-                  ),
-                  Expanded(
-                    child: _buildExperiencesList(state.experiences),
-                  ),
-                ],
-              ),
-            ],
-          );
-        }
-        return Container();
-      },
+              ],
+            );
+          }
+          // testar com "is" faz com o que o dart faça type promote (eg ExperienceState -> ExperienceListLoadSuccess),
+          // por isso nao precisa de nenhum cast pra acessar as propriedades que tem dentro de alguns estados
+          if (state is ExperienceListLoadSuccess) {
+            return Stack(
+              children: [
+                DoubleCircle(),
+                Column(
+                  children: [
+                    _buildExperienceListHeader(
+                      state.categories,
+                      state.selectedCategory,
+                      context,
+                    ),
+                    Expanded(
+                      child: _buildExperiencesList(state.experiences),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+          return Container();
+        },
+      ),
     );
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/model/tag.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/tag.dart';
 
 class TagSelectionGroup extends StatelessWidget {
   final Set<Tag> tags;

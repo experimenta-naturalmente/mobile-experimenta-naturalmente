@@ -1,17 +1,105 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/tag.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/data/models/experience_registration.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  // na declaração do bloc, cada evento é associado a uma função
-  SignUpBloc() : super(SignUpInitial()) {
-    on<SignUpNextPage>(_onSignUpNextPage);
+  final IExperienceRepository experienceRepository;
+  final ITagRepository tagRepository;
+  Set<ExperienceCategory> categoriesCache = {};
+  Map<int, bool> selectedTagsCache = {};
+  Map<ExperienceCategory, Set<Tag>> availableTags = {};
+  final ExperienceRegistration registration = ExperienceRegistration();
+  SignUpBloc({required this.experienceRepository, required this.tagRepository})
+      : super(SignUpLoading()) {
+    on<SignUpChangePage>(_onSignUpChangePage);
+    on<SignUpToggleTag>(_onToggleTag);
+    on<LoadSignUp>(_onLoadSignUp);
   }
 
-  Future<void> _onSignUpNextPage(
-    SignUpNextPage event,
+  Future<void> _onLoadSignUp(
+    LoadSignUp event,
     Emitter<SignUpState> emit,
   ) async {
-    print("aaaa");
+    emit(SignUpLoading());
+    try {
+      if (categoriesCache.isEmpty) {
+        categoriesCache =
+            await experienceRepository.fetchExperienceCategories();
+      }
+      await _initTags();
+      emit(SignUpPageInitialState());
+    } catch (e) {
+      emit(SignUpError(e.toString()));
+    }
+  }
+
+  Future<void> _onSignUpChangePage(
+    SignUpChangePage event,
+    Emitter<SignUpState> emit,
+  ) async {
+    final previous = event.previous;
+    if (state is SignUpPageInitialState) {
+      if (!previous) {
+        emit(SignUpPageDescriptionState());
+      }
+      emit(SignUpPageDescriptionState());
+    } else if (state is SignUpPageDescriptionState) {
+      if (previous) {
+        emit(SignUpPageInitialState());
+      } else {
+        emit(SignUpPageFormState());
+      }
+    } else if (state is SignUpPageFormState) {
+      if (previous) {
+        emit(SignUpPageDescriptionState());
+      } else {
+        emit(SignUpPageWorkingHoursState());
+      }
+    } else if (state is SignUpPageWorkingHoursState) {
+      if (previous) {
+        emit(SignUpPageFormState());
+      } else {
+        emit(SignUpPageTagSelectionState(selectedTags: selectedTagsCache));
+      }
+    } else if (state is SignUpPageTagSelectionState) {
+      if (previous) {
+        selectedTagsCache = (state as SignUpPageTagSelectionState).selectedTags;
+        emit(SignUpPageWorkingHoursState());
+      }
+    }
+  }
+
+  Future<void> _onToggleTag(
+    SignUpToggleTag event,
+    Emitter<SignUpState> emit,
+  ) async {
+    final toggledTag = event.tag;
+    final selectedTags = Map<int, bool>.from(event.selectedTags);
+    selectedTags.update(
+      toggledTag.id,
+      (value) => !value,
+      ifAbsent: () => false,
+    );
+    emit(SignUpPageTagSelectionState(selectedTags: selectedTags));
+  }
+
+  Future<void> _initTags() async {
+    final tags = await tagRepository.fetchAllTags();
+    selectedTagsCache = {};
+    final Map<ExperienceCategory, Set<Tag>> groupedTags = {};
+
+    for (final tag in tags) {
+      if (!groupedTags.containsKey(tag.type)) {
+        groupedTags[tag.type] = {};
+      }
+      groupedTags[tag.type]!.add(tag);
+      selectedTagsCache[tag.id] = false;
+    }
+    availableTags = groupedTags;
   }
 }

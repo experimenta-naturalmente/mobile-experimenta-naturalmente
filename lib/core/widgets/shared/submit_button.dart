@@ -12,35 +12,16 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final brightTheme = Theme.of(context).brightness == Brightness.light;
-    return SizedBox(
-      height: 65,
-      width: screenWidth * 0.6,
-      child: FilledButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return brightTheme ? Colors.grey[400] : Colors.grey[800];
-            }
-            return Theme.of(context).colorScheme.secondary;
-          }),
-        ),
-        child: Text(
-          text,
-          textScaler: const TextScaler.linear(2),
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: MaterialStateColor.resolveWith(
-                  (states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Theme.of(context).disabledColor;
-                    }
-                    return Theme.of(context).colorScheme.onSecondary;
-                  },
-                ),
-                fontWeight: FontWeight.bold,
-              ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(width: 160),
+      child: SizedBox(
+        height: 52,
+        child: OutlinedButton(
+          onPressed: onPressed,
+          child: Text(
+            text,
+            textScaler: const TextScaler.linear(1.5),
+          ),
         ),
       ),
     );
