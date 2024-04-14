@@ -3,6 +3,7 @@ image: "ghcr.io/cirruslabs/flutter:stable"
 stages:
   - analyze_and_test
   - preview
+  - build
   - deploy
 
 cache:
@@ -80,44 +81,35 @@ deploy-preview:
   only:
     - merge_requests
   allow_failure: true
+  when: manual
 
-deploy_dev:
+build_dev:
   stage: deploy
-  services:
-    - docker:dind
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
-    - |
-      echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" > .env
-      echo "AWS_BUCKET_NAME=${AWS_BUCKET_NAME}" >> .env
-      echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> .env
-      echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> .env
     - flutter pub get
     - flutter build web
-    - docker cp build/web/* nginx-dev:/usr/share/nginx/html
-    - docker-compose up -d nginx-dev
+  artifacts:
+    paths:
+      - build/web/
   environment:
     name: dev
   only:
     - develop
 
-deploy_prod:
+deploy_dev:
   stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
   before_script:
-    - docker --version
-    - docker-compose --version
+    - docker info
+    - docker ps
   script:
-    - echo "🔝🔝 Deploying to PROD environment... 🚀"
-    - |
-      echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" > .env
-      echo "AWS_BUCKET_NAME=${AWS_BUCKET_NAME}" >> .env
-      echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> .env
-      echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> .env
-    - flutter pub get
-    - flutter build web ----release
-    - docker cp build/web/* nginx-prod:/usr/share/nginx/html
-    - docker-compose up -d nginx-prod
+    - docker cp build/web/. nginx-dev:/usr/share/nginx/html/
+  dependencies:
+    - build_dev
   environment:
-    name: prod
+    name: dev
   only:
-    - main
+    - develop
