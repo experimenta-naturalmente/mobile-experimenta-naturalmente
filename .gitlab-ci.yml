@@ -87,6 +87,7 @@ build_dev:
   stage: build
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
+    - touch .env
     - flutter pub get
     - flutter build web
   artifacts:
