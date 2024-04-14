@@ -87,6 +87,11 @@ deploy_dev:
     - docker:dind
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
+    - |
+      echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" > .env
+      echo "AWS_BUCKET_NAME=${AWS_BUCKET_NAME}" >> .env
+      echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> .env
+      echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> .env
     - flutter pub get
     - flutter build web
     - docker cp build/web/* nginx-dev:/usr/share/nginx/html
@@ -103,6 +108,11 @@ deploy_prod:
     - docker-compose --version
   script:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
+    - |
+      echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" > .env
+      echo "AWS_BUCKET_NAME=${AWS_BUCKET_NAME}" >> .env
+      echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> .env
+      echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> .env
     - flutter pub get
     - flutter build web ----release
     - docker cp build/web/* nginx-prod:/usr/share/nginx/html
