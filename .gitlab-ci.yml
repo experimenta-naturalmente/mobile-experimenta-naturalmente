@@ -84,7 +84,7 @@ deploy-preview:
   when: manual
 
 build_dev:
-  stage: deploy
+  stage: build
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
     - flutter pub get
@@ -100,8 +100,6 @@ build_dev:
 deploy_dev:
   stage: deploy
   image: docker:latest
-  services:
-    - docker:dind
   before_script:
     - docker info
     - docker ps
