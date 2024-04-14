@@ -83,15 +83,18 @@ deploy-preview:
 
 deploy_dev:
   stage: deploy
+  services:
+    - docker:dind
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
-    - chmod +x ./sync-s3.sh
-    - ./sync-s3.sh $AWS_S3_BUCKET_NAME dev
+    - flutter pub get
+    - flutter build web
+    - docker cp build/web/* nginx-dev:/usr/share/nginx/html
+    - docker-compose up -d nginx-dev
   environment:
     name: dev
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      when: always
+  only:
+    - develop
 
 deploy_prod:
   stage: deploy
@@ -100,9 +103,11 @@ deploy_prod:
     - docker-compose --version
   script:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
+    - flutter pub get
+    - flutter build web ----release
+    - docker cp build/web/* nginx-prod:/usr/share/nginx/html
     - docker-compose up -d nginx-prod
   environment:
     name: prod
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      when: always
+  only:
+    - main
