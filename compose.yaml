@@ -30,25 +30,51 @@ services:
       - ./gitlab-runner/config:/etc/gitlab-runner
 
   # PROD Frontend
-  prod-frontend:
+  nginx-prod:
     image: nginx:alpine
+    container_name: nginx-prod
     ports:
       - "80:80"
     volumes:
-      - ./build/web:/usr/share/nginx/html:ro
+      - prod-web-content:/usr/share/nginx/html:ro
     environment:
       - ENV=PROD
     depends_on:
       - gitlab-runner
+      - s3-sync-prod
 
+  # s3-sync-prod:
+  #   image: amazon/aws-cli
+  #   container_name: s3-sync-prod
+  #   volumes:
+  #     - prod-web-content:/usr/share/nginx/html
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+  #     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  #     - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+  #   command: ["/bin/sh", "./sync-s3.sh ${AWS_S3_BUCKET_NAME} prod"]
+    
   # DEV Frontend
-  dev-frontend:
+  nginx-dev:
     image: nginx:alpine
+    container_name: nginx-dev
     ports:
       - "9000:80"
     volumes:
-      - ./build/web:/usr/share/nginx/html:ro
+      - dev-web-content:/usr/share/nginx/html:ro
     environment:
       - ENV=DEV
     depends_on:
       - gitlab-runner
+      - s3-sync-dev
+
+  # s3-sync-dev:
+  #   image: amazon/aws-cli
+  #   container_name: s3-sync-dev
+  #   volumes:
+  #     - dev-web-content:/usr/share/nginx/html
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+  #     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  #     - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+  #   command: ["/bin/sh", "./sync-s3.sh ${AWS_S3_BUCKET_NAME} dev"]

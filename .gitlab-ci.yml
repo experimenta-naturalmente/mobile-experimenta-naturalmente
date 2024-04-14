@@ -6,7 +6,7 @@ stages:
   - deploy
 
 cache:
-  key: "${CI_COMMIT_REF_SLUG}"
+  key: "$CI_COMMIT_REF_SLUG"
   paths:
     - .pub-cache/global_packages
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -85,8 +85,8 @@ deploy_dev:
   stage: deploy
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
-    - touch .env
-    - flutter build web
+    - chmod +x ./sync-s3.sh
+    - ./sync-s3.sh $AWS_S3_BUCKET_NAME dev
   environment:
     name: dev
   rules:
@@ -95,10 +95,12 @@ deploy_dev:
 
 deploy_prod:
   stage: deploy
+  before_script:
+    - docker --version
+    - docker-compose --version
   script:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
-    - touch .env
-    - flutter build web --release
+    - docker-compose up -d nginx-prod
   environment:
     name: prod
   rules:
