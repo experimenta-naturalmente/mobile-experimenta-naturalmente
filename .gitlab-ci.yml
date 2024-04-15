@@ -15,9 +15,12 @@ code_quality:
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
-    - flutter pub global activate dart_code_metrics  
+    - flutter pub global activate dart_code_metrics
+    - apt-get update && apt-get install -y python3 python3-pip
+    - ln -s /usr/bin/python3 /usr/bin/python
   script:
-    - metrics lib -r codeclimate > gl-code-quality-report.json
+    - dart run dart_code_metrics:metrics lib --reporter=codeclimate | tee gl-code-quality-report.json
+    - python check_issues.py gl-code-quality-report.json | tee -a gl-code-quality-report.json
   artifacts:
     when: always
     reports:

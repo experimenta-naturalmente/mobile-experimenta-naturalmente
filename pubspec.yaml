@@ -13,9 +13,9 @@ dependencies:
   flutter_bloc: ^8.1.4
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^2.0.9
   google_maps_flutter: ^2.6.0
-  http: ^1.0.0
+  http: ^0.13.5
   image_picker: ^1.0.7
   lorem_ipsum_generator: ^0.0.3
   mask_text_input_formatter: ^2.9.0
@@ -26,6 +26,7 @@ dependencies:
 dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
+  dart_code_metrics: ^5.7.0
   flutter_test:
     sdk: flutter
   husky: ^0.1.7
