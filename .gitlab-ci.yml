@@ -99,3 +99,21 @@ deploy_dev:
     name: dev
   only:
     - develop
+
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "🔝🔝 Deploying to PROD environment... 🚀"
+    - touch .env
+    - flutter pub get
+    - flutter build web
+    - mkdir -p /app/prod/usr/share/nginx/html
+    - cp -r build/web/* /app/prod/usr/share/nginx/html/
+    - ls -al /app/prod/usr/share/nginx/html
+  artifacts:
+    paths:
+      - build/web/
+  environment:
+    name: prod
+  only:
+    - main
