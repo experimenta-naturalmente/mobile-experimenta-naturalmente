@@ -89,7 +89,9 @@ deploy_dev:
     - touch .env
     - flutter pub get
     - flutter build web
-    - mv build/web/ /dev/usr/share/nginx/html/
+    - mkdir -p /app/dev/usr/share/nginx/html
+    - cp -r build/web/* /app/dev/usr/share/nginx/html/
+    - ls -al /app/dev/usr/share/nginx/html
   artifacts:
     paths:
       - build/web/

@@ -7,8 +7,8 @@ services:
     volumes:
       - ./gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - nginx-dev:/dev/usr/share/nginx/html:rw
-      - nginx-prod:/prod/usr/share/nginx/html:rw
+      - nginx-dev:/app/dev/usr/share/nginx/html:rw
+      - nginx-prod:/app/prod/usr/share/nginx/html:rw
 
   # Runner Register
   gitlab-runner-register:
@@ -28,6 +28,10 @@ services:
       - --executor=docker
       - --docker-image="cirruslabs/flutter:stable"
       - --description="gitlab-runner"
+      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+      - --docker-volumes=./gitlab-runner/config:/etc/gitlab-runner
+      - --docker-volumes=nginx-dev:/app/dev/usr/share/nginx/html
+      - --docker-volumes=nginx-prod:/app/prod/usr/share/nginx/html
     volumes:
       - ./gitlab-runner/config:/etc/gitlab-runner
 
@@ -52,3 +56,9 @@ services:
       - nginx-dev:/usr/share/nginx/html:ro
     environment:
       - ENV=DEV
+
+volumes:
+  nginx-dev:
+    name: nginx-dev
+  nginx-prod:
+    name: nginx-prod
