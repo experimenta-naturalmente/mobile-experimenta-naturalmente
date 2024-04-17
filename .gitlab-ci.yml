@@ -109,7 +109,7 @@ deploy_prod:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
     - touch .env
     - flutter pub get
-    - flutter build web
+    - flutter build web --release
     - mkdir -p /app/prod/usr/share/nginx/html
     - cp -r build/web/* /app/prod/usr/share/nginx/html/
     - ls -al /app/prod/usr/share/nginx/html
