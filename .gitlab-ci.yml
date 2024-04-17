@@ -91,7 +91,7 @@ deploy_dev:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
     - touch .env
     - flutter pub get
-    - flutter build web --base-href "/dev/"
+    - flutter build web
     - mkdir -p /app/dev/usr/share/nginx/html
     - cp -r build/web/* /app/dev/usr/share/nginx/html/
     - ls -al /app/dev/usr/share/nginx/html
