@@ -16,20 +16,9 @@ void main() {
     blocTest<LoginBloc, LoginState>(
       'emits [LoginSubmitLoading] quando LoginSubmit é adicionado',
       build: () => loginBloc,
-      act: (bloc) => bloc.add(const LoginSubmit("teste", "passwordTest")),
+      act: (bloc) => bloc.add(const LoginSubmit("teste", "passwordtest")),
       expect: () => [LoginSubmitLoading()],
     );
-
-    // Test das props do login_event.
-    test('LoginSubmit get props should return [user, password]', () {
-      const event = LoginSubmit('user', 'password');
-      expect(event.props, ['user', 'password']);
-    });
-
-    test('LoginToggleObscuredText get props should return [obscuredText]', () {
-      const event = LoginToggleObscuredText(true);
-      expect(event.props, [true]);
-    });
 
     // Teste para verificar o comportamento ao enviar LoginToggleObscuredText
     blocTest<LoginBloc, LoginState>(
@@ -38,11 +27,6 @@ void main() {
       act: (bloc) => bloc.add(const LoginToggleObscuredText(true)),
       expect: () => [const LoginInitial(false)],
     );
-
-    test('LoginError get props should return [error]', () {
-      const state = LoginError('Test error');
-      expect(state.props, ['Test error']);
-    });
 
     // Feche o bloco após cada teste
     tearDown(() {

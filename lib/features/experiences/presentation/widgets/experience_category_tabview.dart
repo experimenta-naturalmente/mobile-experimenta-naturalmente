@@ -14,22 +14,22 @@ class ExperienceCategoryTabView extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Wrap(
-        spacing: 6,
-        children: tabs
-            .map(
-              (category) => ChoiceChip(
-                label: Text(category.name),
-                selected: category == selectedCategory,
-                onSelected: (selected) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 4,
+      children: tabs
+          .map(
+            (category) => ChoiceChip(
+              label: Text(category.name),
+              selected: category == selectedCategory,
+              onSelected: (selected) {
+                if (selected) {
                   onCategorySelected(category);
-                },
-              ),
-            )
-            .toList(),
-      ),
+                }
+              },
+            ),
+          )
+          .toList(),
     );
   }
 }

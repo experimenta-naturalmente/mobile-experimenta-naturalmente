@@ -46,14 +46,6 @@ class ExperienceRepository implements IExperienceRepository {
       ),
       const ExperienceCategory(
         id: 4,
-        name: 'Produtor rural',
-      ),
-      const ExperienceCategory(
-        id: 5,
-        name: 'Atração turística',
-      ),
-      const ExperienceCategory(
-        id: 6,
         name: 'Evento',
       ),
     };

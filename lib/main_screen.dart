@@ -43,12 +43,12 @@ class MainScreen extends StatelessWidget {
               label: 'Mapa',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.favorite_outline_outlined)),
-              label: 'Favoritos',
+              icon: Badge(child: Icon(Icons.person_outlined)),
+              label: 'Signup',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.person_outlined)),
-              label: 'Perfil',
+              icon: Badge(child: Icon(Icons.favorite_outline_outlined)),
+              label: 'Favoritos',
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/data/models/experience_registration.dart';
 
@@ -12,9 +13,6 @@ class SignUpPageInitial extends StatelessWidget {
         context.read<SignUpBloc>().registration;
     final categories = context.read<SignUpBloc>().categoriesCache;
     final screenWidth = MediaQuery.of(context).size.width;
-
-    registration.category = registration.category ?? categories.first;
-
     return Align(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -29,18 +27,17 @@ class SignUpPageInitial extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          DropdownMenu<int>(
-            initialSelection: registration.category?.id ?? categories.first.id,
+          DropdownMenu<ExperienceCategory>(
+            initialSelection: registration.category ?? categories.first,
             width: screenWidth * 0.7,
             textStyle: Theme.of(context).textTheme.titleLarge,
             onSelected: (value) => {
-              registration.category =
-                  categories.firstWhere((category) => category.id == value),
+              registration.category = value,
             },
             dropdownMenuEntries: categories
                 .map(
                   (category) => DropdownMenuEntry(
-                    value: category.id,
+                    value: category,
                     label: category.name,
                   ),
                 )
