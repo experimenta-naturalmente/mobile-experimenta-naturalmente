@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:lorem_ipsum_generator/lorem_ipsum_generator.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 
 class ExperienceRepository implements IExperienceRepository {

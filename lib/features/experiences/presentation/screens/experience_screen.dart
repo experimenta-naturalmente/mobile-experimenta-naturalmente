@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
@@ -7,7 +8,6 @@ import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dar
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_category_tabview.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
@@ -36,7 +36,7 @@ class ExperiencesScreen extends StatelessWidget {
           if (state is ExperienceListLoading) {
             return Stack(
               children: [
-                OverflowBox(child: DoubleCircle()),
+                DoubleCircle(),
                 Column(
                   children: [
                     _buildExperienceListHeader(
@@ -50,8 +50,6 @@ class ExperiencesScreen extends StatelessWidget {
               ],
             );
           }
-          // testar com "is" faz com o que o dart faça type promote (eg ExperienceState -> ExperienceListLoadSuccess),
-          // por isso nao precisa de nenhum cast pra acessar as propriedades que tem dentro de alguns estados
           if (state is ExperienceListLoadSuccess) {
             return Stack(
               children: [

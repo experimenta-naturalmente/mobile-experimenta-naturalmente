@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 
 class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {

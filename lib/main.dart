@@ -3,16 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/repositories/experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
@@ -67,6 +69,15 @@ class MainApp extends StatelessWidget {
             create: (context) {
               final loginBloc = LoginBloc();
               return loginBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final homeBloc = HomeBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+              );
+              homeBloc.add(HomeLoadData());
+              return homeBloc;
             },
           ),
         ],

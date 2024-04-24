@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/tag.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
