@@ -50,7 +50,6 @@ class AppTheme {
         ),
         chipTheme: chipTheme,
         searchBarTheme: searchBarTheme,
-        primaryColor: const Color.fromARGB(255, 21, 133, 24),
       );
 
   final _darkTypography = Typography.whiteCupertino.apply(

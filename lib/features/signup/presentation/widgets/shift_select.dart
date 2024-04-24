@@ -1,96 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:time_range_picker/time_range_picker.dart';
-import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
+import 'package:turismo_rural_frontend/features/signup/presentation/widgets/alarm_time_picker.dart';
 
-class ShiftSelect extends StatefulWidget {
-  final ValueNotifier<bool> checkboxNotifier;
+class ShiftSelect extends StatelessWidget {
+  const ShiftSelect({super.key});
 
-  const ShiftSelect({super.key, required this.checkboxNotifier});
-
-  @override
-  _ShiftSelectState createState() => _ShiftSelectState();
-}
-
-class _ShiftSelectState extends State<ShiftSelect> {
-  List<TimeRange> timeRanges = [
-    TimeRange(
-      startTime: const TimeOfDay(hour: 8, minute: 0),
-      endTime: const TimeOfDay(hour: 20, minute: 0),
-    ),
-  ];
+  TimeOfDay get startTime => const TimeOfDay(hour: 10, minute: 00);
+  TimeOfDay get endTime => const TimeOfDay(hour: 20, minute: 00);
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.checkboxNotifier.value = false;
-    });
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 30.0),
-          child: Text(
-            'Lista de horários:',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const RangeMaintainingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...timeRanges.map(
-                  (TimeRange timeRange) => ListTile(
-                    title: Text(
-                      '${timeRange.startTime.format(context)} - ${timeRange.endTime.format(context)}',
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          timeRanges.remove(timeRange);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  child: const Text('Adicionar intervalo'),
-                  onPressed: () async {
-                    final newTimeRange = await showTimeRangePicker(
-                      context: context,
-                      fromText: 'De',
-                      toText: 'Até',
-                      strokeColor: Colors.green,
-                      handlerColor: Colors.green[800],
-                      selectedColor: Colors.green[900],
-                      backgroundColor: Colors.green[200],
-                      
-                    );
-                    if (newTimeRange != null) {
-                      setState(() {
-                        timeRanges.add(newTimeRange as TimeRange);
-                      });
-                    }
-                  },
-                ),
-              ],
+    return Center(
+      child: SingleChildScrollView(
+        physics: const RangeMaintainingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: Text(
+                'Selecione o horário de abertura:',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
-          ),
+            AlarmTimePicker(
+              initialTime: startTime,
+              onTimeSelected: (selectedTime) {},
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 70.0),
+              child: Text(
+                'Selecione o horário de fechamento:',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+            AlarmTimePicker(
+              initialTime: endTime,
+              onTimeSelected: (selectedTime) {},
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: SubmitButton(
-            text: 'Avançar',
-            onPressed: () => {
-              widget.checkboxNotifier.value = true,
-              Navigator.of(context).pop(),
-            },
-          ),
-        ),
-      ],
+      ),
     );
+  }
+
+  bool isTimeOfDayLater(TimeOfDay t1, TimeOfDay t2) {
+    final t1InMinutes = t1.hour * 60 + t1.minute;
+    final t2InMinutes = t2.hour * 60 + t2.minute;
+
+    return t1InMinutes >= t2InMinutes;
   }
 }

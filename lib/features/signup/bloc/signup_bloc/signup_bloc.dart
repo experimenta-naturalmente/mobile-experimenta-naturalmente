@@ -12,7 +12,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final ITagRepository tagRepository;
   Set<ExperienceCategory> categoriesCache = {};
   Map<int, bool> selectedTagsCache = {};
-  Map<ExperienceCategory, Set<Tag>> availableTags = {};
+  Set<Tag> availableTags = {};
+  Set<Tag> filteredTags = {};
   final ExperienceRegistration registration = ExperienceRegistration();
   SignUpBloc({required this.experienceRepository, required this.tagRepository})
       : super(SignUpLoading()) {
@@ -63,10 +64,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     } else if (state is SignUpPageWorkingHoursState) {
       if (previous) {
         emit(SignUpPageFormState());
-      } else if ((state as SignUpPageWorkingHoursState).canProceed) {
-        emit(SignUpPageTagSelectionState(selectedTags: selectedTagsCache));
       } else {
-        // Mostrar mensagem de erro
+        await _showTags();
+        emit(SignUpPageTagSelectionState(selectedTags: selectedTagsCache));
       }
     } else if (state is SignUpPageTagSelectionState) {
       if (previous) {
@@ -91,17 +91,18 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> _initTags() async {
-    final tags = await tagRepository.fetchAllTags();
+    availableTags = await tagRepository.fetchAllTags();
     selectedTagsCache = {};
-    final Map<ExperienceCategory, Set<Tag>> groupedTags = {};
+  }
 
-    for (final tag in tags) {
-      if (!groupedTags.containsKey(tag.type)) {
-        groupedTags[tag.type] = {};
+  Future<void> _showTags() async {
+    filteredTags = {};
+
+    for (final tag in availableTags) {
+      if (tag.type.id == registration.category?.id) {
+        filteredTags.add(tag);
       }
-      groupedTags[tag.type]!.add(tag);
       selectedTagsCache[tag.id] = false;
     }
-    availableTags = groupedTags;
   }
 }
