@@ -12,7 +12,11 @@ class HomeScreen extends StatelessWidget {
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 360.0),
         itemBuilder: (BuildContext context, int index) {
-          return _buildCarousel(context, index ~/ 2);
+          // ignore: use_is_even_rather_than_modulo
+          if (index % 2 == 0) {
+            return _buildCarousel(context, index ~/ 2);
+          }
+          return null;
         },
       ),
     );
@@ -20,20 +24,22 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildCarousel(BuildContext context, int carouselIndex) {
     return Wrap(
+      spacing: 10.0,
       children: <Widget>[
-        const Text(
-          "Eventos",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 26,
+        const Padding(
+          padding: EdgeInsets.only(left: 24.0), // Adicionar padding à esquerda
+          child: Text(
+            "Eventos",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 24,
+            ),
           ),
         ),
         SizedBox(
           // you may want to use an aspect ratio here for tablet support
-          height: 155.0,
-          width: 800,
+          height: 175.0,
           child: PageView.builder(
-            // store this controller in a State to save the carousel scroll position
             itemBuilder: (BuildContext context, int itemIndex) {
               return _buildCarouselItem(context, carouselIndex, itemIndex);
             },
@@ -44,28 +50,37 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildCarouselItem(
-      BuildContext context, int carouselIndex, int itemIndex,) {
+    BuildContext context,
+    int carouselIndex,
+    int itemIndex,
+  ) {
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: [
         Positioned(
           top: 0, // Ajuste esse valor conforme necessário para mover para cima
           left: 20.0,
-          right: 30.0,
+          right: 63.0,
           child: Container(
-            height: 120.0,
-            width: 20.0,
+            height: 124.0,
+            width: 350.0,
             decoration: const BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
           ),
         ),
-        const Text(
-          "Eventos",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 26,
+        const Padding(
+          padding: EdgeInsets.only(
+              left: 22.0,
+              top: 120.0,
+              right: 63,), // Adicionar padding à esquerda
+          child: Text(
+            "Evento X: Seja bem vindo ao maior evento da cidade",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: 18,
+            ),
           ),
         ),
       ],
