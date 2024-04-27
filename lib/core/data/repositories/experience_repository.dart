@@ -12,7 +12,8 @@ class ExperienceRepository implements IExperienceRepository {
   ) async {
     await Future.delayed(const Duration(milliseconds: 250));
     final rand = Random();
-    return Set.from(
+    final categories = await fetchExperienceCategories();
+    final Set<ExperienceListItem> generatedExperiences = Set.from(
       List.generate(
         10,
         (index) => ExperienceListItem(
@@ -23,9 +24,14 @@ class ExperienceRepository implements IExperienceRepository {
             wordsPerParagraph: rand.nextInt(30) + 10,
           ),
           imageUrl: 'https://picsum.photos/300/400?random=$index',
+          category: categories.elementAt(rand.nextInt(6)),
         ),
       ),
     );
+
+    return generatedExperiences
+        .where((element) => element.category == category)
+        .toSet();
   }
 
   @override

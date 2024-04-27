@@ -22,12 +22,14 @@ void main() {
     name: 'Experience 1',
     description: 'Description 1',
     imageUrl: 'https://picsum.photos/300/400?random=1',
+    category: mockCategory1,
   );
   const ExperienceListItem mockExperienceListItem2 = ExperienceListItem(
     id: 2,
     name: 'Experience 2',
     description: 'Description 2',
     imageUrl: 'https://picsum.photos/300/400?random=1',
+    category: mockCategory2,
   );
 
   setUp(() {

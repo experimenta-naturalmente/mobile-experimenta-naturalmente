@@ -27,6 +27,7 @@ void main() {
     name: 'Experience 1',
     description: 'Description 1',
     imageUrl: '',
+    category: mockCategory1,
   );
   setUp(() {
     mockExperienceBloc = MockExperienceBloc();
