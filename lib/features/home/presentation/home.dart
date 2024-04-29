@@ -24,12 +24,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildCarousel(BuildContext context, int carouselIndex) {
     return Wrap(
-      spacing: 10.0,
       children: <Widget>[
         const Padding(
-          padding: EdgeInsets.only(left: 24.0), // Adicionar padding à esquerda
+          padding: EdgeInsets.only(left: 24.0),
           child: Text(
-            "Eventos",
+            "Eventos1",
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 24,
@@ -37,9 +36,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         SizedBox(
-          // you may want to use an aspect ratio here for tablet support
           height: 175.0,
           child: PageView.builder(
+            itemCount: 5, // Número de itens no carrossel
             itemBuilder: (BuildContext context, int itemIndex) {
               return _buildCarouselItem(context, carouselIndex, itemIndex);
             },
@@ -54,42 +53,55 @@ class HomeScreen extends StatelessWidget {
     int carouselIndex,
     int itemIndex,
   ) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomStart,
-      children: [
-        Positioned(
-          top: 0, // Ajuste esse valor conforme necessário para mover para cima
-          left: 20.0,
-          right: 63.0,
-          child: Container(
-            height: 124.0,
-            width: 350.0,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+    return SizedBox(
+      width: 100.0,
+      child: Stack(
+        children: [
+          /*Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.red, // Cor da borda para visibilidade
+                width: 2.0, // Espessura da borda
+              ),
+            ),
+          ),*/
+          Positioned(
+            top: 0,
+            left: 20.0,
+            right: 20.0,
+            child: Container(
+              height: 124.0,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                      'https://www.rbsdirect.com.br/filestore/1/2/5/0/9/8/4_361e19f93784fa6/4890521_aef3999fcc0f380.jpg?w=1024&h=768&a=c'),
+                  fit: BoxFit.cover, // Ajuste da imagem dentro do Container
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              ),
             ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(
+          const Padding(
+            padding: EdgeInsets.only(
               left: 22.0,
-              top: 120.0,
-              right: 63,), // Adicionar padding à esquerda
-          child: Text(
-            "Evento X: Seja bem vindo ao maior evento da cidade",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 18,
+              top: 125.0,
+              right: 63,
+            ), // Adicionar padding à esquerda
+            child: Text(
+              "Evento X: Seja bem vindo ao maior evento da cidade",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
-}
 
-@override
-State<StatefulWidget> createState() {
-  // TODO: implement createState
-  throw UnimplementedError();
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
 }
