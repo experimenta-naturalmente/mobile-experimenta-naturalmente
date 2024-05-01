@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
 abstract class SignUpState extends Equatable {
   const SignUpState();
@@ -12,7 +11,16 @@ abstract class SignUpState extends Equatable {
 
 class SignUpPageInitialState extends SignUpState {}
 
-class SignUpPageDescriptionState extends SignUpState {}
+class SignUpPageDescriptionState extends SignUpState {
+  final ExperienceCategory selectedCategory;
+
+  const SignUpPageDescriptionState({
+    required this.selectedCategory,
+  });
+
+  @override
+  List<Object> get props => [selectedCategory];
+}
 
 class SignUpPageFormState extends SignUpState {}
 
@@ -23,6 +31,20 @@ class SignUpPageWorkingHoursState extends SignUpState {
 
   @override
   List<Object> get props => [...workingHours.entries];
+}
+
+class SignUpPageDateRangeState extends SignUpState {
+  final ValueNotifier<DateTime?> startDate;
+  final ValueNotifier<DateTime?> endDate;
+
+  SignUpPageDateRangeState()
+      : startDate = ValueNotifier<DateTime?>(null),
+        endDate = ValueNotifier<DateTime?>(null);
+
+  bool get canProceed => startDate.value != null && endDate.value != null;
+
+  @override
+  List<Object> get props => [startDate, endDate];
 }
 
 class SignUpPageDateRangeState extends SignUpState {

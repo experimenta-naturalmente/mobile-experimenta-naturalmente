@@ -3,14 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
 
 class SignUpPageDescription extends StatelessWidget {
-  const SignUpPageDescription({super.key});
+  final SignUpPageDescriptionState state;
+
+  const SignUpPageDescription({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final selectedCategory = state.selectedCategory;
     return SingleChildScrollView(
       physics: const RangeMaintainingScrollPhysics(),
       child: Container(
@@ -24,6 +28,10 @@ class SignUpPageDescription extends StatelessWidget {
             _buildDescriptionField(context),
             const SizedBox(height: 32),
             _buildAttachmentsField(context),
+            if (selectedCategory.name == 'Evento') ...[
+              const SizedBox(height: 32),
+              _buildDetailsField(context),
+            ],
           ],
         ),
       ),
@@ -85,6 +93,35 @@ class SignUpPageDescription extends StatelessWidget {
       children: [
         Text(
           'Adicione uma descrição',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: TextEditingController(
+            text: context.read<SignUpBloc>().registration.description,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          style: Theme.of(context).textTheme.bodyLarge,
+          keyboardType: TextInputType.multiline,
+          minLines: 3,
+          maxLines: null,
+          maxLength: 560,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailsField(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Adicione a programação do evento',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 16),

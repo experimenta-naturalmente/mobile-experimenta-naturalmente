@@ -57,9 +57,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final previous = event.previous;
     if (state is SignUpPageInitialState) {
       if (!previous) {
-        emit(SignUpPageDescriptionState());
+        emit(
+          SignUpPageDescriptionState(selectedCategory: registration.category!),
+        );
       }
-      emit(SignUpPageDescriptionState());
+      emit(
+        SignUpPageDescriptionState(selectedCategory: registration.category!),
+      );
     } else if (state is SignUpPageDescriptionState) {
       if (previous) {
         emit(SignUpPageInitialState());
@@ -68,16 +72,14 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       }
     } else if (state is SignUpPageFormState) {
       if (previous) {
-        emit(SignUpPageDescriptionState());
+        emit(
+          SignUpPageDescriptionState(selectedCategory: registration.category!),
+        );
       } else {
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());
         } else {
-          emit(
-            SignUpPageWorkingHoursState(
-              workingHours: registration.workingHours,
-            ),
-          );
+          emit(SignUpPageWorkingHoursState());
         }
       }
     } else if (state is SignUpPageDateRangeState) {
@@ -100,11 +102,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());
         } else {
-          emit(
-            SignUpPageWorkingHoursState(
-              workingHours: registration.workingHours,
-            ),
-          );
+          emit(SignUpPageWorkingHoursState());
         }
       }
     }
