@@ -46,9 +46,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final previous = event.previous;
     if (state is SignUpPageInitialState) {
       if (!previous) {
-        emit(SignUpPageDescriptionState());
+        emit(
+          SignUpPageDescriptionState(selectedCategory: registration.category!),
+        );
       }
-      emit(SignUpPageDescriptionState());
+      emit(
+        SignUpPageDescriptionState(selectedCategory: registration.category!),
+      );
     } else if (state is SignUpPageDescriptionState) {
       if (previous) {
         emit(SignUpPageInitialState());
@@ -57,9 +61,22 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       }
     } else if (state is SignUpPageFormState) {
       if (previous) {
-        emit(SignUpPageDescriptionState());
+        emit(
+          SignUpPageDescriptionState(selectedCategory: registration.category!),
+        );
       } else {
-        emit(SignUpPageWorkingHoursState());
+        if (registration.category?.name == 'Evento') {
+          emit(SignUpPageDateRangeState());
+        } else {
+          emit(SignUpPageWorkingHoursState());
+        }
+      }
+    } else if (state is SignUpPageDateRangeState) {
+      if (previous) {
+        emit(SignUpPageFormState());
+      } else {
+        await _showTags();
+        emit(SignUpPageTagSelectionState(selectedTags: selectedTagsCache));
       }
     } else if (state is SignUpPageWorkingHoursState) {
       if (previous) {
@@ -71,7 +88,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     } else if (state is SignUpPageTagSelectionState) {
       if (previous) {
         selectedTagsCache = (state as SignUpPageTagSelectionState).selectedTags;
-        emit(SignUpPageWorkingHoursState());
+        if (registration.category?.name == 'Evento') {
+          emit(SignUpPageDateRangeState());
+        } else {
+          emit(SignUpPageWorkingHoursState());
+        }
       }
     }
   }

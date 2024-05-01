@@ -21,6 +21,7 @@ dependencies:
   mask_text_input_formatter: ^2.9.0
   nested: any
   provider: ^6.1.2
+  syncfusion_flutter_datepicker: ^25.1.42
   time_range_picker: ^2.0.0
   validators: ^3.0.0
 
