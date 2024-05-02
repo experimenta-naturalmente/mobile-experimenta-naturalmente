@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,7 +31,7 @@ class HomeScreen extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.only(left: 24.0),
           child: Text(
-            "Eventos1",
+            "Eventos",
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 24,
@@ -36,12 +39,30 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 175.0,
-          child: PageView.builder(
-            itemCount: 5, // Número de itens no carrossel
-            itemBuilder: (BuildContext context, int itemIndex) {
-              return _buildCarouselItem(context, carouselIndex, itemIndex);
-            },
+          height: 175.0, // Altura do container que irá conter o Carousel
+          width: MediaQuery.of(context).size.width, // Largura total da tela
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0, // Movendo o Carousel para esquerda por 10 pixels
+                right: -150,
+                top: 0, // Alinhamento superior no Stack
+                bottom: 0, // Alinhamento inferior no Stack
+                child: CarouselSlider.builder(
+                  itemCount: 5,
+                  itemBuilder:
+                      (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return _buildCarouselItem(
+                        context, carouselIndex, itemIndex,);
+                  },
+                  options: CarouselOptions(
+                    height: 400,
+                    viewportFraction: 0.55,
+                    padEnds: false,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -53,31 +74,27 @@ class HomeScreen extends StatelessWidget {
     int carouselIndex,
     int itemIndex,
   ) {
+    final Random random = Random();
+    final int randomId = random.nextInt(100) + 1; // +1 para garantir que não seja 0
     return SizedBox(
-      width: 100.0,
+      width: 330,
       child: Stack(
+        alignment: AlignmentDirectional.bottomStart,
         children: [
-          /*Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.red, // Cor da borda para visibilidade
-                width: 2.0, // Espessura da borda
-              ),
-            ),
-          ),*/
           Positioned(
             top: 0,
             left: 20.0,
             right: 20.0,
             child: Container(
               height: 124.0,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
-                      'https://www.rbsdirect.com.br/filestore/1/2/5/0/9/8/4_361e19f93784fa6/4890521_aef3999fcc0f380.jpg?w=1024&h=768&a=c'),
+                    'https://picsum.photos/id/$randomId/290/124',
+                  ),
                   fit: BoxFit.cover, // Ajuste da imagem dentro do Container
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
               ),
             ),
           ),
