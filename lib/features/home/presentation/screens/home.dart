@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
@@ -45,14 +46,52 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildEventsList(Set<Experience> experiences) {
-    return ListView.builder(
-      itemCount: experiences.length,
-      itemBuilder: (BuildContext context, int index) {
-        final experience = experiences.elementAt(index);
-        return EventListItem(event: experience, onTap: () => {});
-      },
+    return Wrap(
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(left: 24.0),
+          child: Text(
+            "Eventos",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          ),
+        ),
+        Builder( 
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 175.0,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 0,
+                    right: -150,
+                    top: 0,
+                    bottom: 0,
+                    child: CarouselSlider.builder(
+                      itemCount: experiences.length,
+                      itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+                        final experience = experiences.elementAt(index);
+                        return EventListItem(event: experience, onTap: () => {});
+                      },
+                      options: CarouselOptions(
+                        height: 400,
+                        viewportFraction: 0.55,
+                        padEnds: false,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
-  }
+}
+
 
   Widget _buildSpotsList(Set<Experience> experiences) {
     return ListView.builder(
