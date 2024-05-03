@@ -1,124 +1,66 @@
-import 'dart:math';
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
+import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/event_list_item.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/spot_list_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Carousel in vertical scrollable'),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 360.0),
-        itemBuilder: (BuildContext context, int index) {
-          // ignore: use_is_even_rather_than_modulo
-          if (index % 2 == 0) {
-            return _buildCarousel(context, index ~/ 2);
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget _buildCarousel(BuildContext context, int carouselIndex) {
-    return Wrap(
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(left: 24.0),
-          child: Text(
-            "Eventos",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 24,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 175.0, // Altura do container que irá conter o Carousel
-          width: MediaQuery.of(context).size.width, // Largura total da tela
-          child: Stack(
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (BuildContext context, HomeState state) {
+        if (state is HomeLoading) {
+          return const LoadingIndicator();
+        }
+        if (state is HomeError) {
+          return ErrorHandler(
+            error: state.error,
+            onRetry: () => {},
+          );
+        }
+        if (state is HomeLoaded) {
+          return Stack(
             children: [
-              Positioned(
-                left: 0, // Movendo o Carousel para esquerda por 10 pixels
-                right: -150,
-                top: 0, // Alinhamento superior no Stack
-                bottom: 0, // Alinhamento inferior no Stack
-                child: CarouselSlider.builder(
-                  itemCount: 5,
-                  itemBuilder:
-                      (BuildContext context, int itemIndex, int pageViewIndex) {
-                    return _buildCarouselItem(
-                        context, carouselIndex, itemIndex,);
-                  },
-                  options: CarouselOptions(
-                    height: 400,
-                    viewportFraction: 0.55,
-                    padEnds: false,
-                  ),
-                ),
+              DoubleCircle(),
+              Column(
+                children: [
+                  _buildEventsList(state.events),
+                  _buildSpotsList(state.spots),
+                  const LoadingIndicator(),
+                ],
               ),
             ],
-          ),
-        ),
-      ],
+          );
+        }
+        return Container();
+      },
     );
   }
 
-  Widget _buildCarouselItem(
-    BuildContext context,
-    int carouselIndex,
-    int itemIndex,
-  ) {
-    final Random random = Random();
-    final int randomId = random.nextInt(100) + 1; // +1 para garantir que não seja 0
-    return SizedBox(
-      width: 330,
-      child: Stack(
-        alignment: AlignmentDirectional.bottomStart,
-        children: [
-          Positioned(
-            top: 0,
-            left: 20.0,
-            right: 20.0,
-            child: Container(
-              height: 124.0,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://picsum.photos/id/$randomId/290/124',
-                  ),
-                  fit: BoxFit.cover, // Ajuste da imagem dentro do Container
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(
-              left: 22.0,
-              top: 125.0,
-              right: 63,
-            ), // Adicionar padding à esquerda
-            child: Text(
-              "Evento X: Seja bem vindo ao maior evento da cidade",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ],
-      ),
+  Widget _buildEventsList(Set<Experience> experiences) {
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        final experience = experiences.elementAt(index);
+        return EventListItem(event: experience, onTap: () => {});
+      },
     );
   }
 
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+  Widget _buildSpotsList(Set<Experience> experiences) {
+    return ListView.builder(
+      itemCount: experiences.length,
+      itemBuilder: (BuildContext context, int index) {
+        final experience = experiences.elementAt(index);
+        return SpotListItem(spot: experience, onTap: () => {});
+      },
+    );
   }
 }
