@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 
 abstract class SignUpEvent extends Equatable {
   const SignUpEvent();

@@ -1,11 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 
 class MockExperienceRepository extends Mock implements IExperienceRepository {}
@@ -22,12 +22,14 @@ void main() {
     name: 'Experience 1',
     description: 'Description 1',
     imageUrl: 'https://picsum.photos/300/400?random=1',
+    category: mockCategory1,
   );
   const ExperienceListItem mockExperienceListItem2 = ExperienceListItem(
     id: 2,
     name: 'Experience 2',
     description: 'Description 2',
     imageUrl: 'https://picsum.photos/300/400?random=1',
+    category: mockCategory2,
   );
 
   setUp(() {

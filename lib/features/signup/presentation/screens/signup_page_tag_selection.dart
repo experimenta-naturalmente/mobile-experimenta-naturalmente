@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/interfaces/i_tag_repository.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/tag.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/repositories/tag_repository.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
@@ -16,7 +16,7 @@ class SignUpTagSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final availableTags = context.read<SignUpBloc>().availableTags;
+    final filteredTags = context.read<SignUpBloc>().filteredTags;
     final selectedTags = state.selectedTags;
     return SingleChildScrollView(
       child: Center(
@@ -35,15 +35,13 @@ class SignUpTagSelection extends StatelessWidget {
             ),
             Column(
               children: [
-                for (final category in availableTags.keys) ...[
-                  _buildTagGroup(
-                    context,
-                    category,
-                    availableTags[category] ?? {},
-                    selectedTags,
-                  ),
-                  const SizedBox(height: 24),
-                ],
+                _buildTagGroup(
+                  context,
+                  filteredTags.isNotEmpty ? filteredTags.first.type.name : '',
+                  filteredTags,
+                  selectedTags,
+                ),
+                const SizedBox(height: 24),
               ],
             ),
           ],
@@ -54,27 +52,33 @@ class SignUpTagSelection extends StatelessWidget {
 
   Widget _buildTagGroup(
     BuildContext context,
-    ExperienceCategory tagType,
+    String tagType,
     Set<Tag> tags,
     Map<int, bool> selectedTags,
   ) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            tagType.name,
-            style: Theme.of(context).textTheme.titleMedium,
+    if (tagType != '' && tags.isNotEmpty) {
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              tagType,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
-        ),
-        TagSelectionGroup(
-          tags: tags,
-          selectedTags: selectedTags,
-          onSelected: (Tag tag) {
-            context.read<SignUpBloc>().add(SignUpToggleTag(tag, selectedTags));
-          },
-        ),
-      ],
-    );
+          TagSelectionGroup(
+            tags: tags,
+            selectedTags: selectedTags,
+            onSelected: (Tag tag) {
+              context
+                  .read<SignUpBloc>()
+                  .add(SignUpToggleTag(tag, selectedTags));
+            },
+          ),
+        ],
+      );
+    } else {
+      return EmptyList();
+    }
   }
 }

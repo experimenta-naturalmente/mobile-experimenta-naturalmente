@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
@@ -27,6 +27,7 @@ void main() {
     name: 'Experience 1',
     description: 'Description 1',
     imageUrl: '',
+    category: mockCategory1,
   );
   setUp(() {
     mockExperienceBloc = MockExperienceBloc();

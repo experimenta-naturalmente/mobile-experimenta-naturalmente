@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 
 class ExperienceCategoryTabView extends StatelessWidget {
   final Set<ExperienceCategory> tabs;
@@ -14,22 +14,22 @@ class ExperienceCategoryTabView extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 4,
-      children: tabs
-          .map(
-            (category) => ChoiceChip(
-              label: Text(category.name),
-              selected: category == selectedCategory,
-              onSelected: (selected) {
-                if (selected) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Wrap(
+        spacing: 6,
+        children: tabs
+            .map(
+              (category) => ChoiceChip(
+                label: Text(category.name),
+                selected: category == selectedCategory,
+                onSelected: (selected) {
                   onCategorySelected(category);
-                }
-              },
-            ),
-          )
-          .toList(),
+                },
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }
