@@ -40,7 +40,7 @@ class MainScreen extends StatelessWidget {
               label: 'Experiências',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.explore)),
+              icon: Badge(child: Icon(Icons.map)),
               label: 'Mapa',
             ),
             NavigationDestination(
