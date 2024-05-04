@@ -4,6 +4,7 @@ import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/screens/home.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
@@ -32,19 +33,15 @@ class MainScreen extends StatelessWidget {
             NavigationDestination(
               selectedIcon: Icon(Icons.home),
               icon: Icon(Icons.home_outlined),
-              label: 'Menu',
+              label: 'Home',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.grass_outlined)),
+              icon: Badge(child: Icon(Icons.hotel_class)),
               label: 'Experiências',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.map_outlined)),
+              icon: Badge(child: Icon(Icons.map)),
               label: 'Mapa',
-            ),
-            NavigationDestination(
-              icon: Badge(child: Icon(Icons.favorite_outline_outlined)),
-              label: 'Favoritos',
             ),
             NavigationDestination(
               icon: Badge(child: Icon(Icons.person_outlined)),
@@ -53,8 +50,7 @@ class MainScreen extends StatelessWidget {
           ],
         ),
         body: [
-          const ExperiencesScreen(),
-          const ExperiencesScreen(),
+          const HomeScreen(),
           const ExperiencesScreen(),
           const SignUpHandler(),
           const LoginScreen(),
