@@ -46,9 +46,23 @@ class MainApp extends StatelessWidget {
             )..add(LoadExperienceCategories()),
           ),
           BlocProvider(
-            create: (context) => SpotsBloc(
-              experienceRepository: ExperienceRepository(),
-            )..add(LoadSpotsCategories()),
+            create: (context) {
+              final spotBloc = SpotsBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+              );
+              spotBloc.add(LoadSpotsCategories());
+              return spotBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final signUpBloc = SignUpBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+                tagRepository: context.read<ITagRepository>(),
+              );
+              signUpBloc.add(LoadSignUp());
+              return signUpBloc;
+            },
           ),
           BlocProvider(
             create: (context) => SignUpBloc(
