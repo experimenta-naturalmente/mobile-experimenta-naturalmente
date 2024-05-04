@@ -54,7 +54,5 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   Future<void> _onExperienceSelected(
     ExperienceSelected event,
     Emitter<ExperienceState> emit,
-  ) async {
-    print('Experience selected: ${event.selectedItem.name}');
-  }
+  ) async {}
 }

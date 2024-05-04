@@ -1,20 +1,15 @@
-image: "ghcr.io/cirruslabs/flutter:stable"
+image: "ghcr.io/cirruslabs/flutter:beta"
 
 stages:
   - analyze_and_test
   - preview
   - deploy
 
-cache:
-  key: "$CI_COMMIT_REF_SLUG"
-  paths:
-    - .pub-cache/global_packages
-    - export PATH="$PATH":"$HOME/.pub-cache/bin"
-
 code_quality:
   stage: analyze_and_test
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
+    - flutter --version
     - flutter pub global activate dart_code_metrics
     - apt-get update && apt-get install -y python3 python3-pip
     - ln -s /usr/bin/python3 /usr/bin/python
