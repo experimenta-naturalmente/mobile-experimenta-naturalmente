@@ -23,7 +23,10 @@ dependencies:
   nested: any
   provider: ^6.1.2
   syncfusion_flutter_datepicker: ^25.1.42
-  time_range_picker: ^2.0.0
+  time_range_picker: 
+    git:
+      url: https://github.com/mariahbf/flutter_time_range_picker.git
+      ref: master
   validators: ^3.0.0
 
 dev_dependencies:

@@ -1,93 +1,136 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_range_picker/time_range_picker.dart';
-import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 
 class ShiftSelect extends StatefulWidget {
-  final ValueNotifier<bool> checkboxNotifier;
+  final WeekDay day;
+  final List<(TimeOfDay, TimeOfDay)>? workingHours;
 
-  const ShiftSelect({super.key, required this.checkboxNotifier});
+  const ShiftSelect({
+    super.key,
+    required this.day,
+    this.workingHours,
+  });
 
   @override
   _ShiftSelectState createState() => _ShiftSelectState();
 }
 
 class _ShiftSelectState extends State<ShiftSelect> {
-  List<TimeRange> timeRanges = [
-    TimeRange(
-      startTime: const TimeOfDay(hour: 8, minute: 0),
-      endTime: const TimeOfDay(hour: 20, minute: 0),
-    ),
-  ];
+  late List<TimeRange> timeRanges;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.workingHours != null) {
+      timeRanges = widget.workingHours!
+          .map(
+            (e) => TimeRange(
+              startTime: e.$1,
+              endTime: e.$2,
+            ),
+          )
+          .toList();
+    } else {
+      timeRanges = [
+        TimeRange(
+          startTime: const TimeOfDay(hour: 8, minute: 0),
+          endTime: const TimeOfDay(hour: 20, minute: 0),
+        ),
+      ];
+      context.read<SignUpBloc>().add(
+            SignUpChangeWorkingHours(
+              day: widget.day,
+              workingHours:
+                  timeRanges.map((e) => (e.startTime, e.endTime)).toList(),
+            ),
+          );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.checkboxNotifier.value = false;
-    });
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 30.0),
+          padding: const EdgeInsets.symmetric(vertical: 18),
           child: Text(
-            'Lista de horários:',
+            'Horário de funcionamento',
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const RangeMaintainingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...timeRanges.map(
-                  (TimeRange timeRange) => ListTile(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: ElevatedButton(
+            child: const Text('Adicionar intervalo'),
+            onPressed: () async {
+              final newTimeRange = await showTimeRangePicker(
+                interval: const Duration(minutes: 30),
+                context: context,
+                fromText: 'De',
+                toText: 'Até',
+                strokeColor: Theme.of(context).colorScheme.primary,
+                handlerColor: Theme.of(context).colorScheme.primary,
+                selectedColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+              );
+              if (newTimeRange != null) {
+                setState(() {
+                  timeRanges.add(newTimeRange as TimeRange);
+                  final listTimeDay =
+                      timeRanges.map((e) => (e.startTime, e.endTime)).toList();
+                  context.read<SignUpBloc>().add(
+                        SignUpChangeWorkingHours(
+                          day: widget.day,
+                          workingHours: listTimeDay,
+                        ),
+                      );
+                });
+              }
+            },
+          ),
+        ),
+        Flexible(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.35,
+            ),
+            child: Scrollbar(
+              thumbVisibility: true,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: timeRanges.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
                     title: Text(
-                      '${timeRange.startTime.format(context)} - ${timeRange.endTime.format(context)}',
+                      '${timeRanges[index].startTime.format(context)} - ${timeRanges[index].endTime.format(context)}',
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
-                          timeRanges.remove(timeRange);
+                          timeRanges.removeAt(index);
                         });
+                        final listTimeDay = timeRanges
+                            .map((e) => (e.startTime, e.endTime))
+                            .toList();
+                        context.read<SignUpBloc>().add(
+                              SignUpChangeWorkingHours(
+                                day: widget.day,
+                                workingHours: listTimeDay,
+                              ),
+                            );
                       },
                     ),
-                  ),
-                ),
-                ElevatedButton(
-                  child: const Text('Adicionar intervalo'),
-                  onPressed: () async {
-                    final newTimeRange = await showTimeRangePicker(
-                      context: context,
-                      fromText: 'De',
-                      toText: 'Até',
-                      strokeColor: Colors.green,
-                      handlerColor: Colors.green[800],
-                      selectedColor: Colors.green[900],
-                      backgroundColor: Colors.green[200],
-                      
-                    );
-                    if (newTimeRange != null) {
-                      setState(() {
-                        timeRanges.add(newTimeRange as TimeRange);
-                      });
-                    }
-                  },
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: SubmitButton(
-            text: 'Avançar',
-            onPressed: () => {
-              widget.checkboxNotifier.value = true,
-              Navigator.of(context).pop(),
-            },
           ),
         ),
       ],
