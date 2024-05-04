@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
 abstract class SignUpEvent extends Equatable {
   const SignUpEvent();
@@ -32,4 +34,14 @@ class SignUpToggleTag extends SignUpEvent {
 
   @override
   String toString() => 'ToggleTag { tag: $tag }';
+}
+
+class SignUpChangeWorkingHours extends SignUpEvent {
+  final WeekDay day;
+  final List<(TimeOfDay, TimeOfDay)> workingHours;
+
+  const SignUpChangeWorkingHours({
+    required this.day,
+    required this.workingHours,
+  });
 }
