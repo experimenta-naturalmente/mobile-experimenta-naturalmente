@@ -17,6 +17,8 @@ import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/spots/bloc/spots_bloc.dart';
+import 'package:turismo_rural_frontend/features/spots/bloc/spots_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() {
@@ -53,6 +55,15 @@ class MainApp extends StatelessWidget {
               );
               experienceBloc.add(LoadExperienceCategories());
               return experienceBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final spotBloc = SpotsBloc(
+                experienceRepository: context.read<IExperienceRepository>(),
+              );
+              spotBloc.add(LoadSpotsCategories());
+              return spotBloc;
             },
           ),
           BlocProvider(
