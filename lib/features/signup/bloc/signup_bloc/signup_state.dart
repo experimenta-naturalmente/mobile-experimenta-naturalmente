@@ -25,6 +25,20 @@ class SignUpPageWorkingHoursState extends SignUpState {
   List<Object> get props => [...workingHours.entries];
 }
 
+class SignUpPageDateRangeState extends SignUpState {
+  final ValueNotifier<DateTime?> startDate;
+  final ValueNotifier<DateTime?> endDate;
+
+  SignUpPageDateRangeState()
+      : startDate = ValueNotifier<DateTime?>(null),
+        endDate = ValueNotifier<DateTime?>(null);
+
+  bool get canProceed => startDate.value != null && endDate.value != null;
+
+  @override
+  List<Object> get props => [startDate, endDate];
+}
+
 class SignUpPageTagSelectionState extends SignUpState {
   final Map<int, bool> selectedTags;
 
