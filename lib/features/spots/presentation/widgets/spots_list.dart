@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/spots/bloc/spots_bloc.dart';
 
 class SpotsList extends StatelessWidget {
@@ -10,7 +10,8 @@ class SpotsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categories = context.read<SpotsBloc>().categoriesCache;
-    final experienceListMap = context.read<SpotsBloc>().experienceList;
+    final experienceListMap =
+        {}.cast<ExperienceCategory, Set<ExperienceListItem>>();
 
     return SingleChildScrollView(
       physics: const RangeMaintainingScrollPhysics(),

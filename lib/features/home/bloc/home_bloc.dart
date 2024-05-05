@@ -1,3 +1,4 @@
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
@@ -18,8 +19,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(HomeLoading());
     try {
-      //final experiences = await experienceRepository.fetchExperiences();
-      //emit(HomeLoaded(experiences));
+      final events = experienceRepository.fetchEvents();
+      final spots = experienceRepository.fetchSpots();
+      emit(
+        HomeLoaded(
+          events: await events,
+          spots: await spots,
+        ),
+      );
     } catch (e) {
       emit(HomeError(e.toString()));
     }

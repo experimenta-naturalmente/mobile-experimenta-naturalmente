@@ -1,9 +1,13 @@
+import 'package:turismo_rural_frontend/core/data/models/event.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 
 abstract class IExperienceRepository {
   Future<Set<ExperienceCategory>> fetchExperienceCategories();
-  Future<Set<ExperienceListItem>> fetchExperiencesfromCategory(
+  Future<Set<Experience>> fetchExperiencesfromCategory(
     ExperienceCategory category,
   );
+  Future<Set<Event>> fetchEvents();
+  Future<Set<Spot>> fetchSpots();
 }

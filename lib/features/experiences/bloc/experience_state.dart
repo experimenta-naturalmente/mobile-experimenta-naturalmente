@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 abstract class ExperienceState extends Equatable {
   const ExperienceState();

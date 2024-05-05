@@ -13,7 +13,4 @@ abstract class Experience extends Equatable {
     required this.description,
     required this.category,
   });
-
-  @override
-  List<Object?> get props => [id, name, description, category];
 }

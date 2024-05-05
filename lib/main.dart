@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
-import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
@@ -34,13 +32,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<IMapsService>(
-          create: (context) => GoogleMapsService(),
-        ),
-        Provider<IExperienceRepository>(
-          create: (context) => ExperienceRepository(),
-        ),
-        Provider<ITagRepository>(
-          create: (context) => TagRepository(),
+          create: (_) => GoogleMapsService(),
         ),
       ],
       child: MultiBlocProvider(
@@ -49,47 +41,28 @@ class MainApp extends StatelessWidget {
             create: (context) => NavigationCubit(),
           ),
           BlocProvider(
-            create: (context) {
-              final experienceBloc = ExperienceBloc(
-                experienceRepository: context.read<IExperienceRepository>(),
-              );
-              experienceBloc.add(LoadExperienceCategories());
-              return experienceBloc;
-            },
+            create: (context) => ExperienceBloc(
+              experienceRepository: ExperienceRepository(),
+            )..add(LoadExperienceCategories()),
           ),
           BlocProvider(
-            create: (context) {
-              final spotBloc = SpotsBloc(
-                experienceRepository: context.read<IExperienceRepository>(),
-              );
-              spotBloc.add(LoadSpotsCategories());
-              return spotBloc;
-            },
+            create: (context) => SpotsBloc(
+              experienceRepository: ExperienceRepository(),
+            )..add(LoadSpotsCategories()),
           ),
           BlocProvider(
-            create: (context) {
-              final signUpBloc = SignUpBloc(
-                experienceRepository: context.read<IExperienceRepository>(),
-                tagRepository: context.read<ITagRepository>(),
-              );
-              signUpBloc.add(LoadSignUp());
-              return signUpBloc;
-            },
+            create: (context) => SignUpBloc(
+              experienceRepository: ExperienceRepository(),
+              tagRepository: TagRepository(),
+            )..add(LoadSignUp()),
           ),
           BlocProvider(
-            create: (context) {
-              final loginBloc = LoginBloc();
-              return loginBloc;
-            },
+            create: (context) => LoginBloc(),
           ),
           BlocProvider(
-            create: (context) {
-              final homeBloc = HomeBloc(
-                experienceRepository: context.read<IExperienceRepository>(),
-              );
-              homeBloc.add(HomeLoadData());
-              return homeBloc;
-            },
+            create: (context) => HomeBloc(
+              experienceRepository: ExperienceRepository(),
+            )..add(HomeLoadData()),
           ),
         ],
         child: MaterialApp(
