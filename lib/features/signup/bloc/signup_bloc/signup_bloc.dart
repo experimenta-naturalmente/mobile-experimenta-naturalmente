@@ -57,13 +57,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final previous = event.previous;
     if (state is SignUpPageInitialState) {
       if (!previous) {
-        emit(
-          SignUpPageDescriptionState(selectedCategory: registration.category!),
-        );
+        emit(SignUpPageDescriptionState());
       }
-      emit(
-        SignUpPageDescriptionState(selectedCategory: registration.category!),
-      );
+      emit(SignUpPageDescriptionState());
     } else if (state is SignUpPageDescriptionState) {
       if (previous) {
         emit(SignUpPageInitialState());
@@ -72,9 +68,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       }
     } else if (state is SignUpPageFormState) {
       if (previous) {
-        emit(
-          SignUpPageDescriptionState(selectedCategory: registration.category!),
-        );
+        emit(SignUpPageDescriptionState());
       } else {
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());

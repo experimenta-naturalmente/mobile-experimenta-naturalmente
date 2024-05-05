@@ -12,16 +12,7 @@ abstract class SignUpState extends Equatable {
 
 class SignUpPageInitialState extends SignUpState {}
 
-class SignUpPageDescriptionState extends SignUpState {
-  final ExperienceCategory selectedCategory;
-
-  const SignUpPageDescriptionState({
-    required this.selectedCategory,
-  });
-
-  @override
-  List<Object> get props => [selectedCategory];
-}
+class SignUpPageDescriptionState extends SignUpState {}
 
 class SignUpPageFormState extends SignUpState {}
 
@@ -32,20 +23,6 @@ class SignUpPageWorkingHoursState extends SignUpState {
 
   @override
   List<Object> get props => [...workingHours.entries];
-}
-
-class SignUpPageDateRangeState extends SignUpState {
-  final ValueNotifier<DateTime?> startDate;
-  final ValueNotifier<DateTime?> endDate;
-
-  SignUpPageDateRangeState()
-      : startDate = ValueNotifier<DateTime?>(null),
-        endDate = ValueNotifier<DateTime?>(null);
-
-  bool get canProceed => startDate.value != null && endDate.value != null;
-
-  @override
-  List<Object> get props => [startDate, endDate];
 }
 
 class SignUpPageTagSelectionState extends SignUpState {

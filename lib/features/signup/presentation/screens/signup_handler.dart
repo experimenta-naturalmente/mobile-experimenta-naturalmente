@@ -4,7 +4,6 @@ import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
-import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_date_range.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_description.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_form.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_initial.dart';
@@ -85,15 +84,10 @@ class SignUpHandler extends StatelessWidget {
       return const SignUpPageInitial();
     }
     if (state is SignUpPageDescriptionState) {
-      return SignUpPageDescription(
-        state: state,
-      );
+      return const SignUpPageDescription();
     }
     if (state is SignUpPageFormState) {
       return SignUpPageForm();
-    }
-    if (state is SignUpPageDateRangeState) {
-      return const SignUpPageDateRange();
     }
     if (state is SignUpPageWorkingHoursState) {
       return SignUpPageWorkingHours(
