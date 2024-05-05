@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 class ExperienceListItemWidget extends StatelessWidget {
   final ExperienceListItem experience;

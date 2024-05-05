@@ -1,14 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   final IExperienceRepository experienceRepository;
 
-  // na declaração do bloc, cada evento é associado a uma função
   ExperienceBloc({
     required this.experienceRepository,
   }) : super(ExperienceFilterInitial()) {
@@ -37,8 +37,20 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   ) async {
     emit(ExperienceListLoading(event.selectedCategory, event.categories));
     try {
-      final Set<ExperienceListItem> experienceItems = await experienceRepository
+      final Set<Experience> experiences = await experienceRepository
           .fetchExperiencesfromCategory(event.selectedCategory);
+      final Set<ExperienceListItem> experienceItems = experiences
+          .map(
+            (e) => ExperienceListItem(
+              id: e.id,
+              name: e.name,
+              description: e.description,
+              category: e.category,
+              imageUrl: 'https://picsum.photos/300/400?random=$e.id',
+            ),
+          )
+          .toSet();
+
       emit(
         ExperienceListLoadSuccess(
           experienceItems,

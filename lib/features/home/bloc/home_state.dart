@@ -16,7 +16,7 @@ class HomeLoaded extends HomeState {
   final Set<Experience> spots;
   final Set<Experience> events;
 
-  const HomeLoaded(this.spots, this.events);
+  const HomeLoaded({required this.spots, required this.events});
 
   @override
   List<Object> get props => [spots, events];

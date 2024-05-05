@@ -8,14 +8,12 @@ import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dar
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/data/models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_category_tabview.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
 
 class ExperiencesScreen extends StatelessWidget {
   const ExperiencesScreen({super.key});
-  // preferencialmente manter o tratamento de todos os estados direto no método de build,
-  // evitar fazer tratamento de estado em outras widgets.
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,10 @@
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 
-class Spot extends Experience {
-  final String openingHours;
+class Event extends Experience {
+  final String about;
 
-  const Spot({
-    required this.openingHours,
+  const Event({
+    required this.about,
     required super.id,
     required super.name,
     required super.description,
@@ -12,5 +12,5 @@ class Spot extends Experience {
   });
 
   @override
-  List<Object?> get props => [id, name, description, category, openingHours];
+  List<Object?> get props => [id, name, description, about, category];
 }
