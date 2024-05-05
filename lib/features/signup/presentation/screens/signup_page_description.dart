@@ -20,7 +20,7 @@ class SignUpPageDescription extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.1,
-          vertical: screenHeight * 0.1,
+          vertical: screenHeight * 0.03,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +66,7 @@ class SignUpPageDescription extends StatelessWidget {
               Container(
                 height: 75,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   border: Border.all(
                     color: Colors.transparent,
                   ),

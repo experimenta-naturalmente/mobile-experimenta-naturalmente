@@ -12,13 +12,16 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          textScaler: const TextScaler.linear(1.5),
+    return ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(width: 160),
+      child: SizedBox(
+        height: 52,
+        child: OutlinedButton(
+          onPressed: onPressed,
+          child: Text(
+            text,
+            textScaler: const TextScaler.linear(1.5),
+          ),
         ),
       ),
     );

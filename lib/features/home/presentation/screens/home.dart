@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        Builder( 
+        Builder(
           builder: (BuildContext context) {
             return SizedBox(
               height: 175.0,
@@ -72,9 +72,11 @@ class HomeScreen extends StatelessWidget {
                     bottom: 0,
                     child: CarouselSlider.builder(
                       itemCount: experiences.length,
-                      itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+                      itemBuilder:
+                          (BuildContext context, int index, int pageViewIndex) {
                         final experience = experiences.elementAt(index);
-                        return EventListItem(event: experience, onTap: () => {});
+                        return EventListItem(
+                            event: experience, onTap: () => {});
                       },
                       options: CarouselOptions(
                         height: 400,
@@ -90,8 +92,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ],
     );
-}
-
+  }
 
   Widget _buildSpotsList(Set<Experience> experiences) {
     return ListView.builder(

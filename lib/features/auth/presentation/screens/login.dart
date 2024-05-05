@@ -26,32 +26,42 @@ class LoginScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.1,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: screenHeight * 0.05,
-                    left: screenWidth * 0.02,
+            child: SingleChildScrollView(
+              physics: const RangeMaintainingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: screenHeight * 0.05,
+                      left: screenWidth * 0.02,
+                    ),
+                    child: _welcomeText(context),
                   ),
-                  child: _welcomeText(context),
-                ),
-                _discoverConnectShareText(context),
-                Form(
-                  child: Column(
-                    children: [
-                      _usernameField(context),
-                      SizedBox(height: screenHeight * 0.01),
-                      _passwordField(context, state.obscuredPassword),
-                      _forgotPasswordButton(context),
-                      SizedBox(height: screenHeight * 0.01),
-                      SubmitButton(text: 'Entrar', onPressed: () => {}),
-                    ],
+                  SizedBox(height: screenHeight * 0.12),
+                  _discoverConnectShareText(context),
+                  SizedBox(height: screenHeight * 0.02),
+                  Form(
+                    child: Column(
+                      children: [
+                        _usernameField(context),
+                        SizedBox(
+                          height: screenHeight * 0.02,
+                        ),
+                        _passwordField(context, state.obscuredPassword),
+                        _forgotPasswordButton(context),
+                        SizedBox(
+                          height: screenHeight * 0.02,
+                        ),
+                        SubmitButton(text: 'Entrar', onPressed: () => {}),
+                      ],
+                    ),
                   ),
-                ),
-                _createAccountButton(context),
-              ],
+                  SizedBox(height: screenHeight * 0.07),
+                  _createAccountButton(context),
+                ],
+              ),
             ),
           );
         }

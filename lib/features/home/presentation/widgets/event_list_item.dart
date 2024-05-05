@@ -16,14 +16,11 @@ class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 360.0),
-        itemBuilder: (BuildContext context, int index) {
-
-            return _buildCarousel(context, index ~/ 2);
-          
-        },
-      );
-  
+      padding: const EdgeInsets.symmetric(vertical: 360.0),
+      itemBuilder: (BuildContext context, int index) {
+        return _buildCarousel(context, index ~/ 2);
+      },
+    );
   }
 
   Widget _buildCarousel(BuildContext context, int carouselIndex) {
@@ -54,7 +51,10 @@ class EventListItem extends StatelessWidget {
                   itemBuilder:
                       (BuildContext context, int itemIndex, int pageViewIndex) {
                     return _buildCarouselItem(
-                        context, carouselIndex, itemIndex,);
+                      context,
+                      carouselIndex,
+                      itemIndex,
+                    );
                   },
                   options: CarouselOptions(
                     height: 400,
@@ -76,7 +76,7 @@ class EventListItem extends StatelessWidget {
     int itemIndex,
   ) {
     final Random random = Random();
-    final int randomId = random.nextInt(100) + 1; 
+    final int randomId = random.nextInt(100) + 1;
     return SizedBox(
       width: 330,
       child: Stack(
@@ -93,7 +93,7 @@ class EventListItem extends StatelessWidget {
                   image: NetworkImage(
                     'https://picsum.photos/id/$randomId/290/124',
                   ),
-                  fit: BoxFit.cover, 
+                  fit: BoxFit.cover,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(16.0)),
               ),
@@ -117,5 +117,4 @@ class EventListItem extends StatelessWidget {
       ),
     );
   }
-
 }
