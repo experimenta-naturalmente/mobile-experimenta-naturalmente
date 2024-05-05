@@ -13,7 +13,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     emit(LoginSubmitLoading());
-    try {} catch (e) {
+    try {
+      print("Passou");
+    } catch (e) {
       emit(LoginError(e.toString()));
     }
   }

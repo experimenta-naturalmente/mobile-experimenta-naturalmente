@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
 abstract class SignUpState extends Equatable {
   const SignUpState();
@@ -26,12 +25,34 @@ class SignUpPageDescriptionState extends SignUpState {
 class SignUpPageFormState extends SignUpState {}
 
 class SignUpPageWorkingHoursState extends SignUpState {
-  final Map<WeekDay, List<(TimeOfDay, TimeOfDay)>> workingHours;
+  static const segundaFeira = 'Segunda-feira';
+  static const tercaFeira = 'Terca-feira';
+  static const quartaFeira = 'Quarta-feira';
+  static const quintaFeira = 'Quinta-feira';
+  static const sextaFeira = 'Sexta-feira';
+  static const sabado = 'Sábado';
+  static const domingo = 'Domingo';
+  static const feriados = 'Feriados';
 
-  const SignUpPageWorkingHoursState({required this.workingHours});
+  final Map<String, ValueNotifier<bool>> checkboxNotifier;
+
+  SignUpPageWorkingHoursState()
+      : checkboxNotifier = {
+          segundaFeira: ValueNotifier<bool>(false),
+          tercaFeira: ValueNotifier<bool>(false),
+          quartaFeira: ValueNotifier<bool>(false),
+          quintaFeira: ValueNotifier<bool>(false),
+          sextaFeira: ValueNotifier<bool>(false),
+          sabado: ValueNotifier<bool>(false),
+          domingo: ValueNotifier<bool>(false),
+          feriados: ValueNotifier<bool>(false),
+        };
+
+  bool get canProceed => checkboxNotifier.values
+      .any((valueNotifier) => valueNotifier.value == true);
 
   @override
-  List<Object> get props => [...workingHours.entries];
+  List<Object> get props => [checkboxNotifier];
 }
 
 class SignUpPageDateRangeState extends SignUpState {

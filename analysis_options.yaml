@@ -4,7 +4,7 @@ linter:
   rules:
     unawaited_futures: true
     cancel_subscriptions : false
-    avoid_print: true
+    avoid_print: false
 
 analyzer:
   plugins:

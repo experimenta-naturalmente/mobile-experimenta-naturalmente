@@ -23,9 +23,7 @@ class SignUpHandler extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: _getPage(state),
-            ),
+            Expanded(child: _getPage(state)),
             Expanded(
               flex: 0,
               child: Padding(
@@ -34,12 +32,12 @@ class SignUpHandler extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (showBack)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: SizedBox(
                           child: SubmitButton(
                             text: 'Voltar',
                             onPressed: () => context
@@ -50,12 +48,13 @@ class SignUpHandler extends StatelessWidget {
                       )
                     else
                       Container(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: SizedBox(
+                        width: showBack ? null : 240,
                         child: SubmitButton(
                           text: 'Avançar',
                           onPressed: () => context
@@ -96,9 +95,7 @@ class SignUpHandler extends StatelessWidget {
       return const SignUpPageDateRange();
     }
     if (state is SignUpPageWorkingHoursState) {
-      return SignUpPageWorkingHours(
-        state: state,
-      );
+      return const SignUpPageWorkingHours();
     }
     if (state is SignUpPageTagSelectionState) {
       return SignUpTagSelection(

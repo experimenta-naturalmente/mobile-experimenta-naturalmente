@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   final searchBarTheme = SearchBarThemeData(
-    shadowColor: WidgetStateProperty.all(Colors.transparent),
-    padding: WidgetStateProperty.all(
+    shadowColor: MaterialStateProperty.all(Colors.transparent),
+    padding: MaterialStateProperty.all(
       const EdgeInsets.only(left: 16),
     ),
-    shape: WidgetStateProperty.all(
+    shape: MaterialStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),

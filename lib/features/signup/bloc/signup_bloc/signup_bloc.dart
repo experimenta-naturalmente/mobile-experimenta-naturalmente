@@ -20,17 +20,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<SignUpChangePage>(_onSignUpChangePage);
     on<SignUpToggleTag>(_onToggleTag);
     on<LoadSignUp>(_onLoadSignUp);
-    on<SignUpChangeWorkingHours>(_onSignUpChangeWorkingHours);
-  }
-
-  Future<void> _onSignUpChangeWorkingHours(
-    SignUpChangeWorkingHours event,
-    Emitter<SignUpState> emit,
-  ) async {
-    final day = event.day;
-    final workingHours = event.workingHours;
-    registration.workingHours[day] = workingHours;
-    emit(SignUpPageWorkingHoursState(workingHours: registration.workingHours));
   }
 
   Future<void> _onLoadSignUp(
@@ -79,11 +68,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());
         } else {
-          emit(
-            SignUpPageWorkingHoursState(
-              workingHours: registration.workingHours,
-            ),
-          );
+          emit(SignUpPageWorkingHoursState());
         }
       }
     } else if (state is SignUpPageDateRangeState) {
@@ -106,11 +91,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());
         } else {
-          emit(
-            SignUpPageWorkingHoursState(
-              workingHours: registration.workingHours,
-            ),
-          );
+          emit(SignUpPageWorkingHoursState());
         }
       }
     }

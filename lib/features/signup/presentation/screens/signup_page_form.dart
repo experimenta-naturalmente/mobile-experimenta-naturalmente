@@ -6,15 +6,11 @@ class SignUpPageForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     return Center(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: screenHeight * 0.1,
-            ),
             _buildTextField(
               context,
               text: 'Nome Fantasia',
