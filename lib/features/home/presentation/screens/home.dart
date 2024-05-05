@@ -1,66 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/core/data/models/experience.dart';
-import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
-import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
-import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
-import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
-import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
-import 'package:turismo_rural_frontend/features/home/presentation/widgets/event_list_item.dart';
-import 'package:turismo_rural_frontend/features/home/presentation/widgets/spot_list_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (BuildContext context, HomeState state) {
-        if (state is HomeLoading) {
-          return const LoadingIndicator();
-        }
-        if (state is HomeError) {
-          return ErrorHandler(
-            error: state.error,
-            onRetry: () => {},
-          );
-        }
-        if (state is HomeLoaded) {
-          return Stack(
-            children: [
-              DoubleCircle(),
-              Column(
-                children: [
-                  _buildEventsList(state.events),
-                  _buildSpotsList(state.spots),
-                  const LoadingIndicator(),
-                ],
-              ),
-            ],
-          );
-        }
-        return Container();
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Carousel in vertical scrollable'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 360.0),
+        itemBuilder: (BuildContext context, int index) {
+          return _buildCarousel(context, index ~/ 2);
+        },
+      ),
     );
   }
 
-  Widget _buildEventsList(Set<Experience> experiences) {
-    return ListView.builder(
-      itemCount: experiences.length,
-      itemBuilder: (BuildContext context, int index) {
-        final experience = experiences.elementAt(index);
-        return EventListItem(event: experience, onTap: () => {});
-      },
+  Widget _buildCarousel(BuildContext context, int carouselIndex) {
+    return Wrap(
+      children: <Widget>[
+        const Text(
+          "Eventos",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 26,
+          ),
+        ),
+        SizedBox(
+          height: 155.0,
+          width: 800,
+          child: PageView.builder(
+            itemBuilder: (BuildContext context, int itemIndex) {
+              return _buildCarouselItem(context, carouselIndex, itemIndex);
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildSpotsList(Set<Experience> experiences) {
-    return ListView.builder(
-      itemCount: experiences.length,
-      itemBuilder: (BuildContext context, int index) {
-        final experience = experiences.elementAt(index);
-        return SpotListItem(spot: experience, onTap: () => {});
-      },
+  Widget _buildCarouselItem(
+    BuildContext context,
+    int carouselIndex,
+    int itemIndex,
+  ) {
+    return Stack(
+      alignment: AlignmentDirectional.bottomStart,
+      children: [
+        Positioned(
+          top: 0, // Ajuste esse valor conforme necessário para mover para cima
+          left: 20.0,
+          right: 30.0,
+          child: Container(
+            height: 120.0,
+            width: 20.0,
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+          ),
+        ),
+        const Text(
+          "Eventos",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 26,
+          ),
+        ),
+      ],
     );
   }
+}
+
+@override
+State<StatefulWidget> createState() {
+  // TODO: implement createState
+  throw UnimplementedError();
 }
