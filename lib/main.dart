@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
-import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
-import 'package:turismo_rural_frontend/core/data/repositories/firestore_experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
@@ -20,15 +17,9 @@ import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_b
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/spots/bloc/spots_bloc.dart';
 import 'package:turismo_rural_frontend/features/spots/bloc/spots_event.dart';
-import 'package:turismo_rural_frontend/firebase_options.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+void main() {
   runApp(MainApp());
 }
 
@@ -43,10 +34,6 @@ class MainApp extends StatelessWidget {
         Provider<IMapsService>(
           create: (_) => GoogleMapsService(),
         ),
-        Provider<IExperienceRepository>(
-          create: (_) =>
-              FirestoreExperienceRepository(FirebaseFirestore.instance),
-        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -55,20 +42,17 @@ class MainApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ExperienceBloc(
-              experienceRepository:
-                  RepositoryProvider.of<IExperienceRepository>(context),
+              experienceRepository: ExperienceRepository(),
             )..add(LoadExperienceCategories()),
           ),
           BlocProvider(
             create: (context) => SpotsBloc(
-              experienceRepository:
-                  RepositoryProvider.of<IExperienceRepository>(context),
+              experienceRepository: ExperienceRepository(),
             )..add(LoadSpotsCategories()),
           ),
           BlocProvider(
             create: (context) => SignUpBloc(
-              experienceRepository:
-                  RepositoryProvider.of<IExperienceRepository>(context),
+              experienceRepository: ExperienceRepository(),
               tagRepository: TagRepository(),
             )..add(LoadSignUp()),
           ),
@@ -77,8 +61,7 @@ class MainApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => HomeBloc(
-              experienceRepository:
-                  RepositoryProvider.of<IExperienceRepository>(context),
+              experienceRepository: ExperienceRepository(),
             )..add(HomeLoadData()),
           ),
         ],
