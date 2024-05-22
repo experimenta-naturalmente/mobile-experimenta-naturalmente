@@ -80,7 +80,7 @@ class SpotsList extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           14.0,
-        ), // Set this value to adjust the roundness
+        ),
         side: const BorderSide(width: 2.0),
       ),
       margin: const EdgeInsets.symmetric(vertical: 4.0),

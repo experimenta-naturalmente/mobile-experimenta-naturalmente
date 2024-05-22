@@ -1,81 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/event_carousel.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/home_header.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/spot_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Carousel in vertical scrollable'),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 360.0),
-        itemBuilder: (BuildContext context, int index) {
-          return _buildCarousel(context, index ~/ 2);
-        },
-      ),
-    );
-  }
-
-  Widget _buildCarousel(BuildContext context, int carouselIndex) {
-    return Wrap(
-      children: <Widget>[
-        const Text(
-          "Eventos",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 26,
-          ),
-        ),
-        SizedBox(
-          height: 155.0,
-          width: 800,
-          child: PageView.builder(
-            itemBuilder: (BuildContext context, int itemIndex) {
-              return _buildCarouselItem(context, carouselIndex, itemIndex);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCarouselItem(
-    BuildContext context,
-    int carouselIndex,
-    int itemIndex,
-  ) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomStart,
-      children: [
-        Positioned(
-          top: 0, // Ajuste esse valor conforme necessário para mover para cima
-          left: 20.0,
-          right: 30.0,
-          child: Container(
-            height: 120.0,
-            width: 20.0,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+    final screenHeight = MediaQuery.of(context).size.height;
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (state is HomeInitial) {
+          context.read<HomeBloc>().add(HomeLoadData());
+        }
+        if (state is HomeLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is HomeError) {
+          return Center(
+            child: ErrorHandler(
+              error: state.error,
+              onRetry: () => context.read<HomeBloc>().add(
+                    HomeLoadData(),
+                  ),
             ),
-          ),
+          );
+        }
+        if (state is HomeLoaded) {
+          return Column(
+            children: [
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                child: HomeHeader(),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildTouristRoutes(context),
+                      const EventCarousel(),
+                      const SpotList(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _buildTouristRoutes(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Rotas Turísticas",
+          style: Theme.of(context).textTheme.titleLarge,
+          textAlign: TextAlign.start,
         ),
-        const Text(
-          "Eventos",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 26,
+        Container(
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white54,
+            border: Border.all(),
           ),
         ),
       ],
     );
   }
-}
-
-@override
-State<StatefulWidget> createState() {
-  // TODO: implement createState
-  throw UnimplementedError();
 }

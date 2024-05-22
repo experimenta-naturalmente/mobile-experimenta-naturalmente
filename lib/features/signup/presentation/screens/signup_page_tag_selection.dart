@@ -25,7 +25,7 @@ class SignUpTagSelection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 36.0,
-                vertical: 18.0,
+                vertical: 36.0,
               ),
               child: Text(
                 'Selecione algumas TAGs para o seu negócio:',
