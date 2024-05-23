@@ -24,7 +24,7 @@ class SpotsBloc extends Bloc<SpotsEvent, SpotsState> {
       emit(SpotsCategoriesLoaded(categoriesCache));
       for (final category in categoriesCache) {
         final experiences =
-            await experienceRepository.fetchExperiencesfromCategory(category);
+            await experienceRepository.fetchExperiencesFromCategory(category);
         final experienceList = experiences.map((e) {
           return ExperienceListItem(
             id: e.id,

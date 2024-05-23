@@ -5,9 +5,9 @@ import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 
 abstract class IExperienceRepository {
   Future<Set<ExperienceCategory>> fetchExperienceCategories();
-  Future<Set<Experience>> fetchExperiencesfromCategory(
+  Future<Set<Experience>> fetchExperiencesFromCategory(
     ExperienceCategory category,
   );
-  Future<Set<Event>> fetchEvents();
-  Future<Set<Spot>> fetchSpots();
+  Future<Set<Event>> fetchFeaturedEvents();
+  Future<Set<Spot>> fetchFeaturedSpots();
 }

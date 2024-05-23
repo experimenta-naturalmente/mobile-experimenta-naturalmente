@@ -38,7 +38,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     emit(ExperienceListLoading(event.selectedCategory, event.categories));
     try {
       final Set<Experience> experiences = await experienceRepository
-          .fetchExperiencesfromCategory(event.selectedCategory);
+          .fetchExperiencesFromCategory(event.selectedCategory);
       final Set<ExperienceListItem> experienceItems = experiences
           .map(
             (e) => ExperienceListItem(

@@ -12,6 +12,7 @@ class EventCarousel extends StatelessWidget {
   }
 
   Widget _buildCarousel(BuildContext context) {
+    final eventHeight = MediaQuery.of(context).size.height * 0.2;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -27,10 +28,10 @@ class EventCarousel extends StatelessWidget {
           itemCount: 5,
           itemBuilder:
               (BuildContext context, int itemIndex, int pageViewIndex) {
-            return _buildItem(context, itemIndex);
+            return _buildItem(context, itemIndex, eventHeight);
           },
           options: CarouselOptions(
-            height: 250,
+            height: eventHeight + 80,
             viewportFraction: 0.75,
             enableInfiniteScroll: false,
             enlargeCenterPage: true,
@@ -40,7 +41,7 @@ class EventCarousel extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(BuildContext context, int index) {
+  Widget _buildItem(BuildContext context, int index, double eventHeight) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -48,7 +49,7 @@ class EventCarousel extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width * 0.75,
-            height: 150,
+            height: eventHeight,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(

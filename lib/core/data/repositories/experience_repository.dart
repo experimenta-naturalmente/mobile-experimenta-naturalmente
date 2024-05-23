@@ -9,7 +9,7 @@ import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 
 class ExperienceRepository implements IExperienceRepository {
   @override
-  Future<Set<Experience>> fetchExperiencesfromCategory(
+  Future<Set<Experience>> fetchExperiencesFromCategory(
     ExperienceCategory category,
   ) async {
     await Future.delayed(const Duration(milliseconds: 250));
@@ -77,7 +77,7 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Set<Event>> fetchEvents() async {
+  Future<Set<Event>> fetchFeaturedEvents() async {
     await Future.delayed(const Duration(milliseconds: 250));
     final rand = Random();
     final categories = await fetchExperienceCategories();
@@ -97,11 +97,12 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Set<Spot>> fetchSpots() async {
+  Future<Set<Spot>> fetchFeaturedSpots() async {
     await Future.delayed(const Duration(milliseconds: 250));
     final rand = Random();
     final categories = await fetchExperienceCategories();
-    final list = List.generate(10, (index) {
+    categories.removeWhere((element) => element.name == 'Evento');
+    final list = List.generate(50, (index) {
       return Spot(
         id: index,
         name: 'Spot $index',

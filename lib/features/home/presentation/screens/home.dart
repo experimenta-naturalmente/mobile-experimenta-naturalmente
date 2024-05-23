@@ -6,7 +6,7 @@ import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/widgets/event_carousel.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/widgets/home_header.dart';
-import 'package:turismo_rural_frontend/features/home/presentation/widgets/spot_list.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/spots_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       _buildTouristRoutes(context),
                       const EventCarousel(),
-                      const SpotList(),
+                      const SpotsList(),
                     ],
                   ),
                 ),
