@@ -28,6 +28,9 @@ void main() {
     description: 'Description 1',
     imageUrl: '',
     category: mockCategory1,
+    timeDetails: [],
+    socialNetworks: [],
+    tags: {},
   );
   setUp(() {
     mockExperienceBloc = MockExperienceBloc();

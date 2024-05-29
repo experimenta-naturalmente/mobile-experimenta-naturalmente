@@ -3,77 +3,62 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
-import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_details_screen.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_category_tabview.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
 
-class ExperiencesScreen extends StatelessWidget {
-  const ExperiencesScreen({super.key});
+class ExperienceListScreen extends StatelessWidget {
+  const ExperienceListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ExperienceBloc, ExperienceState>(
-        builder: (BuildContext context, ExperienceState state) {
-          if (state is ExperienceCategoriesLoading) {
-            return const LoadingIndicator();
-          }
-          if (state is ExperienceError) {
-            return ErrorHandler(
-              error: state.error,
-              onRetry: () => context.read<ExperienceBloc>().add(
-                    LoadExperienceCategories(),
+    return BlocBuilder<ExperienceBloc, ExperienceState>(
+      builder: (BuildContext context, ExperienceState state) {
+        if (state is ExperienceListLoadSuccess) {
+          return const LoadingIndicator();
+        }
+        if (state is ExperienceListLoading) {
+          return Stack(
+            children: [
+              DoubleCircle(),
+              Column(
+                children: [
+                  _buildExperienceListHeader(
+                    state.categories,
+                    state.selectedCategory,
+                    context,
                   ),
-            );
-          }
-          if (state is ExperienceListLoading) {
-            return Stack(
-              children: [
-                DoubleCircle(),
-                Column(
-                  children: [
-                    _buildExperienceListHeader(
-                      state.categories,
-                      state.selectedCategory,
-                      context,
-                    ),
-                    const LoadingIndicator(),
-                  ],
-                ),
-              ],
-            );
-          }
-          if (state is ExperienceListLoadSuccess) {
-            return Stack(
-              children: [
-                DoubleCircle(),
-                Column(
-                  children: [
-                    _buildExperienceListHeader(
-                      state.categories,
-                      state.selectedCategory,
-                      context,
-                    ),
-                    Expanded(
-                      child: _buildExperiencesList(state.experiences),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }
-          if (state is ExperienceDetails) {
-            return const ExperienceDetailsScreen();
-          }
-          return Container();
-        },
-      ),
+                  const LoadingIndicator(),
+                ],
+              ),
+            ],
+          );
+        }
+        if (state is ExperienceListLoadSuccess) {
+          return Stack(
+            children: [
+              DoubleCircle(),
+              Column(
+                children: [
+                  _buildExperienceListHeader(
+                    state.categories,
+                    state.selectedCategory,
+                    context,
+                  ),
+                  Expanded(
+                    child: _buildExperiencesList(state.experiences),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 

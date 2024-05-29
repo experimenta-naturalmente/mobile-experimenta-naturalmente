@@ -47,6 +47,9 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
               description: e.description,
               category: e.category,
               imageUrl: 'https://picsum.photos/300/400?random=$e.id',
+              timeDetails: e.timeDetails,
+              socialNetworks: e.socialNetworks,
+              tags: e.tags,
             ),
           )
           .toSet();
@@ -66,5 +69,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   Future<void> _onExperienceSelected(
     ExperienceSelected event,
     Emitter<ExperienceState> emit,
-  ) async {}
+  ) async {
+    emit(ExperienceDetails(event.selectedItem));
+  }
 }

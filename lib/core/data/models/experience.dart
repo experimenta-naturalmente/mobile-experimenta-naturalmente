@@ -1,16 +1,23 @@
 import 'package:equatable/equatable.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 
 abstract class Experience extends Equatable {
   final int id;
   final String name;
   final String description;
   final ExperienceCategory category;
+  final List<String> timeDetails;
+  final List<String> socialNetworks;
+  final Set<Tag> tags;
 
   const Experience({
     required this.id,
     required this.name,
     required this.description,
     required this.category,
+    required this.timeDetails,
+    required this.socialNetworks,
+    required this.tags,
   });
 }

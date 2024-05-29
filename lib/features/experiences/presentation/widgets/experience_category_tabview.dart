@@ -12,7 +12,7 @@ class ExperienceCategoryTabView extends StatelessWidget {
     required this.selectedCategory,
     required this.onCategorySelected,
   });
-    @override
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),

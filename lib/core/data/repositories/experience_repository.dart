@@ -6,6 +6,7 @@ import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
+import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 
 class ExperienceRepository implements IExperienceRepository {
   @override
@@ -28,6 +29,46 @@ class ExperienceRepository implements IExperienceRepository {
               wordsPerParagraph: rand.nextInt(30) + 10,
             ),
             category: category,
+            timeDetails: const [
+              "Segunda-Feira: 9am - 5pm",
+              "Terça-Feira: 9am - 5pm",
+              "Quarta-Feira: 9am - 5pm",
+              "Quinta-Feira: 9am - 5pm",
+              "Sexta-Feira: 9am - 5pm",
+              "Sábado: 9am - 5pm",
+              "Domingo: 9am - 5pm",
+            ],
+            socialNetworks: const [
+              "https://www.instagram.com/parque8cachoeiras/",
+              "https://www.parque8cachoeiras.com.br",
+            ],
+            tags: {
+              const Tag(
+                id: 29,
+                name: 'Comida Caseira',
+                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+              ),
+              const Tag(
+                id: 26,
+                name: 'Pet Friendly',
+                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+              ),
+              const Tag(
+                id: 14,
+                name: 'Estacionamento Gratuito',
+                type: ExperienceCategory(id: 1, name: 'Hotel'),
+              ),
+              const Tag(
+                id: 7,
+                name: 'Cervejaria Artesanal',
+                type: ExperienceCategory(id: 4, name: 'Produtor rural'),
+              ),
+              const Tag(
+                id: 2,
+                name: 'Mirante',
+                type: ExperienceCategory(id: 5, name: 'Atração turística'),
+              ),
+            },
           );
         } else {
           return Spot(
@@ -39,6 +80,46 @@ class ExperienceRepository implements IExperienceRepository {
             ),
             category: category,
             openingHours: '1',
+            timeDetails: const [
+              "Segunda-Feira: 9am - 5pm",
+              "Terça-Feira: 9am - 5pm",
+              "Quarta-Feira: 9am - 5pm",
+              "Quinta-Feira: 9am - 5pm",
+              "Sexta-Feira: 9am - 5pm",
+              "Sábado: 9am - 5pm",
+              "Domingo: 9am - 5pm",
+            ],
+            socialNetworks: const [
+              "https://www.instagram.com/parque8cachoeiras/",
+              "https://www.parque8cachoeiras.com.br",
+            ],
+            tags: {
+              const Tag(
+                id: 29,
+                name: 'Comida Caseira',
+                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+              ),
+              const Tag(
+                id: 26,
+                name: 'Pet Friendly',
+                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+              ),
+              const Tag(
+                id: 14,
+                name: 'Estacionamento Gratuito',
+                type: ExperienceCategory(id: 1, name: 'Hotel'),
+              ),
+              const Tag(
+                id: 7,
+                name: 'Cervejaria Artesanal',
+                type: ExperienceCategory(id: 4, name: 'Produtor rural'),
+              ),
+              const Tag(
+                id: 2,
+                name: 'Mirante',
+                type: ExperienceCategory(id: 5, name: 'Atração turística'),
+              ),
+            },
           );
         }
       }),
@@ -91,6 +172,46 @@ class ExperienceRepository implements IExperienceRepository {
           wordsPerParagraph: rand.nextInt(30) + 10,
         ),
         category: categories.elementAt(rand.nextInt(categories.length)),
+        timeDetails: const [
+          "Segunda-Feira: 9am - 5pm",
+          "Terça-Feira: 9am - 5pm",
+          "Quarta-Feira: 9am - 5pm",
+          "Quinta-Feira: 9am - 5pm",
+          "Sexta-Feira: 9am - 5pm",
+          "Sábado: 9am - 5pm",
+          "Domingo: 9am - 5pm",
+        ],
+        socialNetworks: const [
+          "https://www.instagram.com/parque8cachoeiras/",
+          "https://www.parque8cachoeiras.com.br",
+        ],
+        tags: {
+          const Tag(
+            id: 29,
+            name: 'Comida Caseira',
+            type: ExperienceCategory(id: 2, name: 'Restaurante'),
+          ),
+          const Tag(
+            id: 26,
+            name: 'Pet Friendly',
+            type: ExperienceCategory(id: 2, name: 'Restaurante'),
+          ),
+          const Tag(
+            id: 14,
+            name: 'Estacionamento Gratuito',
+            type: ExperienceCategory(id: 1, name: 'Hotel'),
+          ),
+          const Tag(
+            id: 7,
+            name: 'Cervejaria Artesanal',
+            type: ExperienceCategory(id: 4, name: 'Produtor rural'),
+          ),
+          const Tag(
+            id: 2,
+            name: 'Mirante',
+            type: ExperienceCategory(id: 5, name: 'Atração turística'),
+          ),
+        },
       );
     });
     return Set.from(list);
@@ -112,6 +233,46 @@ class ExperienceRepository implements IExperienceRepository {
         ),
         category: categories.elementAt(rand.nextInt(categories.length)),
         openingHours: '1',
+        timeDetails: const [
+          "Segunda-Feira: 9am - 5pm",
+          "Terça-Feira: 9am - 5pm",
+          "Quarta-Feira: 9am - 5pm",
+          "Quinta-Feira: 9am - 5pm",
+          "Sexta-Feira: 9am - 5pm",
+          "Sábado: 9am - 5pm",
+          "Domingo: 9am - 5pm",
+        ],
+        socialNetworks: const [
+          "https://www.instagram.com/parque8cachoeiras/",
+          "https://www.parque8cachoeiras.com.br",
+        ],
+        tags: {
+          const Tag(
+            id: 29,
+            name: 'Comida Caseira',
+            type: ExperienceCategory(id: 2, name: 'Restaurante'),
+          ),
+          const Tag(
+            id: 26,
+            name: 'Pet Friendly',
+            type: ExperienceCategory(id: 2, name: 'Restaurante'),
+          ),
+          const Tag(
+            id: 14,
+            name: 'Estacionamento Gratuito',
+            type: ExperienceCategory(id: 1, name: 'Hotel'),
+          ),
+          const Tag(
+            id: 7,
+            name: 'Cervejaria Artesanal',
+            type: ExperienceCategory(id: 4, name: 'Produtor rural'),
+          ),
+          const Tag(
+            id: 2,
+            name: 'Mirante',
+            type: ExperienceCategory(id: 5, name: 'Atração turística'),
+          ),
+        },
       );
     });
     return Set.from(list);

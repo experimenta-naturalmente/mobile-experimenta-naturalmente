@@ -9,8 +9,20 @@ class Event extends Experience {
     required super.name,
     required super.description,
     required super.category,
+    required super.timeDetails,
+    required super.socialNetworks,
+    required super.tags,
   });
 
   @override
-  List<Object?> get props => [id, name, description, about, category];
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        about,
+        category,
+        timeDetails,
+        socialNetworks,
+        tags,
+      ];
 }

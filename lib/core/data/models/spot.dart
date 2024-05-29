@@ -9,8 +9,20 @@ class Spot extends Experience {
     required super.name,
     required super.description,
     required super.category,
+    required super.timeDetails,
+    required super.socialNetworks,
+    required super.tags,
   });
 
   @override
-  List<Object?> get props => [id, name, description, category, openingHours];
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        category,
+        openingHours,
+        timeDetails,
+        socialNetworks,
+        tags,
+      ];
 }

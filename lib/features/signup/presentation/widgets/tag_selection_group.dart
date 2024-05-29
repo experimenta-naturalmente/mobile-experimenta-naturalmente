@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class TagSelectionGroup extends StatelessWidget {
   final Set<Tag> tags;
@@ -25,7 +26,7 @@ class TagSelectionGroup extends StatelessWidget {
           return ChoiceChip(
             label: Text(
               tag.name,
-              style: _getTagTextStyle(tag.name, context),
+              style: getTagTextStyle(tag.name, context),
             ),
             selected: isSelected,
             onSelected: (_) {
@@ -35,15 +36,5 @@ class TagSelectionGroup extends StatelessWidget {
         }).toList(),
       ),
     );
-  }
-
-  TextStyle _getTagTextStyle(String tagName, BuildContext context) {
-    if (tagName.length < 10) {
-      return Theme.of(context).textTheme.labelLarge!;
-    } else if (tagName.length < 20) {
-      return Theme.of(context).textTheme.labelMedium!;
-    } else {
-      return Theme.of(context).textTheme.labelSmall!;
-    }
   }
 }

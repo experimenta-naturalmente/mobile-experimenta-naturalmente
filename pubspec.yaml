@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.9
+  font_awesome_flutter: ^9.0.0-nullsafety
   google_maps_flutter: ^2.6.0
   http: ^0.13.5
   image_picker: ^1.0.7
