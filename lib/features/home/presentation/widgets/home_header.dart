@@ -7,15 +7,23 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-          ),
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 30,
+        child: Image.asset('assets/logo/logo.png'),
+      ),
+      title: const Text(
+        'Turismo Rural',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: const Text(
+        'São Francisco de Paula',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
         ),
       ),
     );
