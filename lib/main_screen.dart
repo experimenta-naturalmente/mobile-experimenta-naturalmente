@@ -23,7 +23,7 @@ class MainScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: _getAppBar(context, currentIndex),
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {
             context.read<NavigationCubit>().navigateTo(index);
