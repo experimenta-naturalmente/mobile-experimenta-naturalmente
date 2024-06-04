@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle_home.dart';  // Importe o widget DoubleCircleHome
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
@@ -29,31 +30,36 @@ class HomeScreen extends StatelessWidget {
             child: ErrorHandler(
               error: state.error,
               onRetry: () => context.read<HomeBloc>().add(
-                    HomeLoadData(),
-                  ),
+                HomeLoadData(),
+              ),
             ),
           );
         }
         if (state is HomeLoaded) {
-          return Column(
+          return Stack(
             children: [
-              SizedBox(
-                height: screenHeight * 0.05,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                child: HomeHeader(),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildTouristRoutes(context),
-                      const EventCarousel(),
-                      const SpotsList(),
-                    ],
+              DoubleCircleHome(),
+              Column(
+                children: [
+                  SizedBox(
+                    height: screenHeight * 0.05,
                   ),
-                ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    child: HomeHeader(),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _buildTouristRoutes(context),
+                          const EventCarousel(),
+                          const SpotsList(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           );
