@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
-class ExperienceDetails extends StatelessWidget {
+class SpotDetails extends StatelessWidget {
   final ExperienceListItem experienceListItem;
 
   // make constructor
-  const ExperienceDetails({super.key, required this.experienceListItem});
+  const SpotDetails({super.key, required this.experienceListItem});
   // make constructor
 
   @override
