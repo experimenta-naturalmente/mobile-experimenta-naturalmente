@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/data/models/experience_registration.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/data/experience_registration.dart';
 
 class SignUpPageInitial extends StatelessWidget {
   const SignUpPageInitial({super.key});
@@ -19,14 +19,11 @@ class SignUpPageInitial extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: screenWidth * 0.8,
-            child: Text(
-              'O que você deseja cadastrar?',
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+          Text(
+            'O que você deseja cadastrar?',
+            textAlign: TextAlign.center,
+            softWrap: true,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 24),
           DropdownMenu<int>(
@@ -46,6 +43,7 @@ class SignUpPageInitial extends StatelessWidget {
                 )
                 .toList(),
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );

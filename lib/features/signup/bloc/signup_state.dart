@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
+import 'package:turismo_rural_frontend/features/signup/data/attachment.dart';
 
 abstract class SignUpState extends Equatable {
   const SignUpState();
@@ -13,14 +13,20 @@ abstract class SignUpState extends Equatable {
 class SignUpPageInitialState extends SignUpState {}
 
 class SignUpPageDescriptionState extends SignUpState {
-  final ExperienceCategory selectedCategory;
+  final List<Attachment> attachments;
 
-  const SignUpPageDescriptionState({
-    required this.selectedCategory,
-  });
+  const SignUpPageDescriptionState({this.attachments = const []});
 
   @override
-  List<Object> get props => [selectedCategory];
+  List<Object> get props => [attachments];
+
+  SignUpPageDescriptionState copyWith({
+    List<Attachment>? attachments,
+  }) {
+    return SignUpPageDescriptionState(
+      attachments: attachments ?? this.attachments,
+    );
+  }
 }
 
 class SignUpPageFormState extends SignUpState {}
@@ -68,12 +74,9 @@ class SignUpPageTagSelectionState extends SignUpState {
 }
 
 class SignUpError extends SignUpState {
-  final String error;
+  final String? error;
 
-  const SignUpError(this.error);
-
-  @override
-  List<Object> get props => [error];
+  const SignUpError({this.error});
 }
 
 class SignUpLoading extends SignUpState {}

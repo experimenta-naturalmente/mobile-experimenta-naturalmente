@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
 
 class ErrorHandler extends StatelessWidget {
-  final String error;
-  final VoidCallback onRetry;
+  final String? error;
+  final VoidCallback? onRetry;
 
   const ErrorHandler({
     super.key,
-    required this.error,
-    required this.onRetry,
+    this.error,
+    this.onRetry,
   });
 
   @override
@@ -18,30 +20,38 @@ class ErrorHandler extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 60,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Theme.of(context).textTheme.displaySmall!.color,
+                  size: 60,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Oh não...',
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Oh não...',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 24),
             Text(
-              error,
+              error ?? 'Algo deu errado!',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
             ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Retry'),
+              onPressed: () {
+                if (onRetry != null) {
+                  onRetry!();
+                } else {
+                  context.read<NavigationCubit>().navigateTo(0);
+                }
+              },
+              child: const Text('Continuar'),
             ),
           ],
         ),

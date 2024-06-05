@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/widgets/shift_select.dart';
 
 class SignUpPageWorkingHours extends StatelessWidget {

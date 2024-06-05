@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:convert';
 
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
@@ -39,7 +37,8 @@ class Event extends Experience {
       phone: json['phone'] as String,
       description: utf8.decode((json['description'] as String).codeUnits),
       category: categories.firstWhere(
-        (category) => category.id == json['category']['categoryId'] as int,
+        (category) =>
+            category.id == (json['category'] as Map)['categoryId'] as int,
         orElse: () => const ExperienceCategory(
           id: -1,
           name: 'Unknown',

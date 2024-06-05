@@ -5,9 +5,9 @@ import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/screens/home.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_handler.dart';
 
 class MainScreen extends StatelessWidget {

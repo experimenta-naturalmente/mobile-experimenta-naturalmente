@@ -4,9 +4,9 @@ import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dar
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/widgets/tag_selection_group.dart';
 
 class SignUpTagSelection extends StatelessWidget {

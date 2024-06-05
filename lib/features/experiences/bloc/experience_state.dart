@@ -9,8 +9,6 @@ abstract class ExperienceState extends Equatable {
   List<Object> get props => [];
 }
 
-abstract class ExperienceDetailsState extends ExperienceState {}
-
 class ExperienceFilterInitial extends ExperienceState {}
 
 class ExperienceCategoriesLoading extends ExperienceState {}
@@ -48,10 +46,10 @@ class ExperienceListLoadSuccess extends ExperienceState {
   List<Object> get props => [experiences];
 }
 
-class ExperienceDetails extends ExperienceDetailsState {
+class ExperienceDetails extends ExperienceState {
   final ExperienceListItem experienceListItem;
 
-  ExperienceDetails(this.experienceListItem);
+  const ExperienceDetails(this.experienceListItem);
 
   @override
   List<Object> get props => [experienceListItem];

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_state.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_date_range.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_description.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_page_form.dart';
@@ -18,39 +19,35 @@ class SignUpHandler extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (BuildContext context, SignUpState state) {
-        final showBack =
-            state is! SignUpPageInitialState && state is! SignUpLoading;
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: _getPage(state),
-            ),
-            Expanded(
-              flex: 0,
-              child: Padding(
+        try {
+          final showAdvance = state is! SignUpError && state is! SignUpLoading;
+          final showBack = state is! SignUpPageInitialState && showAdvance;
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _getPage(context),
+              Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (showBack)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          child: SubmitButton(
-                            text: 'Voltar',
-                            onPressed: () => context
-                                .read<SignUpBloc>()
-                                .add(const SignUpChangePage(previous: true)),
-                          ),
+                    Visibility(
+                      visible: showBack,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
                         ),
-                      )
-                    else
-                      Container(),
-                    Expanded(
+                        child: SubmitButton(
+                          text: 'Voltar',
+                          onPressed: () => context
+                              .read<SignUpBloc>()
+                              .add(const SignUpChangePage(previous: true)),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: showAdvance,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -67,19 +64,25 @@ class SignUpHandler extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
+        } catch (e) {
+          context.read<SignUpBloc>().add(const SignUpErrorEvent());
+          return Container();
+        }
       },
     );
   }
 
-  Widget _getPage(SignUpState state) {
+  Widget _getPage(BuildContext context) {
+    final state = context.read<SignUpBloc>().state;
     if (state is SignUpError) {
-      return Container();
+      return const ErrorHandler();
     }
     if (state is SignUpLoading) {
-      return Container();
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
     if (state is SignUpPageInitialState) {
       return const SignUpPageInitial();

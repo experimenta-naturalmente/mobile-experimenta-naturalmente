@@ -69,7 +69,9 @@ class ExperiencesScreen extends StatelessWidget {
             );
           }
           if (state is ExperienceDetails) {
-            return const ExperienceDetailsScreen();
+            return ExperienceDetailsScreen(
+              experience: state.experienceListItem,
+            );
           }
           return Container();
         },

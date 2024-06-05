@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc/signup_event.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 
 class ShiftSelect extends StatefulWidget {
   final WeekDay day;

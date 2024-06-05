@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
+import 'package:turismo_rural_frontend/features/signup/data/attachment.dart';
 
 abstract class SignUpEvent extends Equatable {
   const SignUpEvent();
@@ -10,12 +11,23 @@ abstract class SignUpEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class SignUpErrorEvent extends SignUpEvent {
+  final String? error;
+
+  const SignUpErrorEvent({this.error});
+
+  @override
+  List<Object?> get props => [error];
+}
+
 class LoadSignUp extends SignUpEvent {}
 
 class SignUpAttachmentUpload extends SignUpEvent {
-  final dynamic file;
+  final Attachment attachment;
 
-  const SignUpAttachmentUpload(this.file);
+  const SignUpAttachmentUpload({
+    required this.attachment,
+  });
 }
 
 class SignUpChangePage extends SignUpEvent {
