@@ -18,8 +18,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(HomeLoading());
     try {
-      final eventsFuture = experienceRepository.fetchFeaturedEvents();
-      final spotsFuture = experienceRepository.fetchFeaturedSpots();
+      final eventsFuture = experienceRepository.fetchEvents();
+      final spotsFuture = experienceRepository.fetchSpots();
       final events = await eventsFuture;
       final spots = await spotsFuture;
       final categories = spots.map((e) => e.category).toSet();

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
@@ -19,7 +20,7 @@ class ExperienceRepository implements IExperienceRepository {
     ExperienceCategory category,
   ) async {
     if (category.name == 'Evento') {
-      return fetchFeaturedEvents();
+      return fetchEvents();
     } else {
       final response = await http.get(
         Uri.parse(
@@ -66,7 +67,12 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Spot> fetchFeaturedSpotById(int spotId) async {
+  Future<Spot> fetchSpotById(int spotId) async {
+    final apiUrl = dotenv.env['API_URL'];
+    if (apiUrl == null) {
+      throw Exception('API_URL not found in .env file');
+    }
+
     final categoriesSet = await fetchExperienceCategories();
     final categoriesList = categoriesSet.toList();
     categoriesList.removeWhere((element) => element.name == 'Evento');
@@ -88,7 +94,41 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Set<Spot>> fetchFeaturedSpots() async {
+  Future<Event> fetchEventById(int eventId) async {
+    final apiUrl = dotenv.env['API_URL'];
+    if (apiUrl == null) {
+      throw Exception('API_URL not found in .env file');
+    }
+
+    final categoriesSet = await fetchExperienceCategories();
+
+    final categoriesList = categoriesSet.toList();
+    categoriesList.removeWhere((element) => element.name != 'Evento');
+
+    final response = await http.get(Uri.parse('$apiUrl/event/$eventId'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> spotsJson =
+          json.decode(response.body) as List<dynamic>;
+      final event = spotsJson
+          .map(
+            (json) =>
+                Event.fromJson(json as Map<String, dynamic>, categoriesList),
+          )
+          .first;
+      return event;
+    } else {
+      throw Exception('Failed to load event');
+    }
+  }
+
+  @override
+  Future<Set<Spot>> fetchSpots() async {
+    final apiUrl = dotenv.env['API_URL'];
+    if (apiUrl == null) {
+      throw Exception('API_URL not found in .env file');
+    }
+
     final categoriesSet = await fetchExperienceCategories();
     final categoriesList = categoriesSet.toList();
     categoriesList.removeWhere((element) => element.name == 'Evento');
@@ -116,7 +156,12 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Set<Event>> fetchFeaturedEvents() async {
+  Future<Set<Event>> fetchEvents() async {
+    final apiUrl = dotenv.env['API_URL'];
+    if (apiUrl == null) {
+      throw Exception('API_URL not found in .env file');
+    }
+
     final categoriesSet = await fetchExperienceCategories();
     final categoriesList = categoriesSet.toList();
     final response = await http.get(Uri.parse('$apiUrl/event'));
