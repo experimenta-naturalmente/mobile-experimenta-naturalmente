@@ -73,10 +73,12 @@ class EventCarousel extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://picsum.photos/200/300?random=${event.id}',
-                fit: BoxFit.cover,
-              ),
+              child: event.image != null
+                  ? Image.network(
+                      event.image!,
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
           ),
           const SizedBox(height: 8),

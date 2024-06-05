@@ -14,6 +14,7 @@ class Event extends Experience {
     required super.id,
     required super.cnpj,
     required super.name,
+    required super.image,
     required super.email,
     required super.phone,
     required super.description,
@@ -35,6 +36,7 @@ class Event extends Experience {
       name: utf8.decode((json['name'] as String).codeUnits),
       email: json['email'] as String,
       phone: json['phone'] as String,
+      image: json['image'] as String?,
       description: utf8.decode((json['description'] as String).codeUnits),
       category: categories.firstWhere(
         (category) =>
@@ -59,6 +61,7 @@ class Event extends Experience {
         name,
         email,
         phone,
+        image,
         description,
         details,
         category,
