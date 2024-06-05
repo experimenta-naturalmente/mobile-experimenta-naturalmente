@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
+import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
 class ErrorHandler extends StatelessWidget {
   final String? error;
@@ -38,7 +39,7 @@ class ErrorHandler extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              error ?? 'Algo deu errado!',
+              'Algo deu errado!',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
@@ -48,7 +49,9 @@ class ErrorHandler extends StatelessWidget {
                 if (onRetry != null) {
                   onRetry!();
                 } else {
-                  context.read<NavigationCubit>().navigateTo(0);
+                  context
+                      .read<NavigationCubit>()
+                      .navigateTo(appPage: AppPage.home);
                 }
               },
               child: const Text('Continuar'),

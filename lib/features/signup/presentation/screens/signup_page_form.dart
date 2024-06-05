@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 
 class SignUpPageForm extends StatelessWidget {
   SignUpPageForm({super.key});
@@ -8,98 +10,110 @@ class SignUpPageForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: screenHeight * 0.1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: screenHeight * 0.1,
+          ),
+          _buildTextField(
+            context,
+            text: 'Nome Fantasia',
+            verticalPadding: 10,
+            horizontalPadding: 50,
+            keyboardType: TextInputType.text,
+            validator: _validateField,
+            onChanged: (value) => {
+              context.read<SignUpBloc>().registration.fantasyName = value,
+            },
+          ),
+          _buildTextField(
+            context,
+            text: 'Email Empresarial',
+            verticalPadding: 10,
+            horizontalPadding: 50,
+            keyboardType: TextInputType.emailAddress,
+            validator: _validateEmail,
+            onChanged: (value) => {
+              context.read<SignUpBloc>().registration.email = value,
+            },
+          ),
+          _buildTextField(
+            context,
+            text: 'Telefone',
+            verticalPadding: 10,
+            horizontalPadding: 50,
+            keyboardType: TextInputType.phone,
+            validator: _validatePhone,
+            mask: phoneMask,
+            onChanged: (value) => {
+              context.read<SignUpBloc>().registration.phone = value,
+            },
+          ),
+          _buildTextField(
+            context,
+            text: 'Endereço',
+            verticalPadding: 10,
+            horizontalPadding: 50,
+            keyboardType: TextInputType.streetAddress,
+            validator: _validateField,
+            onChanged: (value) => {
+              context.read<SignUpBloc>().registration.address = value,
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50,
+              vertical: 10,
             ),
-            _buildTextField(
-              context,
-              text: 'Nome Fantasia',
-              verticalPadding: 10,
-              horizontalPadding: 50,
-              keyboardType: TextInputType.text,
-              validator: _validateField,
-              onChanged: (value) => {},
-            ),
-            _buildTextField(
-              context,
-              text: 'Email Empresarial',
-              verticalPadding: 10,
-              horizontalPadding: 50,
-              keyboardType: TextInputType.emailAddress,
-              validator: _validateEmail,
-              onChanged: (value) => {},
-            ),
-            _buildTextField(
-              context,
-              text: 'Telefone',
-              verticalPadding: 10,
-              horizontalPadding: 50,
-              keyboardType: TextInputType.phone,
-              validator: _validatePhone,
-              mask: phoneMask,
-              onChanged: (value) => {},
-            ),
-            _buildTextField(
-              context,
-              text: 'Endereço',
-              verticalPadding: 10,
-              horizontalPadding: 50,
-              keyboardType: TextInputType.streetAddress,
-              validator: _validateField,
-              onChanged: (value) => {},
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50,
-                vertical: 10,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: _buildTextField(
-                      context,
-                      text: 'Número',
-                      verticalPadding: 0,
-                      horizontalPadding: 0,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => {},
-                    ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    context,
+                    text: 'Número',
+                    verticalPadding: 0,
+                    horizontalPadding: 0,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => {
+                      context.read<SignUpBloc>().registration.number = value,
+                    },
                   ),
-                  const SizedBox(
-                    width: 16,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: _buildTextField(
+                    context,
+                    text: 'CEP',
+                    verticalPadding: 0,
+                    horizontalPadding: 0,
+                    keyboardType: TextInputType.number,
+                    mask: cepMask,
+                    validator: _validateCEP,
+                    onChanged: (value) => {
+                      context.read<SignUpBloc>().registration.zipCode = value,
+                    },
                   ),
-                  Expanded(
-                    child: _buildTextField(
-                      context,
-                      text: 'CEP',
-                      verticalPadding: 0,
-                      horizontalPadding: 0,
-                      keyboardType: TextInputType.number,
-                      mask: cepMask,
-                      validator: _validateCEP,
-                      onChanged: (value) => {},
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            _buildTextField(
-              context,
-              text: 'CNPJ',
-              verticalPadding: 10,
-              horizontalPadding: 50,
-              keyboardType: TextInputType.number,
-              mask: cnpjMask,
-              validator: _validateField,
-              onChanged: (value) => {},
-            ),
-          ],
-        ),
+          ),
+          _buildTextField(
+            context,
+            text: 'CNPJ',
+            verticalPadding: 10,
+            horizontalPadding: 50,
+            keyboardType: TextInputType.number,
+            mask: cnpjMask,
+            validator: _validateField,
+            onChanged: (value) => {
+              context.read<SignUpBloc>().registration.cnpj = value,
+            },
+          ),
+        ],
       ),
     );
   }

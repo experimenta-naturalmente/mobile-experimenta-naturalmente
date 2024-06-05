@@ -14,6 +14,7 @@ abstract class Experience extends Equatable {
   final List<String> timeDetails;
   final List<String> socialNetworks;
   final Set<Tag> tags;
+  final Set<String> images;
 
   const Experience({
     required this.id,
@@ -27,5 +28,6 @@ abstract class Experience extends Equatable {
     required this.timeDetails,
     required this.socialNetworks,
     required this.tags,
+    required this.images,
   });
 }

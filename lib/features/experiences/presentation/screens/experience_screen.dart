@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/empty_list.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
@@ -9,9 +12,8 @@ import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_details_screen.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_category_tabview.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_list_item_widget.dart';
+import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_widget.dart';
 
 class ExperiencesScreen extends StatelessWidget {
   const ExperiencesScreen({super.key});
@@ -43,7 +45,10 @@ class ExperiencesScreen extends StatelessWidget {
                       state.selectedCategory,
                       context,
                     ),
-                    const LoadingIndicator(),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: LoadingIndicator(),
+                    ),
                   ],
                 ),
               ],
@@ -70,7 +75,7 @@ class ExperiencesScreen extends StatelessWidget {
           }
           if (state is ExperienceDetails) {
             return ExperienceDetailsScreen(
-              experience: state.experienceListItem,
+              experience: state.experience,
             );
           }
           return Container();
@@ -112,7 +117,7 @@ class ExperiencesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildExperiencesList(Set<ExperienceListItem> experiences) {
+  Widget _buildExperiencesList(Set<Experience> experiences) {
     if (experiences.isEmpty) {
       return EmptyList();
     }
@@ -120,11 +125,15 @@ class ExperiencesScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, bottom: 8),
       itemCount: experiences.length,
       itemBuilder: (BuildContext context, int index) {
-        return ExperienceListItemWidget(
+        return ExperienceWidget(
           experience: experiences.elementAt(index),
           onTap: () => {
-            context.read<ExperienceBloc>().add(
-                  ExperienceSelected(experiences.elementAt(index)),
+            // context.read<ExperienceBloc>().add(
+            //       ExperienceSelected(experiences.elementAt(index)),
+            //     ),
+            context.read<NavigationCubit>().navigateTo(
+                  appPage: AppPage.experiences,
+                  experience: experiences.elementAt(index),
                 ),
           },
         );

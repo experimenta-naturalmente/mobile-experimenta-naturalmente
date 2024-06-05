@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -78,6 +79,19 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
   }
 
+  Future<void> _submitRegistration(
+    Emitter<SignUpState> emit,
+  ) async {
+    emit(SignUpLoading());
+    try {
+      final _ = await experienceRepository.registerExperience(registration);
+      registration.clear();
+      emit(SignUpSuccess());
+    } catch (e) {
+      emit(SignUpError(error: e.toString()));
+    }
+  }
+
   Future<void> _handleImageUpload(
     Attachment attachment,
     XFile newFile,
@@ -99,17 +113,37 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
   }
 
+  Future<XFile?> compressImage(XFile file, String targetPath) async {
+    if (kIsWeb) {
+      final bytes = await file.readAsBytes();
+      return XFile.fromData(
+        bytes,
+        name: targetPath.split('/').last,
+        mimeType: 'image/jpeg',
+      );
+    }
+    final compressedFile = await FlutterImageCompress.compressAndGetFile(
+      file.path,
+      targetPath,
+      quality: 50,
+    );
+    return compressedFile;
+  }
+
   Future<XFile?> _preprocessImage(XFile file) async {
     try {
-      final directory = await getTemporaryDirectory();
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final newPath = '${directory.path}/$timestamp.jpg';
+      String directoryPath = '';
+      try {
+        final directory = await getTemporaryDirectory();
+        directoryPath = directory.path;
+      } catch (e) {
+        directoryPath = '/temp';
+      }
+      final timestampStr = DateTime.now().millisecondsSinceEpoch.toString();
+      final lastFiveDigits = timestampStr.substring(timestampStr.length - 5);
+      final newPath = '$directoryPath/$lastFiveDigits.jpg';
 
-      final compressedFile = await FlutterImageCompress.compressAndGetFile(
-        file.path,
-        newPath,
-        quality: 50,
-      );
+      final compressedFile = await compressImage(XFile(file.path), newPath);
       if (compressedFile == null) {
         return null;
       }
@@ -147,6 +181,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             await experienceRepository.fetchExperienceCategories();
       }
       await _initTags();
+      registration.clear();
       emit(SignUpPageInitialState());
     } catch (e) {
       emit(SignUpError(error: e.toString()));
@@ -168,6 +203,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         const SignUpPageDescriptionState(),
       );
     } else if (state is SignUpPageDescriptionState) {
+      await _updateAttachments(
+        (state as SignUpPageDescriptionState).attachments,
+      );
       if (previous) {
         emit(SignUpPageInitialState());
       } else {
@@ -204,8 +242,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         emit(SignUpPageTagSelectionState(selectedTags: selectedTagsCache));
       }
     } else if (state is SignUpPageTagSelectionState) {
+      selectedTagsCache = (state as SignUpPageTagSelectionState).selectedTags;
       if (previous) {
-        selectedTagsCache = (state as SignUpPageTagSelectionState).selectedTags;
         if (registration.category?.name == 'Evento') {
           emit(SignUpPageDateRangeState());
         } else {
@@ -215,6 +253,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             ),
           );
         }
+      } else {
+        _updateTags();
+        await _submitRegistration(emit);
       }
     }
   }
@@ -226,7 +267,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final toggledTag = event.tag;
     final selectedTags = Map<int, bool>.from(event.selectedTags);
     selectedTags.update(
-      toggledTag.id,
+      toggledTag.tagId,
       (value) => !value,
       ifAbsent: () => false,
     );
@@ -243,10 +284,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
     for (final tag in availableTags) {
       for (final categoryTag in tag.type) {
-        if (categoryTag.id == registration.category?.id) {
+        if (categoryTag.categoryId == registration.category?.categoryId) {
           filteredTags.add(tag);
         }
-        selectedTagsCache[tag.id] = false;
+        selectedTagsCache[tag.tagId] = false;
       }
     }
   }
@@ -256,5 +297,29 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     emit(const SignUpError());
+  }
+
+  Future<void> _updateAttachments(
+    List<Attachment> attachments,
+  ) async {
+    final attachmentsRegistration = List<Attachment>.from(attachments)
+        .map(
+          (attachment) {
+            final url = attachment.url;
+            if (url != null) {
+              return attachment;
+            }
+          },
+        )
+        .nonNulls
+        .toList();
+    registration.attachments = attachmentsRegistration;
+  }
+
+  void _updateTags() {
+    registration.selectedTags = selectedTagsCache.keys
+        .where((key) => selectedTagsCache[key] == true)
+        .map((key) => availableTags.firstWhere((tag) => tag.tagId == key))
+        .toList();
   }
 }

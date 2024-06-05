@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 abstract class ExperienceEvent extends Equatable {
   const ExperienceEvent();
@@ -22,7 +22,7 @@ class ExperienceCategoryChanged extends ExperienceEvent {
 }
 
 class ExperienceSelected extends ExperienceEvent {
-  final ExperienceListItem selectedItem;
+  final Experience selectedItem;
 
   const ExperienceSelected(this.selectedItem);
 

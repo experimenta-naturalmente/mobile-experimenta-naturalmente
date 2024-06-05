@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/event_details.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_about.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_location_tab.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/spot_details.dart';
 
 class ExperienceTabBar extends StatelessWidget {
-  final ExperienceListItem experienceListItem;
-  const ExperienceTabBar({super.key, required this.experienceListItem});
+  final Experience experience;
+  const ExperienceTabBar({super.key, required this.experience});
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Sobre o lugar'),
@@ -16,7 +16,6 @@ class ExperienceTabBar extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return DefaultTabController(
       length: myTabs.length,
       child: Column(
@@ -28,16 +27,16 @@ class ExperienceTabBar extends StatelessWidget {
             child: TabBarView(
               children: [
                 ExperienceAbout(
-                  experienceListItem: experienceListItem,
+                  experience: experience,
                 ),
                 const ExperienceLocationTab(),
-                if (experienceListItem.category.name == "Evento")
+                if (experience.category.name == "Evento")
                   EventDetails(
-                    experienceListItem: experienceListItem,
+                    experience: experience,
                   )
                 else
                   SpotDetails(
-                    experienceListItem: experienceListItem,
+                    experience: experience,
                   ),
               ],
             ),

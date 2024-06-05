@@ -8,7 +8,7 @@ import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
-import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/login.dart';
 
 class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
     implements LoginBloc {}

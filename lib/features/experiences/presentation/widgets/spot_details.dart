@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 
 class SpotDetails extends StatelessWidget {
-  final ExperienceListItem experienceListItem;
+  final Experience experience;
 
   // make constructor
-  const SpotDetails({super.key, required this.experienceListItem});
+  const SpotDetails({super.key, required this.experience});
   // make constructor
 
   @override
@@ -30,33 +30,27 @@ class SpotDetails extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 6),
                       child: const Icon(Icons.access_time_outlined),
                     ),
-                    const Text(
+                    Text(
                       "Horário de atendimento",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                for (final hour in experienceListItem.timeDetails)
+                for (final hour in experience.timeDetails)
                   Text(
                     hour,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 const Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Centraliza os ícones na linha
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
                         left: 10,
                         top: 45,
                         right: 45,
-                      ), // Padding no ícone do Instagram
+                      ),
                       child: Icon(
                         FontAwesomeIcons.instagram,
                         size: 40,
@@ -67,7 +61,7 @@ class SpotDetails extends StatelessWidget {
                         left: 10,
                         top: 45,
                         right: 10,
-                      ), // Padding no ícone do Facebook
+                      ),
                       child: Icon(
                         FontAwesomeIcons.facebook,
                         size: 40,
@@ -78,7 +72,7 @@ class SpotDetails extends StatelessWidget {
                         left: 45,
                         top: 45,
                         right: 10,
-                      ), // Padding no ícone do WhatsApp
+                      ),
                       child: Icon(
                         FontAwesomeIcons.whatsapp,
                         size: 40,

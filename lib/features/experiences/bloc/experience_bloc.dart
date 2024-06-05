@@ -4,7 +4,6 @@ import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_state.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   final IExperienceRepository experienceRepository;
@@ -39,24 +38,10 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     try {
       final Set<Experience> experiences = await experienceRepository
           .fetchExperiencesFromCategory(event.selectedCategory);
-      final Set<ExperienceListItem> experienceItems = experiences
-          .map(
-            (e) => ExperienceListItem(
-              id: e.id,
-              name: e.name,
-              description: e.description,
-              category: e.category,
-              imageUrl: 'https://picsum.photos/300/400?random=$e.id',
-              timeDetails: e.timeDetails,
-              socialNetworks: e.socialNetworks,
-              tags: e.tags,
-            ),
-          )
-          .toSet();
 
       emit(
         ExperienceListLoadSuccess(
-          experienceItems,
+          experiences,
           event.selectedCategory,
           event.categories,
         ),

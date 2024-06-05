@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is HomeInitial) {
@@ -39,27 +40,43 @@ class HomeScreen extends StatelessWidget {
           return Stack(
             children: [
               DoubleCircle(),
-              Column(
-                children: [
-                  SizedBox(
-                    height: screenHeight * 0.05,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                    child: HomeHeader(),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _buildTouristRoutes(context),
-                          const EventCarousel(),
-                          const SpotsList(),
-                        ],
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: HomeHeader(),
+                    ),
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          bottom: 16,
+                          left: 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //_buildTouristRoutes(context),
+                            const EventCarousel(),
+                            Align(
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 16),
+                                height: 24,
+                                width: screenWidth * 0.8,
+                                child: const Divider(),
+                              ),
+                            ),
+                            const SpotsList(),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           );
@@ -69,23 +86,23 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTouristRoutes(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Rotas Turísticas",
-          style: Theme.of(context).textTheme.titleLarge,
-          textAlign: TextAlign.start,
-        ),
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.white54,
-            border: Border.all(),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildTouristRoutes(BuildContext context) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         "Rotas Turísticas",
+  //         style: Theme.of(context).textTheme.titleLarge,
+  //         textAlign: TextAlign.start,
+  //       ),
+  //       Container(
+  //         height: 200,
+  //         decoration: BoxDecoration(
+  //           color: Colors.white54,
+  //           border: Border.all(),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

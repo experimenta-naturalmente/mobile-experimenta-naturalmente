@@ -3,6 +3,7 @@ import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
+import 'package:turismo_rural_frontend/features/signup/data/experience_registration.dart';
 
 abstract class IExperienceRepository {
   Future<Set<ExperienceCategory>> fetchExperienceCategories();
@@ -14,4 +15,7 @@ abstract class IExperienceRepository {
   Future<Event> fetchEventById(int eventId);
   Future<Spot> fetchSpotById(int spotId);
   Future<String?> uploadImage(XFile file, Function(int) onProgress);
+  Future<bool> registerExperience(
+    ExperienceRegistration registration,
+  );
 }

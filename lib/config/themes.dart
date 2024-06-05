@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   final searchBarTheme = SearchBarThemeData(
@@ -21,26 +22,26 @@ class AppTheme {
     showCheckmark: false,
   );
 
-  final _lightTypography = Typography.blackCupertino.apply(
-    fontFamily: 'JosefinSans',
-  );
+  final _baseFont = GoogleFonts.cantarell().fontFamily;
+
+  final _lightTypography = Typography.blackCupertino;
   ThemeData get lightTheme => ThemeData.light().copyWith(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.lightGreenAccent,
         ),
         textTheme: _lightTypography.copyWith(
           bodySmall:
-              _lightTypography.bodySmall!.copyWith(fontFamily: 'JosefinSans'),
+              _lightTypography.bodySmall!.copyWith(fontFamily: _baseFont),
           bodyMedium:
-              _lightTypography.bodyMedium!.copyWith(fontFamily: 'JosefinSans'),
+              _lightTypography.bodyMedium!.copyWith(fontFamily: _baseFont),
           bodyLarge:
-              _lightTypography.bodyLarge!.copyWith(fontFamily: 'JosefinSans'),
-          headlineSmall: _lightTypography.headlineSmall!
-              .copyWith(fontFamily: 'JosefinSans'),
-          headlineMedium: _lightTypography.headlineMedium!
-              .copyWith(fontFamily: 'JosefinSans'),
-          headlineLarge: _lightTypography.headlineLarge!
-              .copyWith(fontFamily: 'JosefinSans'),
+              _lightTypography.bodyLarge!.copyWith(fontFamily: _baseFont),
+          headlineSmall:
+              _lightTypography.headlineSmall!.copyWith(fontFamily: _baseFont),
+          headlineMedium:
+              _lightTypography.headlineMedium!.copyWith(fontFamily: _baseFont),
+          headlineLarge:
+              _lightTypography.headlineLarge!.copyWith(fontFamily: _baseFont),
           displayLarge: _lightTypography.displayLarge!
               .copyWith(fontWeight: FontWeight.bold),
           displayMedium: _lightTypography.displayMedium!
@@ -53,27 +54,23 @@ class AppTheme {
         primaryColor: const Color.fromARGB(255, 21, 133, 24),
       );
 
-  final _darkTypography = Typography.whiteCupertino.apply(
-    fontFamily: 'JosefinSans',
-  );
+  final _darkTypography = Typography.whiteCupertino;
   ThemeData get darkTheme => ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green,
           brightness: Brightness.dark,
         ),
         textTheme: _darkTypography.copyWith(
-          bodySmall:
-              _darkTypography.bodySmall!.copyWith(fontFamily: 'JosefinSans'),
+          bodySmall: _darkTypography.bodySmall!.copyWith(fontFamily: _baseFont),
           bodyMedium:
-              _darkTypography.bodyMedium!.copyWith(fontFamily: 'JosefinSans'),
-          bodyLarge:
-              _darkTypography.bodyLarge!.copyWith(fontFamily: 'JosefinSans'),
+              _darkTypography.bodyMedium!.copyWith(fontFamily: _baseFont),
+          bodyLarge: _darkTypography.bodyLarge!.copyWith(fontFamily: _baseFont),
           titleSmall:
-              _darkTypography.titleSmall!.copyWith(fontFamily: 'JosefinSans'),
+              _darkTypography.titleSmall!.copyWith(fontFamily: _baseFont),
           titleMedium:
-              _darkTypography.titleMedium!.copyWith(fontFamily: 'JosefinSans'),
+              _darkTypography.titleMedium!.copyWith(fontFamily: _baseFont),
           titleLarge:
-              _darkTypography.titleLarge!.copyWith(fontFamily: 'JosefinSans'),
+              _darkTypography.titleLarge!.copyWith(fontFamily: _baseFont),
           displayLarge: _darkTypography.displayLarge!
               .copyWith(fontWeight: FontWeight.bold),
           displayMedium: _darkTypography.displayMedium!

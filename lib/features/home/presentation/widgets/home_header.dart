@@ -9,22 +9,16 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        radius: 30,
-        child: Image.asset('assets/logo/logo.png'),
+        radius: 30.0,
+        child: Image.asset('assets/logo/logo_small.png'),
       ),
-      title: const Text(
+      title: Text(
         'Turismo Rural',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headlineSmall,
       ),
-      subtitle: const Text(
+      subtitle: Text(
         'São Francisco de Paula',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

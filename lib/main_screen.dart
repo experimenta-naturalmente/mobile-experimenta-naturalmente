@@ -1,96 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/core/services/maps/cubits.dart';
+import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
-import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/login.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/screens/home.dart';
+import 'package:turismo_rural_frontend/features/maps_demo/maps_demo.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_handler.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  static const List<AppPage> tabs = [
+    AppPage.home,
+    AppPage.experiences,
+    AppPage.maps,
+    AppPage.login,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentIndex = context.watch<NavigationCubit>().state;
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
-          navigatorReturn(context);
+          await navigatorReturn(context);
         }
       },
-      child: Scaffold(
-        appBar: _getAppBar(context, currentIndex),
-        resizeToAvoidBottomInset: true,
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
-            context.read<NavigationCubit>().navigateTo(index);
-          },
-          selectedIndex: currentIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
+      child: BlocBuilder<NavigationCubit, NavigationState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: _getAppBar(context, state.currentPage),
+            resizeToAvoidBottomInset: true,
+            bottomNavigationBar: NavigationBar(
+              onDestinationSelected: (int index) {
+                context
+                    .read<NavigationCubit>()
+                    .navigateTo(appPage: tabs[index]);
+              },
+              selectedIndex: getTabIndex(state.currentPage),
+              destinations: const <Widget>[
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.home),
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Home',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.hotel_class),
+                  icon: Icon(Icons.hotel_class_outlined),
+                  label: 'Experiências',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.explore),
+                  icon: Icon(Icons.explore_outlined),
+                  label: 'Mapa',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.person),
+                  icon: Icon(Icons.person_outline),
+                  label: 'Perfil',
+                ),
+              ],
             ),
-            NavigationDestination(
-              icon: Badge(child: Icon(Icons.hotel_class)),
-              label: 'Experiências',
-            ),
-            NavigationDestination(
-              icon: Badge(child: Icon(Icons.explore)),
-              label: 'Mapa',
-            ),
-            NavigationDestination(
-              icon: Badge(child: Icon(Icons.person_outlined)),
-              label: 'Perfil',
-            ),
-          ],
-        ),
-        body: [
-          const HomeScreen(),
-          const ExperiencesScreen(),
-          const SignUpHandler(),
-          const LoginScreen(),
-        ][currentIndex],
+            body: _getPage(state.currentPage, context),
+          );
+        },
       ),
     );
   }
 
-  void navigatorReturn(BuildContext context) {
-    final currPage = context.read<NavigationCubit>().state;
-    if (currPage == 0) {
-      Navigator.pop(context);
-    } else if (currPage == 3) {
-      final bool onInitial =
-          context.read<SignUpBloc>().state is SignUpPageInitialState;
-      if (onInitial) {
-        context.read<NavigationCubit>().navigateTo(0);
-      } else {
-        context.read<SignUpBloc>().add(const SignUpChangePage(previous: true));
-      }
-    } else {
-      context.read<NavigationCubit>().navigateTo(0);
+  int getTabIndex(AppPage page) {
+    if (page == AppPage.register) {
+      return tabs.indexOf(AppPage.login);
+    }
+    return tabs.indexOf(page);
+  }
+
+  Widget _getPage(AppPage currentPage, BuildContext context) {
+    switch (currentPage) {
+      case AppPage.home:
+        return const HomeScreen();
+      case AppPage.experiences:
+        final experience =
+            context.read<NavigationCubit>().state.selectedExperience;
+        if (experience != null) {
+          context.read<ExperienceBloc>().add(ExperienceSelected(experience));
+        } else {
+          context.read<ExperienceBloc>().add(LoadExperienceCategories());
+        }
+        return const ExperiencesScreen();
+      case AppPage.maps:
+        return const MapsDemo();
+      case AppPage.login:
+        return const LoginScreen();
+      case AppPage.register:
+        return const SignUpHandler();
+      default:
+        return Container();
     }
   }
 
-  PreferredSizeWidget? _getAppBar(BuildContext context, currPage) {
+  Future<bool> navigatorReturn(BuildContext context) async {
+    final currPage = context.read<NavigationCubit>().state.currentPage;
+    if (currPage == AppPage.home) {
+      return true;
+    } else if (currPage == AppPage.register) {
+      final bool onInitial =
+          context.read<SignUpBloc>().state is SignUpPageInitialState;
+      if (onInitial) {
+        context.read<NavigationCubit>().navigateTo(appPage: AppPage.home);
+      } else {
+        context.read<SignUpBloc>().add(const SignUpChangePage(previous: true));
+      }
+      return false;
+    }
+    if (currPage == AppPage.experiences) {
+      final selectedExperience =
+          context.read<NavigationCubit>().state.selectedExperience;
+      final previousPage = context.read<NavigationCubit>().state.previousPage;
+      if (selectedExperience != null && previousPage != null) {
+        context.read<NavigationCubit>().navigateTo(appPage: previousPage);
+        return false;
+      }
+    }
+    context.read<NavigationCubit>().navigateTo(appPage: AppPage.home);
+    return false;
+  }
+
+  PreferredSizeWidget? _getAppBar(BuildContext context, AppPage currPage) {
+    if (currPage == AppPage.home) {
+      return null;
+    }
+    return AppBar(
+      centerTitle: true,
+      title: GradientText(
+        text: _getAppBarTitle(currPage),
+      ),
+      leading: currPage == AppPage.home
+          ? null
+          : IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                navigatorReturn(context);
+              },
+            ),
+    );
+  }
+
+  String _getAppBarTitle(AppPage currPage) {
     switch (currPage) {
-      case 3:
-        return AppBar(
-          centerTitle: true,
-          title: const GradientText(text: "Cadastro"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              navigatorReturn(context);
-            },
-          ),
-        );
+      case AppPage.home:
+        return 'Home';
+      case AppPage.experiences:
+        return 'Experiências';
+      case AppPage.maps:
+        return 'Mapa';
+      case AppPage.login:
+        return 'Perfil';
+      case AppPage.register:
+        return 'Cadastro';
       default:
-        return null;
+        return '';
     }
   }
 }

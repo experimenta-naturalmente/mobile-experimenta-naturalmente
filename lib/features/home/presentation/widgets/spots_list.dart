@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
@@ -20,25 +21,20 @@ class SpotsList extends StatelessWidget {
     }
     final spots = state.featuredSpots;
 
-    return SingleChildScrollView(
-      physics: const RangeMaintainingScrollPhysics(),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12, right: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Spots",
-              style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.start,
-            ),
-            for (final category in categories) ...[
-              _buildSpotsGroup(context, category, spots),
-              const SizedBox(height: 20),
-            ],
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "Spots",
+          style: Theme.of(context).textTheme.titleLarge,
+          textAlign: TextAlign.start,
         ),
-      ),
+        for (final category in categories) ...[
+          _buildSpotsGroup(context, category, spots),
+          const SizedBox(height: 20),
+        ],
+      ],
     );
   }
 
@@ -47,10 +43,12 @@ class SpotsList extends StatelessWidget {
     ExperienceCategory category,
     Set<Spot> spots,
   ) {
-    final categorySpots =
-        spots.where((spot) => spot.category.id == category.id).toList();
+    final categorySpots = spots
+        .where((spot) => spot.category.categoryId == category.categoryId)
+        .toList();
     final cardHeight = MediaQuery.of(context).size.height * 0.12;
-    final cardWidth = MediaQuery.of(context).size.width / 2 - 25;
+    final cardWidth = MediaQuery.of(context).size.width / 1.8 - 25;
+    final spotsRows = categorySpots.length > 1 ? 2 : 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +60,7 @@ class SpotsList extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: cardHeight * 2 + 20,
+          height: cardHeight * spotsRows + 20,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Wrap(
@@ -86,18 +84,35 @@ class SpotsList extends StatelessWidget {
     return SizedBox(
       width: cardWidth,
       height: cardHeight,
-      child: Card.outlined(
+      child: Card(
         child: Row(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    EdgeInsets.only(left: cardHeight * 0.05, top: 4, bottom: 4),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                  child: Image.network(
-                    'https://picsum.photos/200/300?random=${spot.id}',
+            Padding(
+              padding: EdgeInsets.only(
+                top: cardHeight * 0.05,
+                bottom: cardHeight * 0.05,
+                left: cardHeight * 0.1,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    width: 2.0,
+                  ),
+                ),
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: spot.image ??
+                        spot.images.firstOrNull ??
+                        'https://picsum.photos/200/300?random=${spot.id}?blur',
                     fit: BoxFit.cover,
+                    width: cardHeight * 0.7,
+                    height: cardHeight * 0.7,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
               ),

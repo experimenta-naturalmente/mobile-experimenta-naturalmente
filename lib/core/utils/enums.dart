@@ -10,3 +10,11 @@ enum WeekDay {
   saturday,
   holiday
 }
+
+enum AppPage {
+  home,
+  login,
+  register,
+  experiences,
+  maps,
+}

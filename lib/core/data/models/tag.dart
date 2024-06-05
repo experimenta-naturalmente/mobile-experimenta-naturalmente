@@ -4,12 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 
 class Tag extends Equatable {
-  final int id;
+  final int tagId;
   final String name;
   final List<ExperienceCategory> type;
 
   const Tag({
-    required this.id,
+    required this.tagId,
     required this.name,
     required this.type,
   });
@@ -28,9 +28,16 @@ class Tag extends Equatable {
         .toList();
 
     return Tag(
-      id: json['tagId'] as int,
+      tagId: json['tagId'] as int,
       name: utf8.decode((json['name'] as String).codeUnits),
       type: categoryList,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'tagId': tagId,
+      'name': name,
+    };
   }
 }

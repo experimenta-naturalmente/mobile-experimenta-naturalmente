@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/view_models/experience_list_item.dart';
 
 class ExperienceAbout extends StatelessWidget {
-  final ExperienceListItem experienceListItem;
+  final Experience experience;
 
-  const ExperienceAbout({super.key, required this.experienceListItem});
+  const ExperienceAbout({super.key, required this.experience});
 
   @override
   Widget build(BuildContext context) {
@@ -13,66 +13,48 @@ class ExperienceAbout extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(top: 16),
         alignment: AlignmentDirectional.bottomStart,
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              margin: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 6),
-                        child: const Icon(Icons.sticky_note_2_outlined),
-                      ),
-                      Text(
-                        experienceListItem.name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  Container(
+                    margin: const EdgeInsets.only(right: 6),
+                    child: const Icon(Icons.sticky_note_2_outlined),
                   ),
                   Text(
-                    experienceListItem.description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 10,
-                    ),
-                    child: Text(
-                      "Características:",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Wrap(
-                    spacing: 6,
-                    children: experienceListItem.tags.map((tag) {
-                      return Chip(
-                        backgroundColor: Colors.green.shade50,
-                        label: Text(
-                          tag.name,
-                          style: getTagTextStyle(
-                            tag.name,
-                            context,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    experience.name,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                experience.description,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 14),
+              Text(
+                "Tags:",
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                children: experience.tags.map((tag) {
+                  return Chip(
+                    backgroundColor: Colors.green.shade50,
+                    label: Text(
+                      tag.name,
+                      style: getTagTextStyle(tag.name, context),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

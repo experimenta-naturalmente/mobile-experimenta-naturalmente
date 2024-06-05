@@ -25,12 +25,18 @@ class MapsDemo extends StatelessWidget {
       ),
     };
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map Demo'),
-      ),
-      body: Container(
-        child: mapService.buildMap(markers),
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
+          ),
+          child: mapService.buildMap(markers),
+        ),
       ),
     );
   }

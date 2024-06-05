@@ -20,59 +20,56 @@ class _ExperienceLocationTabState extends State<ExperienceLocationTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 6),
-                  child: const Icon(Icons.near_me_outlined),
-                ),
-                const Text(
-                  "Endereço",
-                  style: TextStyle(
-                    fontSize: 20,
+    final screenHeight = MediaQuery.of(context).size.height;
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(top: 16),
+        alignment: AlignmentDirectional.bottomStart,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 6),
+                    child: const Icon(Icons.near_me_outlined),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Rua Moinho Velho, 817",
-              style: TextStyle(
-                fontSize: 18,
+                  Text(
+                    "Endereço",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ],
               ),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 11.0,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId('1'),
-                        position: _center,
-                      ),
-                    },
-                  ),
+              const SizedBox(height: 8),
+              Text(
+                "Rua Moinho Velho, 817",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
                 ),
-              ],
-            ),
+                height: screenHeight * 0.20,
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11.0,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('1'),
+                      position: _center,
+                    ),
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

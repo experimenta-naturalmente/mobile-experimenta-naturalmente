@@ -18,36 +18,34 @@ class SignUpTagSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final filteredTags = context.read<SignUpBloc>().filteredTags;
     final selectedTags = state.selectedTags;
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 36.0,
-                vertical: 36.0,
-              ),
-              child: Text(
-                'Selecione algumas TAGs para o seu negócio:',
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
-              ),
+    return Center(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 36.0,
+              vertical: 36.0,
             ),
-            Column(
-              children: [
-                _buildTagGroup(
-                  context,
-                  filteredTags.isNotEmpty
-                      ? filteredTags.first.type.first.name
-                      : '',
-                  filteredTags,
-                  selectedTags,
-                ),
-                const SizedBox(height: 24),
-              ],
+            child: Text(
+              'Selecione algumas tags para o seu negócio:',
+              style: Theme.of(context).textTheme.headlineMedium,
+              textAlign: TextAlign.center,
             ),
-          ],
-        ),
+          ),
+          Column(
+            children: [
+              _buildTagGroup(
+                context,
+                filteredTags.isNotEmpty
+                    ? filteredTags.first.type.first.name
+                    : '',
+                filteredTags,
+                selectedTags,
+              ),
+              const SizedBox(height: 36),
+            ],
+          ),
+        ],
       ),
     );
   }

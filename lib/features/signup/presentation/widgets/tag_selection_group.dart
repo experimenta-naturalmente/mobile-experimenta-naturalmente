@@ -22,7 +22,7 @@ class TagSelectionGroup extends StatelessWidget {
         spacing: 16,
         runSpacing: 4,
         children: tags.map((tag) {
-          final isSelected = selectedTags[tag.id] ?? false;
+          final isSelected = selectedTags[tag.tagId] ?? false;
           return ChoiceChip(
             label: Text(
               tag.name,

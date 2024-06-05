@@ -15,37 +15,36 @@ class SignUpPageInitial extends StatelessWidget {
 
     registration.category = registration.category ?? categories.first;
 
-    return Align(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'O que você deseja cadastrar?',
-            textAlign: TextAlign.center,
-            softWrap: true,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 24),
-          DropdownMenu<int>(
-            initialSelection: registration.category?.id ?? categories.first.id,
-            width: screenWidth * 0.7,
-            textStyle: Theme.of(context).textTheme.titleLarge,
-            onSelected: (value) => {
-              registration.category =
-                  categories.firstWhere((category) => category.id == value),
-            },
-            dropdownMenuEntries: categories
-                .map(
-                  (category) => DropdownMenuEntry(
-                    value: category.id,
-                    label: category.name,
-                  ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'O que você deseja cadastrar?',
+          textAlign: TextAlign.center,
+          softWrap: true,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 24),
+        DropdownMenu<int>(
+          initialSelection:
+              registration.category?.categoryId ?? categories.first.categoryId,
+          width: screenWidth * 0.7,
+          textStyle: Theme.of(context).textTheme.titleLarge,
+          onSelected: (value) => {
+            registration.category = categories
+                .firstWhere((category) => category.categoryId == value),
+          },
+          dropdownMenuEntries: categories
+              .map(
+                (category) => DropdownMenuEntry(
+                  value: category.categoryId,
+                  label: category.name,
+                ),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 }

@@ -22,6 +22,7 @@ class Event extends Experience {
     required super.timeDetails,
     required super.socialNetworks,
     required super.tags,
+    required super.images,
   });
 
   factory Event.fromJson(
@@ -40,16 +41,20 @@ class Event extends Experience {
       description: utf8.decode((json['description'] as String).codeUnits),
       category: categories.firstWhere(
         (category) =>
-            category.id == (json['category'] as Map)['categoryId'] as int,
+            category.categoryId ==
+            (json['category'] as Map)['categoryId'] as int,
         orElse: () => const ExperienceCategory(
-          id: -1,
+          categoryId: -1,
           name: 'Unknown',
         ),
       ),
       timeDetails: const [],
       socialNetworks: const [],
-      tags: (json['tags'] as List<dynamic>)
+      tags: (json['tags'] as List? ?? [])
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
+          .toSet(),
+      images: (json['images'] as List? ?? [])
+          .map((image) => image as String)
           .toSet(),
     );
   }
@@ -68,5 +73,6 @@ class Event extends Experience {
         timeDetails,
         socialNetworks,
         tags,
+        images,
       ];
 }

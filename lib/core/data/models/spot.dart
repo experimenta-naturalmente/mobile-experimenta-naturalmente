@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:convert';
 
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
@@ -22,6 +20,7 @@ class Spot extends Experience {
     required super.timeDetails,
     required super.socialNetworks,
     required super.tags,
+    required super.images,
   });
 
   factory Spot.fromJson(
@@ -39,15 +38,20 @@ class Spot extends Experience {
       image: json['image'] as String?,
       description: utf8.decode((json['description'] as String).codeUnits),
       category: categories.firstWhere(
-        (category) => category.id == json['category']['categoryId'] as int,
+        (category) =>
+            category.categoryId ==
+            (json['category'] as Map)['categoryId'] as int,
         orElse: () => const ExperienceCategory(
-          id: -1,
+          categoryId: -1,
           name: 'Unknown',
         ),
       ),
       socialNetworks: const [],
       tags: (json['tags'] as List<dynamic>)
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
+          .toSet(),
+      images: (json['images'] as List? ?? [])
+          .map((image) => image as String)
           .toSet(),
     );
   }
@@ -68,9 +72,10 @@ class Spot extends Experience {
       category: category,
       timeDetails: const [],
       socialNetworks: const [],
-      tags: (json['tags'] as List<dynamic>)
+      tags: (json['tags'] as List? ?? [])
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
           .toSet(),
+      images: (json['images'] as List).map((image) => image as String).toSet(),
     );
   }
 
@@ -88,5 +93,6 @@ class Spot extends Experience {
         timeDetails,
         socialNetworks,
         tags,
+        images,
       ];
 }
