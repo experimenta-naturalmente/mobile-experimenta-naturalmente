@@ -28,8 +28,8 @@ class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
         // enlargeFactor: 0.3,
       ),
       items: [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9j3w_2mh3w4-xZY-WnuORC-RpeRLq_x-ScA&s",
-        "https://acontecegramado.com.br/wp-content/uploads/2024/01/sao-chico.jpeg",
+        "https://garfoemala.com.br/wp-content/uploads/Luciano-Garcia-Divulga----o-70.jpg",
+        "https://scontent.fpoa11-2.fna.fbcdn.net/v/t1.6435-9/85088740_2527758944001452_8160221692401025024_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGHzQ1SGfR-DrxjBAnbjZdsqCoyVfHpd_qoKjJV8el3-h9zDpL1uVDSmVuJi7E176WHgB8dY2QspxnDbGSiBr-D&_nc_ohc=PJYva68-VoQAb7vuqnV&_nc_ht=scontent.fpoa11-2.fna&oh=00_AfAYAhSH_usw6Q8qT2hXjqk1vrD9rgeTRtJ9--OrtS5OqA&oe=66393F32",
       ].map((url) {
         return Builder(
           builder: (BuildContext context) {
