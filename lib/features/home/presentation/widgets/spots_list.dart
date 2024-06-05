@@ -95,10 +95,12 @@ class SpotsList extends StatelessWidget {
                     EdgeInsets.only(left: cardHeight * 0.05, top: 4, bottom: 4),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                  child: Image.network(
-                    'https://picsum.photos/200/300?random=${spot.id}',
-                    fit: BoxFit.cover,
-                  ),
+                  child: spot.image != null
+                      ? Image.network(
+                          spot.image!,
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
               ),
             ),
