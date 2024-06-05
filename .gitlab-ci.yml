@@ -37,8 +37,6 @@ test:
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - flutter pub global activate junitreport
-    - flutter channel beta
-    - flutter upgrade
     - touch .env
   script:    
     - flutter test --machine --coverage | tojunit -o report.xml
