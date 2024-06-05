@@ -37,7 +37,9 @@ class SignUpTagSelection extends StatelessWidget {
               children: [
                 _buildTagGroup(
                   context,
-                  filteredTags.isNotEmpty ? filteredTags.first.type.name : '',
+                  filteredTags.isNotEmpty
+                      ? filteredTags.first.type.first.name
+                      : '',
                   filteredTags,
                   selectedTags,
                 ),

@@ -1,5 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/models/event.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 
 class EventCarousel extends StatelessWidget {
   const EventCarousel({
@@ -8,10 +12,20 @@ class EventCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildCarousel(context);
+    if (context.watch<HomeBloc>().state is! HomeLoaded) {
+      return const SizedBox();
+    }
+    final state = context.watch<HomeBloc>().state as HomeLoaded;
+    final categories = state.spotCategories;
+    if (categories.isEmpty) {
+      return const SizedBox();
+    }
+    final events = state.featuredEvents;
+
+    return _buildCarousel(context, events);
   }
 
-  Widget _buildCarousel(BuildContext context) {
+  Widget _buildCarousel(BuildContext context, Set<Event> events) {
     final eventHeight = MediaQuery.of(context).size.height * 0.2;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,10 +39,10 @@ class EventCarousel extends StatelessWidget {
           ),
         ),
         CarouselSlider.builder(
-          itemCount: 5,
-          itemBuilder:
-              (BuildContext context, int itemIndex, int pageViewIndex) {
-            return _buildItem(context, itemIndex, eventHeight);
+          itemCount: events.length,
+          itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+            final event = events.elementAt(index);
+            return _buildItem(context, event, eventHeight);
           },
           options: CarouselOptions(
             height: eventHeight + 80,
@@ -41,7 +55,7 @@ class EventCarousel extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(BuildContext context, int index, double eventHeight) {
+  Widget _buildItem(BuildContext context, Event event, double eventHeight) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -60,7 +74,7 @@ class EventCarousel extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                'https://picsum.photos/200/300?random=$index',
+                'https://picsum.photos/200/300?random=${event.id}',
                 fit: BoxFit.cover,
               ),
             ),
@@ -69,7 +83,7 @@ class EventCarousel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              'Description of event $index',
+              event.name,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),

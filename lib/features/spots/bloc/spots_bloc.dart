@@ -50,27 +50,27 @@ class SpotsBloc extends Bloc<SpotsEvent, SpotsState> {
               const Tag(
                 id: 29,
                 name: 'Comida Caseira',
-                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+                type: [ExperienceCategory(id: 2, name: 'Restaurante')],
               ),
               const Tag(
                 id: 26,
                 name: 'Pet Friendly',
-                type: ExperienceCategory(id: 2, name: 'Restaurante'),
+                type: [ExperienceCategory(id: 2, name: 'Restaurante')],
               ),
               const Tag(
                 id: 14,
                 name: 'Estacionamento Gratuito',
-                type: ExperienceCategory(id: 1, name: 'Hotel'),
+                type: [ExperienceCategory(id: 1, name: 'Hotel')],
               ),
               const Tag(
                 id: 7,
                 name: 'Cervejaria Artesanal',
-                type: ExperienceCategory(id: 4, name: 'Produtor rural'),
+                type: [ExperienceCategory(id: 4, name: 'Produtor rural')],
               ),
               const Tag(
                 id: 2,
                 name: 'Mirante',
-                type: ExperienceCategory(id: 5, name: 'Atração turística'),
+                type: [ExperienceCategory(id: 5, name: 'Atração turística')],
               ),
             },
           );

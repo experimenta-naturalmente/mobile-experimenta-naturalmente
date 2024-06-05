@@ -139,10 +139,12 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     filteredTags = {};
 
     for (final tag in availableTags) {
-      if (tag.type.id == registration.category?.id) {
-        filteredTags.add(tag);
+      for (final categoryTag in tag.type) {
+        if (categoryTag.id == registration.category?.id) {
+          filteredTags.add(tag);
+        }
+        selectedTagsCache[tag.id] = false;
       }
-      selectedTagsCache[tag.id] = false;
     }
   }
 }

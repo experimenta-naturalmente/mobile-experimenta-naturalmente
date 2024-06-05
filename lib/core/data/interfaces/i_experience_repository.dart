@@ -10,4 +10,5 @@ abstract class IExperienceRepository {
   );
   Future<Set<Event>> fetchFeaturedEvents();
   Future<Set<Spot>> fetchFeaturedSpots();
+  Future<Spot> fetchFeaturedSpotById(int spotId);
 }

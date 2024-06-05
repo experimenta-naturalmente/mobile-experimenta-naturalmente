@@ -4,7 +4,10 @@ import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 
 abstract class Experience extends Equatable {
   final int id;
+  final String cnpj;
   final String name;
+  final String email;
+  final String phone;
   final String description;
   final ExperienceCategory category;
   final List<String> timeDetails;
@@ -13,7 +16,10 @@ abstract class Experience extends Equatable {
 
   const Experience({
     required this.id,
+    required this.cnpj,
     required this.name,
+    required this.email,
+    required this.phone,
     required this.description,
     required this.category,
     required this.timeDetails,

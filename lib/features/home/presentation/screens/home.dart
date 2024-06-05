@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle_home.dart';  // Importe o widget DoubleCircleHome
+import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle_home.dart'; // Importe o widget DoubleCircleHome
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
@@ -30,8 +30,8 @@ class HomeScreen extends StatelessWidget {
             child: ErrorHandler(
               error: state.error,
               onRetry: () => context.read<HomeBloc>().add(
-                HomeLoadData(),
-              ),
+                    HomeLoadData(),
+                  ),
             ),
           );
         }
