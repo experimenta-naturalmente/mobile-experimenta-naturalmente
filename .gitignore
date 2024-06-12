@@ -53,3 +53,5 @@ gitlab-runner
 gl-code-quality-report.json
 /metrics
 macos/Flutter/GeneratedPluginRegistrant.swift
+linux/flutter/
+windows/flutter/
