@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -137,34 +136,6 @@ class ExperienceRepository implements IExperienceRepository {
                 Spot.fromJson(json as Map<String, dynamic>, categoriesList),
           )
           .toSet();
-
-      final List<Map<String, dynamic>> mockSpotsJson =
-          List.generate(10, (index) {
-        final randomCategory =
-            categoriesList[Random().nextInt(categoriesList.length)];
-        return {
-          'id': index,
-          'cnpj': '00.000.000/0000-0$index',
-          'name': 'Spot $index',
-          'email': 'spot$index@example.com',
-          'phone': '123-456-7890',
-          'image': 'https://picsum.photos/200/300/?random=$index?blur',
-          'description': 'Description for spot $index',
-          'openingHours': '9:00 AM - 6:00 PM',
-          'category': {
-            'categoryId': randomCategory.categoryId,
-          },
-          'tags': [],
-          'images': ['https://picsum.photos/200/300/?random=$index?blur'],
-        };
-      });
-      final mockSpots = mockSpotsJson
-          .map(
-            (json) => Spot.fromJson(json, categoriesList),
-          )
-          .toSet();
-
-      spots.addAll(mockSpots);
 
       return spots;
     } else {
