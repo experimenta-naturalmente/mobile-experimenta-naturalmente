@@ -16,7 +16,10 @@ class LoginInitial extends LoginState {
 
 class LoginSubmitLoading extends LoginState {}
 
-class LoginSubmitSucess extends LoginState {}
+class LoginSubmitSucess extends LoginState {
+  // ignore: avoid_unused_constructor_parameters
+  const LoginSubmitSucess(responseData);
+}
 
 class LoginError extends LoginState {
   final String error;

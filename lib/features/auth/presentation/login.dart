@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
-import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/loading_indicator.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/screens/user_profile_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -15,6 +14,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final usernameController = TextEditingController();
+    final passwordController = TextEditingController();
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (BuildContext context, LoginState state) {
         if (state is LoginSubmitLoading) {
@@ -47,17 +48,30 @@ class LoginScreen extends StatelessWidget {
                   Form(
                     child: Column(
                       children: [
-                        _usernameField(context),
+                        _usernameField(
+                          context,
+                          usernameController,
+                        ),
                         SizedBox(height: screenHeight * 0.01),
-                        _passwordField(context, state.obscuredPassword),
+                        _passwordField(
+                          context,
+                          state.obscuredPassword,
+                          passwordController,
+                        ),
                         _forgotPasswordButton(context),
                         SizedBox(height: screenHeight * 0.01),
                         SubmitButton(
                           text: 'Entrar',
                           onPressed: () => {
-                            context
-                                .read<NavigationCubit>()
-                                .navigateTo(appPage: AppPage.register),
+                            context.read<LoginBloc>().add(
+                                  LoginSubmit(
+                                    usernameController.text,
+                                    passwordController.text,
+                                    //login test, funciona com outra api não a nossa hehehe
+                                    //username: emilys
+                                    //senha: emilyspass
+                                  ),
+                                ),
                           },
                         ),
                       ],
@@ -68,6 +82,9 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
           );
+        }
+        if (state is LoginSubmitSucess) {
+          return const UserProfileScreen();
         }
         return Container();
       },
@@ -90,8 +107,12 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _usernameField(BuildContext context) {
+  Widget _usernameField(
+    BuildContext context,
+    TextEditingController controller,
+  ) {
     return TextFormField(
+      controller: controller,
       decoration: const InputDecoration(
         labelText: 'Usuário',
         filled: true,
@@ -100,8 +121,13 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _passwordField(BuildContext context, bool obscureText) {
+  Widget _passwordField(
+    BuildContext context,
+    bool obscureText,
+    TextEditingController controller,
+  ) {
     return TextFormField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: 'Senha',
