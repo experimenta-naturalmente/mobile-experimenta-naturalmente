@@ -159,40 +159,6 @@ class ExperienceRepository implements IExperienceRepository {
           )
           .toList();
 
-      final List<Map<String, dynamic>> mockEventsJson =
-          List.generate(10, (index) {
-        return {
-          'id': index,
-          'cnpj': '00.000.000/0000-0$index',
-          'name': 'Evento $index',
-          'email': 'event$index@example.com',
-          'phone': '123-456-7890',
-          'image': 'https://picsum.photos/200/300/?random=$index?blur',
-          'description': 'Description for event $index',
-          'details': 'Details for event $index',
-          'time': '12:00 PM',
-          'category': (eventsJson[0] as Map)['category'],
-          'tags': (eventsJson[0] as Map)['tags'],
-          'images': ['https://picsum.photos/200/300/?random=$index?blur'],
-          'isFeatured': true,
-          'socialNetwork': null,
-          'profile': null,
-          'address': {
-            'street': 'Rua do Evento $index',
-            'number': 123,
-            'cep': '12345-678',
-          },
-          'timeDetails': [],
-        };
-      });
-      final mockEvents = mockEventsJson
-          .map(
-            (json) => Event.fromJson(json, categoriesList),
-          )
-          .toSet();
-
-      events.addAll(mockEvents);
-
       return events.toSet();
     } else {
       throw Exception('Failed to load events');
