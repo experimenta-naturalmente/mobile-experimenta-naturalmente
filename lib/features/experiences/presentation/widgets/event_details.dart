@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:turismo_rural_frontend/core/data/models/experience.dart';
+import 'package:turismo_rural_frontend/core/data/models/event.dart';
 
 class EventDetails extends StatelessWidget {
-  final Experience experience;
+  final Event event;
 
-  const EventDetails({super.key, required this.experience});
+  const EventDetails({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class EventDetails extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              for (final hour in experience.timeDetails)
+              for (final hour in event.timeDetails)
                 Text(
                   hour,
                   style: Theme.of(context).textTheme.titleMedium,
@@ -51,7 +51,7 @@ class EventDetails extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                experience.description,
+                event.details,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Row(

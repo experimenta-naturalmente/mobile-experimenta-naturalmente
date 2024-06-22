@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/event_details.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_about.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_location_tab.dart';
@@ -32,11 +34,11 @@ class ExperienceTabBar extends StatelessWidget {
                 const ExperienceLocationTab(),
                 if (experience.category.name == "Evento")
                   EventDetails(
-                    experience: experience,
+                    event: experience as Event,
                   )
                 else
                   SpotDetails(
-                    experience: experience,
+                    spot: experience as Spot,
                   ),
               ],
             ),

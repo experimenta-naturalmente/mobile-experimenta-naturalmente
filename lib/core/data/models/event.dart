@@ -30,7 +30,7 @@ class Event extends Experience {
     List<ExperienceCategory> categories,
   ) {
     return Event(
-      details: json['details'] as String,
+      details: utf8.decode((json['details'] as String).codeUnits),
       time: json['time'] as String,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
