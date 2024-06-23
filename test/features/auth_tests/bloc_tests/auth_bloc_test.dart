@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/user_repository.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
@@ -7,10 +8,12 @@ import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
 void main() {
   group('LoginBloc', () {
     late LoginBloc loginBloc;
+    late UserRepository userRepository;
 
     // Configurações antes de cada teste
     setUp(() {
-      loginBloc = LoginBloc();
+      userRepository = UserRepository(apiUrl: 'API_URL');
+      loginBloc = LoginBloc(userRepository: userRepository);
     });
 
     blocTest<LoginBloc, LoginState>(

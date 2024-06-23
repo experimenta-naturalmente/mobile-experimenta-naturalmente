@@ -84,7 +84,9 @@ class LoginScreen extends StatelessWidget {
           );
         }
         if (state is LoginSubmitSucess) {
-          return const UserProfileScreen();
+          return UserProfileScreen(
+            user: state.user,
+          );
         }
         return Container();
       },

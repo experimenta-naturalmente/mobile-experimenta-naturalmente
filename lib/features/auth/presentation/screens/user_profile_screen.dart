@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/user.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_tabbar.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({super.key});
+  final User user;
+
+  const UserProfileScreen({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +28,14 @@ class UserProfileScreen extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               alignment: AlignmentDirectional.center,
               child: Text(
-                'José Osvaldo',
+                user.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            const Expanded(
-              child: ProfileTabbar(),
+            Expanded(
+              child: ProfileTabbar(
+                user: user,
+              ),
             ),
           ],
         ),

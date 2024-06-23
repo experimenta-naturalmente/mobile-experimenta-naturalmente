@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/data/models/user.dart';
 
 abstract class LoginState extends Equatable {
   const LoginState();
@@ -17,8 +18,11 @@ class LoginInitial extends LoginState {
 class LoginSubmitLoading extends LoginState {}
 
 class LoginSubmitSucess extends LoginState {
-  // ignore: avoid_unused_constructor_parameters
-  const LoginSubmitSucess(responseData);
+  final User user;
+  const LoginSubmitSucess(this.user);
+
+  @override
+  List<Object> get props => [user];
 }
 
 class LoginError extends LoginState {

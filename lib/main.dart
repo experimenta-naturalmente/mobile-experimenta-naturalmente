@@ -7,6 +7,7 @@ import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/user_repository.dart';
 import 'package:turismo_rural_frontend/core/services/aws/aws.dart';
 import 'package:turismo_rural_frontend/core/services/file/file_service.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
@@ -62,6 +63,9 @@ class MainApp extends StatelessWidget {
         Provider<FileService>(
           create: (_) => FileService(),
         ),
+        Provider<UserRepository>(
+          create: (_) => UserRepository(apiUrl: apiUrl!),
+        ),
       ],
       builder: (context, child) {
         return MultiBlocProvider(
@@ -84,7 +88,10 @@ class MainApp extends StatelessWidget {
               )..add(LoadSignUp()),
             ),
             BlocProvider(
-              create: (context) => LoginBloc(),
+              create: (context) => LoginBloc(
+                userRepository:
+                    Provider.of<UserRepository>(context, listen: false),
+              ),
             ),
             BlocProvider(
               create: (context) => HomeBloc(

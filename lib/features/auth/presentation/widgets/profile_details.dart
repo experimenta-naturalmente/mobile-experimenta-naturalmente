@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/user.dart';
 
 class ProfileDetails extends StatelessWidget {
-  const ProfileDetails({super.key});
+  final User user;
+  const ProfileDetails({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    const String telefone = '(51)987654321';
-    const String email = 'email@gmail.com';
     return Container(
       margin: const EdgeInsets.only(top: 16),
       alignment: AlignmentDirectional.bottomStart,
@@ -46,7 +46,7 @@ class ProfileDetails extends StatelessWidget {
                   ),
                   // aqui colocar o email do user
                   TextSpan(
-                    text: email,
+                    text: user.email,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -69,7 +69,7 @@ class ProfileDetails extends StatelessWidget {
                       ),
                       // aqui colocar a senha do user
                       TextSpan(
-                        text: telefone,
+                        text: user.phone,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

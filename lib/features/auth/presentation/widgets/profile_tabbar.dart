@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/user.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_details.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_location_tab.dart';
 
 class ProfileTabbar extends StatelessWidget {
-  const ProfileTabbar({super.key});
+  final User user;
+  const ProfileTabbar({super.key, required this.user});
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Informações'),
@@ -13,16 +15,18 @@ class ProfileTabbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: myTabs.length,
-      child: const Column(
+      child: Column(
         children: [
-          TabBar(
+          const TabBar(
             tabs: myTabs,
           ),
           Expanded(
             child: TabBarView(
               children: [
-                ProfileDetails(),
-                ExperienceLocationTab(),
+                ProfileDetails(
+                  user: user,
+                ),
+                const ExperienceLocationTab(),
               ],
             ),
           ),
