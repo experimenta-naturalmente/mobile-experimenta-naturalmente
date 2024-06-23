@@ -34,7 +34,7 @@ class ExperienceWidget extends StatelessWidget {
           child: ClipOval(
             child: CachedNetworkImage(
               imageUrl: experience.image ??
-                  experience.images.firstOrNull ??
+                  experience.attachments.firstOrNull?.url ??
                   'https://picsum.photos/200/300?random=${experience.id}',
               fit: BoxFit.cover,
               width: 48,

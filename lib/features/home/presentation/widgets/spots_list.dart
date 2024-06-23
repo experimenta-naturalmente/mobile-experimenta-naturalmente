@@ -107,7 +107,7 @@ class SpotsList extends StatelessWidget {
                   child: ClipOval(
                     child: CachedNetworkImage(
                       imageUrl: spot.image ??
-                          spot.images.firstOrNull ??
+                          spot.attachments.firstOrNull?.url ??
                           'https://picsum.photos/200/300?random=${spot.id}?blur',
                       fit: BoxFit.cover,
                       width: cardHeight * 0.7,

@@ -29,10 +29,8 @@ class UserProfileScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-
             const Expanded(
-              child: ProfileTabbar(
-              ),
+              child: ProfileTabbar(),
             ),
           ],
         ),

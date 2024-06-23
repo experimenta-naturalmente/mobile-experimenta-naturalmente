@@ -28,7 +28,9 @@ class ExperienceDetailsScreen extends StatelessWidget {
             SizedBox(
               height: screenHeight * 0.3,
               width: double.infinity,
-              child: const ExperienceCarouselSlider(),
+              child: ExperienceCarouselSlider(
+                experience: experience,
+              ),
             ),
 
             Expanded(

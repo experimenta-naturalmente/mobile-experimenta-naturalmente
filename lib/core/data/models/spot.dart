@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
@@ -20,7 +21,7 @@ class Spot extends Experience {
     required super.timeDetails,
     required super.socialNetworks,
     required super.tags,
-    required super.images,
+    required super.attachments,
   });
 
   factory Spot.fromJson(
@@ -50,8 +51,11 @@ class Spot extends Experience {
       tags: (json['tags'] as List<dynamic>)
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
           .toSet(),
-      images: (json['images'] as List? ?? [])
-          .map((image) => image as String)
+      attachments: (json['attachments'] as List<dynamic>)
+          .map(
+            (attachment) =>
+                Attachment.fromJson(attachment as Map<String, dynamic>),
+          )
           .toSet(),
     );
   }
@@ -75,7 +79,12 @@ class Spot extends Experience {
       tags: (json['tags'] as List? ?? [])
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
           .toSet(),
-      images: (json['images'] as List).map((image) => image as String).toSet(),
+      attachments: (json['attachments'] as List? ?? [])
+          .map(
+            (attachment) =>
+                Attachment.fromJson(attachment as Map<String, dynamic>),
+          )
+          .toSet(),
     );
   }
 
@@ -93,6 +102,6 @@ class Spot extends Experience {
         timeDetails,
         socialNetworks,
         tags,
-        images,
+        attachments,
       ];
 }
