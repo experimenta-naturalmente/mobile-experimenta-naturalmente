@@ -24,6 +24,32 @@ class Spot extends Experience {
     required super.attachments,
   });
 
+  factory Spot.fromJsonProfile(Map<String, dynamic> json) {
+    return Spot(
+      openingHours: json['openingHours'] as String,
+      id: json['id'] as int,
+      cnpj: json['cnpj'] as String,
+      name: utf8.decode((json['name'] as String).codeUnits),
+      email: json['email'] as String,
+      timeDetails: const [],
+      phone: json['phone'] as String,
+      image: json['image'] as String?,
+      description: utf8.decode((json['description'] as String).codeUnits),
+      category:
+          ExperienceCategory.fromJson(json['category'] as Map<String, dynamic>),
+      socialNetworks: const [],
+      tags: (json['tags'] as List<dynamic>)
+          .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
+          .toSet(),
+      attachments: (json['attachments'] as List<dynamic>)
+          .map(
+            (attachment) =>
+                Attachment.fromJson(attachment as Map<String, dynamic>),
+          )
+          .toSet(),
+    );
+  }
+
   factory Spot.fromJson(
     Map<String, dynamic> json,
     List<ExperienceCategory> categories,

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
 
 abstract class LoginState extends Equatable {
@@ -19,7 +20,8 @@ class LoginSubmitLoading extends LoginState {}
 
 class LoginSubmitSucess extends LoginState {
   final User user;
-  const LoginSubmitSucess(this.user);
+  final Set<Spot> spotsBusiness;
+  const LoginSubmitSucess(this.user, this.spotsBusiness);
 
   @override
   List<Object> get props => [user];

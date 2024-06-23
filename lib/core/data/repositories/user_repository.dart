@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:turismo_rural_frontend/core/data/interfaces/i_user_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
 
 class UserRepository implements IUserRepository {
@@ -29,6 +30,30 @@ class UserRepository implements IUserRepository {
       return User.fromJson(jsonData as Map<String, dynamic>);
     } else {
       throw Exception('Failed to load user');
+    }
+  }
+
+  @override
+  Future<Set<Spot>> fetchSpotsByProfileId(int profileId) async {
+    final response = await http.get(
+      Uri.parse(
+        '$apiUrl/spot/spotsby/$profileId',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> spotsJson =
+          json.decode(response.body) as List<dynamic>;
+      final spots = spotsJson
+          .map((json) => Spot.fromJsonProfile(json as Map<String, dynamic>))
+          .toSet();
+
+      print(spots);
+      return spots;
+    } else if (response.statusCode == 404) {
+      return {};
+    } else {
+      throw Exception('Failed to load spots');
     }
   }
 

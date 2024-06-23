@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_user_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
@@ -24,9 +25,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         event.password,
       );
       if (user.id != -1) {
-        emit(LoginSubmitSucess(user));
+        final Set<Spot> spots =
+            await userRepository.fetchSpotsByProfileId(user.id);
+
+        emit(LoginSubmitSucess(user, spots));
       } else {
-        // Erro na autenticação
         emit(const LoginError('Erro na autenticação'));
       }
     } catch (e) {

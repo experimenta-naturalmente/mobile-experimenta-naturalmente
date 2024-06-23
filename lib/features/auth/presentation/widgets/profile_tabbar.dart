@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_details.dart';
-import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_location_tab.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_my_business.dart';
 
 class ProfileTabbar extends StatelessWidget {
   final User user;
@@ -26,7 +26,7 @@ class ProfileTabbar extends StatelessWidget {
                 ProfileDetails(
                   user: user,
                 ),
-                const ExperienceLocationTab(),
+                const ProfileBusiness(),
               ],
             ),
           ),
