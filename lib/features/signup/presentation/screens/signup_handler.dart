@@ -23,16 +23,19 @@ class SignUpHandler extends StatelessWidget {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (BuildContext context, SignUpState state) {
         try {
-          final minHeight = MediaQuery.of(context).size.height * 0.9;
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: minHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _getPage(context, state),
-                  _buildNavigationButtons(context, state),
-                ],
+          final minHeight = MediaQuery.of(context).size.height * 0.75;
+          return Scrollbar(
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _getPage(context, state),
+                    _buildNavigationButtons(context, state),
+                  ],
+                ),
               ),
             ),
           );

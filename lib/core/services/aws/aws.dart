@@ -59,7 +59,6 @@ class AwsS3Service {
 
       return uploadUrl;
     } catch (e) {
-      print(e);
       return null;
     }
   }

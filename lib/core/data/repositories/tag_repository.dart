@@ -5,7 +5,6 @@ import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 class TagRepository implements ITagRepository {
   @override
   Future<Set<Tag>> fetchAllTags() async {
-    // Simulando a busca de todas as tags
     await Future.delayed(const Duration(milliseconds: 250));
     return {
       const Tag(

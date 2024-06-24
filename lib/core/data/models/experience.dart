@@ -9,7 +9,6 @@ abstract class Experience extends Equatable {
   final String name;
   final String email;
   final String phone;
-  final String? image;
   final String description;
   final ExperienceCategory category;
   final List<String> timeDetails;
@@ -23,7 +22,6 @@ abstract class Experience extends Equatable {
     required this.name,
     required this.email,
     required this.phone,
-    required this.image,
     required this.description,
     required this.category,
     required this.timeDetails,

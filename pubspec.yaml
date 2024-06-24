@@ -22,7 +22,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.9
-  font_awesome_flutter: ^10.7.0
+  fluttericon: ^2.0.0
   google_fonts: ^4.0.4
   google_maps_flutter: ^2.6.0
   http: ^0.13.5

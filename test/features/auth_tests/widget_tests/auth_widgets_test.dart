@@ -8,7 +8,7 @@ import 'package:turismo_rural_frontend/core/widgets/shared/submit_button.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
-import 'package:turismo_rural_frontend/features/auth/presentation/login.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 
 class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
     implements LoginBloc {}
@@ -62,8 +62,8 @@ void main() {
     // Configura o `mockLoginBloc` com um estado de erro
     whenListen(
       mockLoginBloc,
-      Stream.fromIterable([const LoginError('Test error')]),
-      initialState: const LoginError('Test error'),
+      Stream.fromIterable([const LoginSubmitError('Test error')]),
+      initialState: const LoginSubmitError('Test error'),
     );
 
     // Renderiza a tela de login

@@ -35,6 +35,7 @@ class MainApp extends StatelessWidget {
     if (apiUrl == null) {
       throw Exception('API_URL not found in .env file');
     }
+    final apiUri = Uri.parse(apiUrl!);
     return MultiProvider(
       providers: [
         Provider<IMapsService>(
@@ -54,7 +55,7 @@ class MainApp extends StatelessWidget {
         ProxyProvider<AwsS3Service, ExperienceRepository>(
           update: (_, awsS3Service, __) => ExperienceRepository(
             awsS3Service: awsS3Service,
-            apiUrl: apiUrl!,
+            apiUri: apiUri,
           ),
         ),
         Provider<TagRepository>(
@@ -64,7 +65,7 @@ class MainApp extends StatelessWidget {
           create: (_) => FileService(),
         ),
         Provider<UserRepository>(
-          create: (_) => UserRepository(apiUrl: apiUrl!),
+          create: (_) => UserRepository(apiUri: apiUri),
         ),
       ],
       builder: (context, child) {
@@ -91,6 +92,8 @@ class MainApp extends StatelessWidget {
               create: (context) => LoginBloc(
                 userRepository:
                     Provider.of<UserRepository>(context, listen: false),
+                experienceRepository: 
+                    Provider.of<ExperienceRepository>(context, listen: false),
               ),
             ),
             BlocProvider(

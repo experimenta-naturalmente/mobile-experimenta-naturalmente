@@ -57,14 +57,6 @@ class _ShiftSelectState extends State<ShiftSelect> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          child: Text(
-            'Horário de funcionamento',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: ElevatedButton(
             child: const Text('Adicionar intervalo'),
@@ -96,40 +88,32 @@ class _ShiftSelectState extends State<ShiftSelect> {
           ),
         ),
         Flexible(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.35,
-            ),
-            child: Scrollbar(
-              thumbVisibility: true,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: timeRanges.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      '${timeRanges[index].startTime.format(context)} - ${timeRanges[index].endTime.format(context)}',
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          timeRanges.removeAt(index);
-                        });
-                        final listTimeDay = timeRanges
-                            .map((e) => (e.startTime, e.endTime))
-                            .toList();
-                        context.read<SignUpBloc>().add(
-                              SignUpChangeWorkingHours(
-                                day: widget.day,
-                                workingHours: listTimeDay,
-                              ),
-                            );
-                      },
-                    ),
-                  );
-                },
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: timeRanges.map((timeRange) {
+                return ListTile(
+                  title: Text(
+                    '${timeRange.startTime.format(context)} - ${timeRange.endTime.format(context)}',
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        timeRanges.remove(timeRange);
+                      });
+                      final listTimeDay = timeRanges
+                          .map((e) => (e.startTime, e.endTime))
+                          .toList();
+                      context.read<SignUpBloc>().add(
+                            SignUpChangeWorkingHours(
+                              day: widget.day,
+                              workingHours: listTimeDay,
+                            ),
+                          );
+                    },
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ),

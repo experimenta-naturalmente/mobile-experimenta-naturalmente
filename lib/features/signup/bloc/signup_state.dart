@@ -13,7 +13,7 @@ abstract class SignUpState extends Equatable {
 class SignUpPageInitialState extends SignUpState {}
 
 class SignUpPageDescriptionState extends SignUpState {
-  final List<Attachment> attachments;
+  final List<AttachmentUpload> attachments;
 
   const SignUpPageDescriptionState({this.attachments = const []});
 
@@ -21,7 +21,7 @@ class SignUpPageDescriptionState extends SignUpState {
   List<Object> get props => [attachments];
 
   SignUpPageDescriptionState copyWith({
-    List<Attachment>? attachments,
+    List<AttachmentUpload>? attachments,
   }) {
     return SignUpPageDescriptionState(
       attachments: attachments ?? this.attachments,

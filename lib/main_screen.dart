@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
-import 'package:turismo_rural_frontend/features/auth/presentation/login.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
@@ -23,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<AppPage> tabs = [
     AppPage.home,
     AppPage.experiences,
-    AppPage.maps,
+    AppPage.register,
     AppPage.login,
   ];
 
@@ -95,10 +96,9 @@ class _MainScreenState extends State<MainScreen> {
       case AppPage.home:
         return const HomeScreen();
       case AppPage.experiences:
-        final experience =
-            context.read<NavigationCubit>().state.selectedExperience;
-        if (experience != null) {
-          context.read<ExperienceBloc>().add(ExperienceSelected(experience));
+        final item = context.read<NavigationCubit>().state.selectedItem;
+        if (item != null && item is Experience) {
+          context.read<ExperienceBloc>().add(ExperienceSelected(item));
         } else {
           context.read<ExperienceBloc>().add(LoadExperienceCategories());
         }
@@ -130,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
     }
     if (currPage == AppPage.experiences) {
       final selectedExperience =
-          context.read<NavigationCubit>().state.selectedExperience;
+          context.read<NavigationCubit>().state.selectedItem;
       final previousPage = context.read<NavigationCubit>().state.previousPage;
       if (selectedExperience != null && previousPage != null) {
         context.read<NavigationCubit>().navigateTo(appPage: previousPage);

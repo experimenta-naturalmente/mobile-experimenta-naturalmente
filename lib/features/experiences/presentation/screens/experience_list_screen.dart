@@ -14,16 +14,21 @@ import 'package:turismo_rural_frontend/features/experiences/presentation/widgets
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_widget.dart';
 
 class ExperienceListScreen extends StatelessWidget {
-  const ExperienceListScreen({super.key});
+  final ExperienceListState state;
+
+  const ExperienceListScreen({required this.state});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExperienceBloc, ExperienceState>(
       builder: (BuildContext context, ExperienceState state) {
-        if (state is ExperienceListLoadSuccess) {
+        if (state is ExperienceInitialState) {
+          context.read<ExperienceBloc>().add(LoadExperienceCategories());
+        }
+        if (state is ExperienceCategoriesLoadingState) {
           return const LoadingIndicator();
         }
-        if (state is ExperienceListLoading) {
+        if (state is ExperienceListLoadingState) {
           return Stack(
             children: [
               DoubleCircle(),
@@ -40,7 +45,7 @@ class ExperienceListScreen extends StatelessWidget {
             ],
           );
         }
-        if (state is ExperienceListLoadSuccess) {
+        if (state is ExperienceListLoadSuccessState) {
           return Stack(
             children: [
               DoubleCircle(),
@@ -70,16 +75,13 @@ class ExperienceListScreen extends StatelessWidget {
     BuildContext context,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 12.0),
       child: Column(
         children: [
           const SearchBar(
-            leading: Icon(
-              Icons.search,
-            ),
+            leading: Icon(Icons.search),
             hintText: 'O que você deseja buscar?',
           ),
-          const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: ExperienceCategoryTabView(
@@ -99,7 +101,7 @@ class ExperienceListScreen extends StatelessWidget {
 
   Widget _buildExperiencesList(Set<Experience> experiences) {
     if (experiences.isEmpty) {
-      return EmptyList();
+      return SizedBox(width: double.infinity, child: EmptyList());
     }
     return ListView.builder(
       padding: const EdgeInsets.only(left: 8, bottom: 8),
@@ -110,7 +112,7 @@ class ExperienceListScreen extends StatelessWidget {
           onTap: () => {
             context.read<NavigationCubit>().navigateTo(
                   appPage: AppPage.experiences,
-                  experience: experiences.elementAt(index),
+                  item: experiences.elementAt(index),
                 ),
           },
         );

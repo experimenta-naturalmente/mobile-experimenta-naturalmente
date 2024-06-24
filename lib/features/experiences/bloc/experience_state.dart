@@ -9,34 +9,43 @@ abstract class ExperienceState extends Equatable {
   List<Object> get props => [];
 }
 
-class ExperienceFilterInitial extends ExperienceState {}
+class ExperienceInitialState extends ExperienceState {}
 
-class ExperienceCategoriesLoading extends ExperienceState {}
-
-class ExperienceError extends ExperienceState {
+class ExperienceErrorState extends ExperienceState {
   final String error;
 
-  const ExperienceError(this.error);
+  const ExperienceErrorState(this.error);
 
   @override
   List<Object> get props => [error];
 }
 
-class ExperienceListFilterInitial extends ExperienceState {}
+class ExperienceDetailsState extends ExperienceState {
+  final Experience experience;
 
-class ExperienceListLoading extends ExperienceState {
+  const ExperienceDetailsState(this.experience);
+
+  @override
+  List<Object> get props => [experience];
+}
+
+abstract class ExperienceListState extends ExperienceState {}
+
+class ExperienceCategoriesLoadingState extends ExperienceListState {}
+
+class ExperienceListLoadingState extends ExperienceListState {
   final ExperienceCategory selectedCategory;
   final Set<ExperienceCategory> categories;
 
-  const ExperienceListLoading(this.selectedCategory, this.categories);
+  ExperienceListLoadingState(this.selectedCategory, this.categories);
 }
 
-class ExperienceListLoadSuccess extends ExperienceState {
+class ExperienceListLoadSuccessState extends ExperienceListState {
   final Set<Experience> experiences;
   final ExperienceCategory selectedCategory;
   final Set<ExperienceCategory> categories;
 
-  const ExperienceListLoadSuccess(
+  ExperienceListLoadSuccessState(
     this.experiences,
     this.selectedCategory,
     this.categories,
@@ -44,13 +53,4 @@ class ExperienceListLoadSuccess extends ExperienceState {
 
   @override
   List<Object> get props => [experiences];
-}
-
-class ExperienceDetails extends ExperienceState {
-  final Experience experience;
-
-  const ExperienceDetails(this.experience);
-
-  @override
-  List<Object> get props => [experience];
 }

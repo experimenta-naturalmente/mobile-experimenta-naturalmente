@@ -21,7 +21,7 @@ class ExperienceRegistration {
   DateTime? eventEnd;
   List<Tag> selectedTags = [];
   Map<WeekDay, List<(TimeOfDay, TimeOfDay)>> workingHours = {};
-  List<Attachment> attachments = [];
+  List<AttachmentUpload> attachments = [];
 
   ExperienceRegistration({
     this.category,

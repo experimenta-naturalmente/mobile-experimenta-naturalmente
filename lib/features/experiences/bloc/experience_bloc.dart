@@ -10,7 +10,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
 
   ExperienceBloc({
     required this.experienceRepository,
-  }) : super(ExperienceFilterInitial()) {
+  }) : super(ExperienceInitialState()) {
     on<ExperienceCategoryChanged>(_onExperienceCategoryChanged);
     on<LoadExperienceCategories>(_onLoadExperienceCategories);
     on<ExperienceSelected>(_onExperienceSelected);
@@ -20,13 +20,13 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     LoadExperienceCategories event,
     Emitter<ExperienceState> emit,
   ) async {
-    emit(ExperienceCategoriesLoading());
+    emit(ExperienceCategoriesLoadingState());
     try {
       final Set<ExperienceCategory> categories =
           await experienceRepository.fetchExperienceCategories();
       add(ExperienceCategoryChanged(categories.first, categories));
     } catch (e) {
-      emit(ExperienceError(e.toString()));
+      emit(ExperienceErrorState(e.toString()));
     }
   }
 
@@ -34,20 +34,20 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     ExperienceCategoryChanged event,
     Emitter<ExperienceState> emit,
   ) async {
-    emit(ExperienceListLoading(event.selectedCategory, event.categories));
+    emit(ExperienceListLoadingState(event.selectedCategory, event.categories));
     try {
       final Set<Experience> experiences = await experienceRepository
           .fetchExperiencesFromCategory(event.selectedCategory);
 
       emit(
-        ExperienceListLoadSuccess(
+        ExperienceListLoadSuccessState(
           experiences,
           event.selectedCategory,
           event.categories,
         ),
       );
     } catch (e) {
-      emit(ExperienceError(e.toString()));
+      emit(ExperienceErrorState(e.toString()));
     }
   }
 
@@ -55,6 +55,6 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     ExperienceSelected event,
     Emitter<ExperienceState> emit,
   ) async {
-    emit(ExperienceDetails(event.selectedItem));
+    emit(ExperienceDetailsState(event.selectedItem));
   }
 }

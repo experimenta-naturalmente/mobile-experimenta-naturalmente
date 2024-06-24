@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
+import 'package:turismo_rural_frontend/core/utils/common.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/faded_divider.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 
@@ -22,20 +24,32 @@ class SpotsList extends StatelessWidget {
       return const SizedBox();
     }
     final spots = state.featuredSpots;
+    final orientation = MediaQuery.of(context).orientation;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (final category in categories) ...[
-          _buildSpotsGroup(context, category, spots),
-          const SizedBox(height: 20),
+        for (int i = 0; i < categories.length; i++) ...[
+          if (orientation == Orientation.portrait)
+            _buildPortraitSpotsGroup(context, categories.elementAt(i), spots)
+          else
+            _buildLandscapeSpotsGroup(context, categories.elementAt(i), spots),
+          Visibility(
+            visible: i < categories.length - 1,
+            replacement: const SizedBox(height: 16),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child:
+                  FadedDivider(width: MediaQuery.of(context).size.width * 0.9),
+            ),
+          ),
         ],
       ],
     );
   }
 
-  Widget _buildSpotsGroup(
+  Widget _buildPortraitSpotsGroup(
     BuildContext context,
     ExperienceCategory category,
     Set<Spot> spots,
@@ -43,28 +57,187 @@ class SpotsList extends StatelessWidget {
     final categorySpots = spots
         .where((spot) => spot.category.categoryId == category.categoryId)
         .toList();
-    final cardHeight = MediaQuery.of(context).size.height * 0.12;
-    final cardWidth = MediaQuery.of(context).size.width / 1.8 - 25;
-    final spotsRows = categorySpots.length > 1 ? 2 : 1;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final cardHeight = screenHeight * 0.15;
+    final cardWidth = screenWidth * 0.7;
+    const maxCardWidth = 300.0;
+    final adjustedCardWidth =
+        cardWidth < maxCardWidth ? cardWidth : maxCardWidth;
+
+    final spotsRows = categorySpots.length > 1 && screenHeight > 500 ? 2 : 1;
+    final textTheme = screenWidth > 600
+        ? Theme.of(context).textTheme.headlineMedium
+        : Theme.of(context).textTheme.headlineSmall;
+
+    final scrolls = categorySpots.length > 2;
+    final fadeStops = scrolls ? [0.0, 0.9, 1.0] : [0.0, 1.0, 1.0];
+
+    final ScrollController scrollController = ScrollController();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          category.name,
-          style: Theme.of(context).textTheme.titleMedium,
-          textAlign: TextAlign.start,
+        Padding(
+          padding: EdgeInsets.only(left: screenWidth * 0.05, top: 18),
+          child: RichText(
+            text: TextSpan(
+              style: textTheme,
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 2, right: 12),
+                    child: iconFromCategory(
+                      experienceCategory: category,
+                      color: textTheme!.color,
+                      size: screenWidth > 600 ? 28 : 24,
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: category.name,
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: cardHeight * spotsRows + 20,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Wrap(
-              direction: Axis.vertical,
-              children: categorySpots.map((spot) {
-                return _buildSpotCard(context, spot, cardHeight, cardWidth);
-              }).toList(),
+        ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return LinearGradient(
+              colors: [
+                Theme.of(context).scaffoldBackgroundColor,
+                Theme.of(context).scaffoldBackgroundColor,
+                Colors.transparent,
+              ],
+              stops: fadeStops,
+            ).createShader(bounds);
+          },
+          blendMode: BlendMode.dstIn,
+          child: SizedBox(
+            height: cardHeight * spotsRows + 8,
+            child: Scrollbar(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    children: categorySpots.map((spot) {
+                      return _buildSpotCard(
+                        context,
+                        spot,
+                        cardHeight,
+                        adjustedCardWidth,
+                        4.0,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLandscapeSpotsGroup(
+    BuildContext context,
+    ExperienceCategory category,
+    Set<Spot> spots,
+  ) {
+    final categorySpots = spots
+        .where((spot) => spot.category.categoryId == category.categoryId)
+        .toList();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final cardHeight = screenHeight * 0.12;
+    const minHeight = 100.0;
+    final adjustedCardHeight = cardHeight > minHeight ? cardHeight : minHeight;
+    final cardWidth = screenWidth * 0.5;
+    const maxCardWidth = 300.0;
+    final adjustedCardWidth =
+        cardWidth < maxCardWidth ? cardWidth : maxCardWidth;
+
+    final spotsRows = categorySpots.length > 1 && screenHeight > 500 ? 2 : 1;
+    final textTheme = screenWidth > 600
+        ? Theme.of(context).textTheme.headlineMedium
+        : Theme.of(context).textTheme.headlineSmall;
+
+    final scrolls = screenWidth / adjustedCardWidth < categorySpots.length / 2;
+    final fadeStops = scrolls ? [0.0, 0.9, 1.0] : [0.0, 1.0, 1.0];
+
+    final ScrollController scrollController = ScrollController();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: screenWidth * 0.05, top: 18),
+          child: RichText(
+            text: TextSpan(
+              style: textTheme,
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 2, right: 12),
+                    child: iconFromCategory(
+                      experienceCategory: category,
+                      color: textTheme!.color,
+                      size: screenWidth > 600 ? 28 : 24,
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: category.name,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return LinearGradient(
+              colors: [
+                Theme.of(context).scaffoldBackgroundColor,
+                Theme.of(context).scaffoldBackgroundColor,
+                Colors.transparent,
+              ],
+              stops: fadeStops,
+            ).createShader(bounds);
+          },
+          blendMode: BlendMode.dstIn,
+          child: SizedBox(
+            height: adjustedCardHeight * spotsRows + 8,
+            child: Scrollbar(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    children: categorySpots.map((spot) {
+                      return _buildSpotCard(
+                        context,
+                        spot,
+                        adjustedCardHeight,
+                        adjustedCardWidth,
+                        8.0,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -77,58 +250,62 @@ class SpotsList extends StatelessWidget {
     Spot spot,
     double cardHeight,
     double cardWidth,
+    double margin,
   ) {
     return GestureDetector(
       onTap: () {
         context
             .read<NavigationCubit>()
-            .navigateTo(appPage: AppPage.experiences, experience: spot);
+            .navigateTo(appPage: AppPage.experiences, item: spot);
       },
       child: SizedBox(
         width: cardWidth,
         height: cardHeight,
-        child: Card(
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: cardHeight * 0.05,
-                  bottom: cardHeight * 0.05,
-                  left: cardHeight * 0.1,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      width: 2.0,
-                    ),
+        child: Card.outlined(
+          margin: EdgeInsets.all(margin),
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: cardHeight * 0.05,
+                    bottom: cardHeight * 0.05,
                   ),
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: spot.image ??
-                          spot.attachments.firstOrNull?.url ??
-                          'https://picsum.photos/200/300?random=${spot.id}?blur',
-                      fit: BoxFit.cover,
-                      width: cardHeight * 0.7,
-                      height: cardHeight * 0.7,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: cardHeight * 0.35,
+                          backgroundImage: CachedNetworkImageProvider(
+                            spot.attachments.firstOrNull?.url ??
+                                'https://picsum.photos/200/300?random=${spot.id}?blur',
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.0),
-              Flexible(
-                flex: 2,
-                child: Text(
-                  spot.name,
-                  style: Theme.of(context).textTheme.labelLarge,
+                SizedBox(width: cardWidth * 0.05),
+                Flexible(
+                  flex: 2,
+                  child: Text(
+                    spot.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.fade,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

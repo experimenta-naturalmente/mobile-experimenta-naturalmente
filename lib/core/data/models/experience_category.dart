@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class ExperienceCategory extends Equatable {
   final int categoryId;
@@ -14,7 +13,7 @@ class ExperienceCategory extends Equatable {
   factory ExperienceCategory.fromJson(Map<String, dynamic> json) {
     return ExperienceCategory(
       categoryId: json['categoryId'] as int,
-      name: utf8.decode((json['name'] as String).codeUnits),
+      name: decodeUtf8(json['name'] as String),
     );
   }
 

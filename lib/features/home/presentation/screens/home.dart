@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/widgets/backgrounds/double_circle.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/error_handler.dart';
+import 'package:turismo_rural_frontend/core/widgets/shared/faded_divider.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
@@ -16,6 +17,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is HomeInitial) {
@@ -40,44 +44,18 @@ class HomeScreen extends StatelessWidget {
           return Stack(
             children: [
               DoubleCircle(),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: screenHeight * 0.05,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: HomeHeader(),
-                    ),
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16,
-                          bottom: 16,
-                          left: 16,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //_buildTouristRoutes(context),
-                            const EventCarousel(),
-                            Align(
-                              child: Container(
-                                padding: const EdgeInsets.only(right: 16),
-                                height: 24,
-                                width: screenWidth * 0.8,
-                                child: const Divider(),
-                              ),
-                            ),
-                            const SpotsList(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+              if (isLandscape)
+                _buildLandscapeLayout(
+                  context,
+                  screenWidth,
+                  screenHeight,
+                )
+              else
+                _buildPortraitLayout(
+                  context,
+                  screenWidth,
+                  screenHeight,
                 ),
-              ),
             ],
           );
         }
@@ -86,23 +64,64 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildTouristRoutes(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         "Rotas Turísticas",
-  //         style: Theme.of(context).textTheme.titleLarge,
-  //         textAlign: TextAlign.start,
-  //       ),
-  //       Container(
-  //         height: 200,
-  //         decoration: BoxDecoration(
-  //           color: Colors.white54,
-  //           border: Border.all(),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _buildPortraitLayout(
+    BuildContext context,
+    double screenWidth,
+    double screenHeight,
+  ) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HomeHeader(),
+          const SizedBox(height: 16),
+          const EventCarousel(),
+          Center(
+            child: SizedBox(
+              width: screenWidth * 0.8,
+              child: const FadedDivider(),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 6.0),
+            child: SpotsList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLandscapeLayout(
+    BuildContext context,
+    double screenWidth,
+    double screenHeight,
+  ) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const HomeHeader(),
+          Column(
+            children: [
+              SizedBox(height: screenHeight * 0.03),
+              const EventCarousel(),
+              Center(
+                child: SizedBox(
+                  width: screenWidth * 0.8,
+                  child: const FadedDivider(),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  top: screenHeight * 0.02,
+                  bottom: screenHeight * 0.02,
+                ),
+                child: const SpotsList(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

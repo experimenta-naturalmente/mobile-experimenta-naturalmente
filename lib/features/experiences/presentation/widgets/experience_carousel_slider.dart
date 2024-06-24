@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 
 class ExperienceCarouselSlider extends StatefulWidget {
@@ -18,47 +19,77 @@ class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-      carouselController: carouselController,
-      options: CarouselOptions(
-        initialPage: 2,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 5),
-        enlargeCenterPage: true,
-        viewportFraction: 0.75,
+    final screenHeight = MediaQuery.of(context).size.height;
+    final experienceHeight = screenHeight * 0.3;
+    final experienceWidth = experienceHeight * 16 / 9;
+
+    return ShaderMask(
+      shaderCallback: (Rect rect) {
+        return LinearGradient(
+          colors: [
+            Colors.transparent,
+            Theme.of(context).colorScheme.surface,
+            Theme.of(context).colorScheme.surface,
+            Colors.transparent,
+          ],
+          stops: const [0.0, 0.1, 0.9, 1.0],
+        ).createShader(rect);
+      },
+      blendMode: BlendMode.dstIn,
+      child: CarouselSlider.builder(
+        carouselController: carouselController,
+        itemCount: widget.experience.attachments.length,
+        itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+          final attachment = widget.experience.attachments.elementAt(index);
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: MediaQuery.of(context).size.width * 0.01,
+            ),
+            child: _buildItem(
+              context,
+              attachment,
+              experienceHeight,
+              experienceWidth,
+            ),
+          );
+        },
+        options: CarouselOptions(
+          height: experienceHeight,
+          viewportFraction:
+              experienceWidth / MediaQuery.of(context).size.width * 0.8,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 5),
+        ),
       ),
-      items: widget.experience.attachments.map((attachment) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(28.0),
-                border: Border.all(
-                  width: 4,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24.0),
-                child: CachedNetworkImage(
-                  imageUrl: attachment.url,
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
-            );
-          },
-        );
-      }).toList(),
+    );
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    Attachment attachment,
+    double eventHeight,
+    double eventWidth,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+          width: 2,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: attachment.url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      ),
     );
   }
 }

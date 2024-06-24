@@ -18,20 +18,41 @@ class LoginInitial extends LoginState {
 
 class LoginSubmitLoading extends LoginState {}
 
-class LoginSubmitSucess extends LoginState {
+class LoginSubmitError extends LoginState {
+  final String error;
+
+  const LoginSubmitError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+abstract class ProfileState extends LoginState {
   final User user;
-  final Set<Spot> spotsBusiness;
-  const LoginSubmitSucess(this.user, this.spotsBusiness);
+  const ProfileState(this.user);
 
   @override
   List<Object> get props => [user];
 }
 
-class LoginError extends LoginState {
+class ProfileLoading extends ProfileState {
+  const ProfileLoading(super.user);
+}
+
+class ProfileError extends ProfileState {
   final String error;
 
-  const LoginError(this.error);
+  const ProfileError(super.user, this.error);
 
   @override
   List<Object> get props => [error];
+}
+
+class ProfileSuccess extends ProfileState {
+  final Set<Spot> spotsBusiness;
+
+  const ProfileSuccess(super.user, this.spotsBusiness);
+
+  @override
+  List<Object> get props => [user, spotsBusiness];
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
-import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class ExperienceAbout extends StatelessWidget {
   final Experience experience;
@@ -48,7 +47,7 @@ class ExperienceAbout extends StatelessWidget {
                     backgroundColor: Colors.green.shade50,
                     label: Text(
                       tag.name,
-                      style: getTagTextStyle(tag.name, context),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   );
                 }).toList(),

@@ -6,6 +6,7 @@ import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_reposit
 import 'package:turismo_rural_frontend/core/data/interfaces/i_tag_repository.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
 import 'package:turismo_rural_frontend/features/signup/data/attachment.dart';
@@ -37,7 +38,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final attachment = event.attachment;
     final localFile = attachment.localFile;
     final type = attachment.type;
-    final attachmentList = List<Attachment>.from(
+    final attachmentList = List<AttachmentUpload>.from(
       (state as SignUpPageDescriptionState).attachments,
     );
     attachmentList.add(attachment);
@@ -54,7 +55,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             attachment,
             convertedFile,
             (progressAttachment) {
-              final updatedList = List<Attachment>.from(attachmentList);
+              final updatedList = List<AttachmentUpload>.from(attachmentList);
               final index = updatedList.indexWhere((a) => a == attachment);
               if (index != -1) {
                 updatedList[index] = progressAttachment;
@@ -93,9 +94,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> _handleImageUpload(
-    Attachment attachment,
+    AttachmentUpload attachment,
     XFile newFile,
-    Function(Attachment) onProgress,
+    Function(AttachmentUpload) onProgress,
   ) async {
     final url = await experienceRepository.uploadImage(newFile, (progress) {
       final updatedAttachment = attachment.copyWith(progress: progress);
@@ -147,15 +148,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       if (compressedFile == null) {
         return null;
       }
-      final bytesCount = await compressedFile.length();
-
-      print(
-        'Image successfully converted to JPG and saved at ${compressedFile.path}, size: ${bytesCount / 1000} KB',
-      );
-
       return compressedFile;
     } catch (e) {
-      print('Error processing image: $e');
       return null;
     }
   }
@@ -166,7 +160,28 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   ) async {
     final day = event.day;
     final workingHours = event.workingHours;
+
+    const autofillWeekdays = [
+      WeekDay.monday,
+      WeekDay.tuesday,
+      WeekDay.wednesday,
+      WeekDay.thursday,
+      WeekDay.friday,
+    ];
+
+    final isFirstSet = registration.workingHours.entries
+        .where((entry) => autofillWeekdays.contains(entry.key))
+        .every((entry) => entry.value.isEmpty);
+
     registration.workingHours[day] = workingHours;
+    if (isFirstSet) {
+      for (final weekday in autofillWeekdays) {
+        if (registration.workingHours[weekday]?.isEmpty ?? true) {
+          registration.workingHours[weekday] = workingHours;
+        }
+      }
+    }
+
     emit(SignUpPageWorkingHoursState(workingHours: registration.workingHours));
   }
 
@@ -300,9 +315,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> _updateAttachments(
-    List<Attachment> attachments,
+    List<AttachmentUpload> attachments,
   ) async {
-    final attachmentsRegistration = List<Attachment>.from(attachments)
+    final attachmentsRegistration = List<AttachmentUpload>.from(attachments)
         .map(
           (attachment) {
             final url = attachment.url;

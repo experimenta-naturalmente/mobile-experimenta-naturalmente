@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_details.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/profile_my_business.dart';
 
 class ProfileTabbar extends StatelessWidget {
   final User user;
-  const ProfileTabbar({super.key, required this.user});
+  final Set<Spot> spotsBusiness;
+  const ProfileTabbar({
+    super.key,
+    required this.user,
+    required this.spotsBusiness,
+  });
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Informações'),
@@ -26,7 +32,7 @@ class ProfileTabbar extends StatelessWidget {
                 ProfileDetails(
                   user: user,
                 ),
-                const ProfileBusiness(),
+                ProfileBusiness(spotsBusiness: spotsBusiness),
               ],
             ),
           ),

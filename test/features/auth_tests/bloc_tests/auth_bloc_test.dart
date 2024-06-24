@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/user_repository.dart';
+import 'package:turismo_rural_frontend/core/services/aws/aws.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
@@ -9,11 +11,20 @@ void main() {
   group('LoginBloc', () {
     late LoginBloc loginBloc;
     late UserRepository userRepository;
+    late ExperienceRepository experienceRepository;
 
     // Configurações antes de cada teste
     setUp(() {
-      userRepository = UserRepository(apiUrl: 'API_URL');
-      loginBloc = LoginBloc(userRepository: userRepository);
+      userRepository =
+          UserRepository(apiUri: Uri.parse('https://dummyjson.com/auth/login'));
+      experienceRepository = ExperienceRepository(
+        awsS3Service: AwsS3Service(accessKey: 'accessKey', secretKey: 'secretKey', region: 'region', bucketName: 'bucketName', destDir: 'destDir'),
+        apiUri: Uri.parse('https://dummyjson.com/experiences'),
+      );
+      loginBloc = LoginBloc(
+        userRepository: userRepository,
+        experienceRepository: experienceRepository,
+      );
     });
 
     blocTest<LoginBloc, LoginState>(
@@ -43,7 +54,7 @@ void main() {
     );
 
     test('LoginError get props should return [error]', () {
-      const state = LoginError('Test error');
+      const state = LoginSubmitError('Test error');
       expect(state.props, ['Test error']);
     });
 

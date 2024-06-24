@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
+import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class Event extends Experience {
   final String details;
@@ -15,7 +14,6 @@ class Event extends Experience {
     required super.id,
     required super.cnpj,
     required super.name,
-    required super.image,
     required super.email,
     required super.phone,
     required super.description,
@@ -28,18 +26,17 @@ class Event extends Experience {
 
   factory Event.fromJson(
     Map<String, dynamic> json,
-    List<ExperienceCategory> categories,
+    Set<ExperienceCategory> categories,
   ) {
     return Event(
-      details: utf8.decode((json['details'] as String).codeUnits),
+      details: decodeUtf8(json['details'] as String),
       time: json['time'] as String,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
-      name: utf8.decode((json['name'] as String).codeUnits),
+      name: decodeUtf8(json['name'] as String),
       email: json['email'] as String,
       phone: json['phone'] as String,
-      image: json['image'] as String?,
-      description: utf8.decode((json['description'] as String).codeUnits),
+      description: decodeUtf8(json['description'] as String),
       category: categories.firstWhere(
         (category) =>
             category.categoryId ==
@@ -63,6 +60,21 @@ class Event extends Experience {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'details': details,
+      'time': time,
+      'id': id,
+      'cnpj': cnpj,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'description': description,
+      'category': {'categoryId': category.categoryId},
+      'tags': tags.map((tag) => tag.toJson()).toList(),
+    };
+  }
+
   @override
   List<Object?> get props => [
         id,
@@ -70,7 +82,6 @@ class Event extends Experience {
         name,
         email,
         phone,
-        image,
         description,
         details,
         category,

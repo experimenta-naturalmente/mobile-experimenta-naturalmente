@@ -73,7 +73,7 @@ class _SignUpPageDescriptionState extends State<SignUpPageDescription> {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null && context.mounted) {
-      final Attachment attachment = Attachment(
+      final AttachmentUpload attachment = AttachmentUpload(
         localFile: XFile(pickedFile.path),
         type: AttachmentType.image,
       );
@@ -88,11 +88,9 @@ class _SignUpPageDescriptionState extends State<SignUpPageDescription> {
     final selectedCategory = context.read<SignUpBloc>().registration.category ??
         context.read<SignUpBloc>().categoriesCache.first;
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: screenHeight * 0.1,
         horizontal: screenWidth * 0.1,
       ),
       child: Column(
@@ -112,7 +110,7 @@ class _SignUpPageDescriptionState extends State<SignUpPageDescription> {
 
   Widget _buildAttachmentsField(
     BuildContext context,
-    List<Attachment> attachments,
+    List<AttachmentUpload> attachments,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

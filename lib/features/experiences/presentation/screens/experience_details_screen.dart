@@ -18,11 +18,16 @@ class ExperienceDetailsScreen extends StatelessWidget {
         Column(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               alignment: AlignmentDirectional.bottomStart,
               child: Text(
                 experience.name,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      fontSize: getFontSize(
+                        context,
+                        experience.name,
+                      ),
+                    ),
               ),
             ),
             SizedBox(
@@ -43,5 +48,17 @@ class ExperienceDetailsScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  double getFontSize(BuildContext context, String text) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (text.length < 20 || screenWidth > 800) {
+      return Theme.of(context).textTheme.headlineMedium!.fontSize!;
+    } else if (text.length < 30 || screenWidth > 600) {
+      return Theme.of(context).textTheme.headlineSmall!.fontSize!;
+    } else if (text.length < 40 || screenWidth > 400) {
+      return Theme.of(context).textTheme.titleLarge!.fontSize!;
+    }
+    return Theme.of(context).textTheme.titleMedium!.fontSize!;
   }
 }

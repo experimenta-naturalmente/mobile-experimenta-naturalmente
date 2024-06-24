@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Attachment extends Equatable {
+class AttachmentUpload extends Equatable {
   final XFile localFile;
   final XFile? file;
   final String? url;
@@ -9,7 +9,7 @@ class Attachment extends Equatable {
   final int progress;
   final AttachmentType type;
 
-  const Attachment({
+  const AttachmentUpload({
     required this.localFile,
     required this.type,
     this.file,
@@ -18,7 +18,7 @@ class Attachment extends Equatable {
     this.progress = 0,
   });
 
-  Attachment copyWith({
+  AttachmentUpload copyWith({
     XFile? localFile,
     XFile? file,
     String? url,
@@ -26,7 +26,7 @@ class Attachment extends Equatable {
     int? progress,
     AttachmentType? type,
   }) {
-    return Attachment(
+    return AttachmentUpload(
       localFile: localFile ?? this.localFile,
       file: file ?? this.file,
       url: url ?? this.url,

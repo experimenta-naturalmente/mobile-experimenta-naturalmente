@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_user_repository.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
@@ -7,10 +8,13 @@ import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final IUserRepository userRepository;
+  final IExperienceRepository experienceRepository;
 
-  LoginBloc({required this.userRepository}) : super(const LoginInitial(true)) {
+  LoginBloc({required this.userRepository, required this.experienceRepository})
+      : super(const LoginInitial(true)) {
     on<LoginSubmit>(_onLoginSubmit);
     on<LoginToggleObscuredText>(_onLoginToggleObscuredText);
+    on<LoginClear>(_onLoginClear);
   }
 
   Future<void> _onLoginSubmit(
@@ -25,15 +29,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         event.password,
       );
       if (user.id != -1) {
-        final Set<Spot> spots =
-            await userRepository.fetchSpotsByProfileId(user.id);
-
-        emit(LoginSubmitSucess(user, spots));
+        emit(ProfileLoading(user));
+        final Set<Spot> spotsBusiness =
+            await experienceRepository.fetchSpotsByProfileId(user.id);
+        emit(ProfileSuccess(user, spotsBusiness));
       } else {
-        emit(const LoginError('Erro na autenticação'));
+        emit(const LoginSubmitError('Erro na autenticação'));
       }
     } catch (e) {
-      emit(LoginError(e.toString()));
+      emit(LoginSubmitError(e.toString()));
     }
   }
 
@@ -42,5 +46,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     emit(LoginInitial(!event.obscuredText));
+  }
+
+  Future<void> _onLoginClear(
+    LoginClear event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(const LoginInitial(true));
   }
 }

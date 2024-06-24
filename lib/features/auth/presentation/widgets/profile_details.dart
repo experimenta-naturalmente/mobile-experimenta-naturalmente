@@ -14,88 +14,64 @@ class ProfileDetails extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(
-                  'Dados Pessoais',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Email: ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.bodyMedium?.color,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium?.fontSize,
-                    ),
-                  ),
-                  // aqui colocar o email do user
-                  TextSpan(
-                    text: user.email,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Telefone: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyMedium?.color,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium?.fontSize,
-                        ),
-                      ),
-                      // aqui colocar a senha do user
-                      TextSpan(
-                        text: user.phone,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                OutlinedButton(
-                  onPressed: () {
-                    // Adicione a ação do botão aqui
-                  },
-                  style: OutlinedButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.bodySmall,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 1.0,
-                      vertical: 1.0,
-                    ), // Ajusta o padding
-                    minimumSize: const Size(100, 30), // Ajusta o tamanho mínimo
-                  ),
-                  child: const Text('Trocar senha'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
+            _buildUserDetails(context),
+            _buildActionButtons(),
           ],
         ),
       ),
+    );
+  }
+
+  Column _buildUserDetails(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Dados Pessoais',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        const SizedBox(height: 8),
+        _buildRichText(context, 'Email: ', user.email),
+        const SizedBox(height: 8),
+        _buildRichText(context, 'Telefone: ', user.phone),
+      ],
+    );
+  }
+
+  RichText _buildRichText(BuildContext context, String label, String value) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: label,
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          TextSpan(
+            text: value,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row _buildActionButtons() {
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () {},
+          child: const Text('Trocar senha'),
+        ),
+        const SizedBox(width: 16),
+        IconButton.outlined(
+          onPressed: () {},
+          icon: const Icon(Icons.edit),
+        ),
+      ],
     );
   }
 }

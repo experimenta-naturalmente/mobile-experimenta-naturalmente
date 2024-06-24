@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class Attachment extends Equatable {
   final int attachmentId;
@@ -16,7 +16,7 @@ class Attachment extends Equatable {
   factory Attachment.fromJson(Map<String, dynamic> json) {
     return Attachment(
       attachmentId: json['attachmentId'] as int,
-      url: utf8.decode((json['url'] as String).codeUnits),
+      url: decodeUtf8(json['url'] as String),
     );
   }
 

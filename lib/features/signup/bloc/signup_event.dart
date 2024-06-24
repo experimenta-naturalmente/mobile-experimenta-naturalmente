@@ -23,7 +23,7 @@ class SignUpErrorEvent extends SignUpEvent {
 class LoadSignUp extends SignUpEvent {}
 
 class SignUpAttachmentUpload extends SignUpEvent {
-  final Attachment attachment;
+  final AttachmentUpload attachment;
 
   const SignUpAttachmentUpload({
     required this.attachment,

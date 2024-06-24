@@ -79,9 +79,8 @@ class AWSWebClient {
           onProgress(progress);
         },
       );
-      print('${config.fileName} uploaded to s3Bucket');
     } catch (e) {
-      print('Failed to upload file: $e');
+      rethrow;
     }
   }
 }

@@ -12,9 +12,9 @@ import 'package:turismo_rural_frontend/features/signup/data/experience_registrat
 
 class ExperienceRepository implements IExperienceRepository {
   AwsS3Service awsS3Service;
-  String apiUrl;
+  Uri apiUri;
 
-  ExperienceRepository({required this.awsS3Service, required this.apiUrl});
+  ExperienceRepository({required this.awsS3Service, required this.apiUri});
 
   @override
   Future<Set<Experience>> fetchExperiencesFromCategory(
@@ -24,21 +24,18 @@ class ExperienceRepository implements IExperienceRepository {
       return fetchEvents();
     } else {
       final response = await http.get(
-        Uri.parse(
-          '$apiUrl/spot',
-        ),
+        apiUri.replace(path: 'spot'),
       );
 
       if (response.statusCode == 200) {
         final categoriesSet = await fetchExperienceCategories();
-        final categoriesList = categoriesSet.toList();
 
         final List<dynamic> spotsJson =
             json.decode(response.body) as List<dynamic>;
         final spots = spotsJson
             .map(
               (json) =>
-                  Spot.fromJson(json as Map<String, dynamic>, categoriesList),
+                  Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
             )
             .where(
               (element) => element.category.categoryId == category.categoryId,
@@ -54,7 +51,7 @@ class ExperienceRepository implements IExperienceRepository {
 
   @override
   Future<Set<ExperienceCategory>> fetchExperienceCategories() async {
-    final response = await http.get(Uri.parse('$apiUrl/category'));
+    final response = await http.get(apiUri.replace(path: 'category'));
 
     if (response.statusCode == 200) {
       final List<dynamic> categoriesJson =
@@ -72,9 +69,9 @@ class ExperienceRepository implements IExperienceRepository {
   @override
   Future<Spot> fetchSpotById(int spotId) async {
     final categoriesSet = await fetchExperienceCategories();
-    final categoriesList = categoriesSet.toList();
-    categoriesList.removeWhere((element) => element.name == 'Evento');
-    final response = await http.get(Uri.parse('$apiUrl/spot/$spotId'));
+    categoriesSet.removeWhere((element) => element.name == 'Evento');
+
+    final response = await http.get(apiUri.replace(path: 'spot/$spotId'));
 
     if (response.statusCode == 200) {
       final List<dynamic> spotsJson =
@@ -82,7 +79,7 @@ class ExperienceRepository implements IExperienceRepository {
       final spot = spotsJson
           .map(
             (json) =>
-                Spot.fromJson(json as Map<String, dynamic>, categoriesList),
+                Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
           )
           .first;
       return spot;
@@ -94,11 +91,10 @@ class ExperienceRepository implements IExperienceRepository {
   @override
   Future<Event> fetchEventById(int eventId) async {
     final categoriesSet = await fetchExperienceCategories();
-
-    final categoriesList = categoriesSet.toList();
+    final categoriesList = categoriesSet;
     categoriesList.removeWhere((element) => element.name != 'Evento');
 
-    final response = await http.get(Uri.parse('$apiUrl/event/$eventId'));
+    final response = await http.get(apiUri.replace(path: 'event/$eventId'));
 
     if (response.statusCode == 200) {
       final List<dynamic> spotsJson =
@@ -116,16 +112,11 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Set<Spot>> fetchSpots() async {
+  Future<Set<Spot>> fetchAllSpots() async {
     final categoriesSet = await fetchExperienceCategories();
-    final categoriesList = categoriesSet.toList();
-    categoriesList.removeWhere((element) => element.name == 'Evento');
+    categoriesSet.removeWhere((element) => element.name == 'Evento');
 
-    final response = await http.get(
-      Uri.parse(
-        '$apiUrl/spot',
-      ),
-    );
+    final response = await http.get(apiUri.replace(path: 'spot'));
 
     if (response.statusCode == 200) {
       final List<dynamic> spotsJson =
@@ -133,7 +124,7 @@ class ExperienceRepository implements IExperienceRepository {
       final spots = spotsJson
           .map(
             (json) =>
-                Spot.fromJson(json as Map<String, dynamic>, categoriesList),
+                Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
           )
           .toSet();
 
@@ -144,21 +135,38 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
+  Future<Set<Spot>> fetchSpotsByProfileId(int profileId) async {
+    final response = await http.get(
+      apiUri.replace(path: 'spot', queryParameters: {'profileId' : '$profileId'}),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> spotsJson =
+          json.decode(response.body) as List<dynamic>;
+      final spots = spotsJson
+          .map((json) => Spot.fromJsonProfile(json as Map<String, dynamic>))
+          .toSet();
+
+      return spots;
+    } else if (response.statusCode == 404) {
+      return {};
+    } else {
+      throw Exception('Failed to load spots');
+    }
+  }
+
+  @override
   Future<Set<Event>> fetchEvents() async {
     final categoriesSet = await fetchExperienceCategories();
-    final categoriesList = categoriesSet.toList();
-    final response = await http.get(Uri.parse('$apiUrl/event'));
+
+    final response = await http.get(apiUri.replace(path: 'event'));
 
     if (response.statusCode == 200) {
       final List<dynamic> eventsJson =
           json.decode(response.body) as List<dynamic>;
-      final events = eventsJson
-          .map(
-            (json) =>
-                Event.fromJson(json as Map<String, dynamic>, categoriesList),
-          )
-          .toList();
-
+      final events = eventsJson.map(
+        (json) => Event.fromJson(json as Map<String, dynamic>, categoriesSet),
+      );
       return events.toSet();
     } else {
       throw Exception('Failed to load events');
@@ -171,12 +179,11 @@ class ExperienceRepository implements IExperienceRepository {
       return false;
     }
     final requestBody = jsonEncode(registration.toJson());
-    final String url = registration.category!.name == 'Evento'
-        ? '$apiUrl/event'
-        : '$apiUrl/spot';
 
     final response = await http.post(
-      Uri.parse(url),
+      registration.category!.name == 'Evento'
+          ? apiUri.replace(path: 'event')
+          : apiUri.replace(path: 'spot'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

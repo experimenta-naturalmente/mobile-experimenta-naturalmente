@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 
 class BusinessCard extends StatelessWidget {
-  final String imageUrl;
+  final Attachment? imageUrl;
   final String name;
   final String cnpj;
   final Function() onTap;
@@ -17,46 +19,46 @@ class BusinessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // Chamando o callback quando o card for tocado
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
+      onTap: onTap,
+      child: Card.outlined(
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Theme.of(context).primaryColor),
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 30.0,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium?.fontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 2.0,
                   ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'Cnpj: $cnpj',
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                ],
+                ),
+                child: CircleAvatar(
+                  radius: 30.0,
+                  backgroundImage:
+                      CachedNetworkImageProvider(imageUrl?.url ?? ''),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      'Cnpj: $cnpj',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,29 +1,28 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
-class NavigationCubit extends Cubit<NavigationState> {
-  NavigationCubit() : super(NavigationState(currentPage: AppPage.home));
+class NavigationCubit<T> extends Cubit<NavigationState<T>> {
+  NavigationCubit() : super(NavigationState<T>(currentPage: AppPage.home));
 
-  void navigateTo({required AppPage appPage, Experience? experience}) {
+  void navigateTo({required AppPage appPage, T? item}) {
     emit(
-      NavigationState(
+      NavigationState<T>(
         currentPage: appPage,
-        selectedExperience: experience,
+        selectedItem: item,
         previousPage: state.currentPage,
       ),
     );
   }
 }
 
-class NavigationState {
+class NavigationState<T> {
   final AppPage currentPage;
   final AppPage? previousPage;
-  final Experience? selectedExperience;
+  final T? selectedItem;
 
   NavigationState({
     required this.currentPage,
-    this.selectedExperience,
+    this.selectedItem,
     this.previousPage,
   });
 }

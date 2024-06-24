@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:turismo_rural_frontend/core/data/models/event.dart';
 
 class EventDetails extends StatelessWidget {
@@ -65,7 +65,7 @@ class EventDetails extends StatelessWidget {
                       right: 45,
                     ), // Padding no ícone do Instagram
                     child: Icon(
-                      FontAwesomeIcons.instagram,
+                      FontAwesome.instagram,
                       size: 40,
                     ),
                   ),
@@ -76,7 +76,7 @@ class EventDetails extends StatelessWidget {
                       right: 10,
                     ), // Padding no ícone do Facebook
                     child: Icon(
-                      FontAwesomeIcons.facebook,
+                      FontAwesome.facebook,
                       size: 40,
                     ),
                   ),
@@ -87,7 +87,7 @@ class EventDetails extends StatelessWidget {
                       right: 10,
                     ), // Padding no ícone do WhatsApp
                     child: Icon(
-                      FontAwesomeIcons.whatsapp,
+                      FontAwesome.whatsapp,
                       size: 40,
                     ),
                   ),

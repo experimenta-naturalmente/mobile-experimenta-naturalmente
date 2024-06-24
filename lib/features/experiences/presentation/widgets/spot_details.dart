@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 
 class SpotDetails extends StatelessWidget {
@@ -52,7 +52,7 @@ class SpotDetails extends StatelessWidget {
                         right: 45,
                       ),
                       child: Icon(
-                        FontAwesomeIcons.instagram,
+                        FontAwesome.instagram,
                         size: 40,
                       ),
                     ),
@@ -63,7 +63,7 @@ class SpotDetails extends StatelessWidget {
                         right: 10,
                       ),
                       child: Icon(
-                        FontAwesomeIcons.facebook,
+                        FontAwesome.facebook,
                         size: 40,
                       ),
                     ),
@@ -74,7 +74,7 @@ class SpotDetails extends StatelessWidget {
                         right: 10,
                       ),
                       child: Icon(
-                        FontAwesomeIcons.whatsapp,
+                        FontAwesome.whatsapp,
                         size: 40,
                       ),
                     ),
