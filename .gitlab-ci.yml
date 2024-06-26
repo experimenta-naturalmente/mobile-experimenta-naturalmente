@@ -107,7 +107,7 @@ deploy_dev:
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
     - flutter pub get
-    - flutter build web --release
+    - flutter build web --release --web-renderer html
     - mkdir -p /app/dev/usr/share/nginx/html
     - cp -r build/web/* /app/dev/usr/share/nginx/html/
     - ls -al /app/dev/usr/share/nginx/html
