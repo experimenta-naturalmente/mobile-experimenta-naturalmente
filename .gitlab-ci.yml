@@ -26,7 +26,9 @@ code_quality:
 analyze:
   stage: analyze_and_test
   before_script:
-    - touch .env
+    - |
+      cat <<EOF > .env
+      EOF
   script:
     - flutter analyze --fatal-infos --fatal-warnings
   only:
@@ -37,7 +39,9 @@ test:
   before_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - flutter pub global activate junitreport
-    - touch .env
+    - |
+      cat <<EOF > .env
+      EOF
   script:    
     - touch report.xml
   coverage: '/lines\.*: \d+\.\d+\%/'
@@ -51,9 +55,19 @@ test:
 deploy-preview:
   stage: preview
   image: node:bookworm
+  before_script:
+    - |
+      cat <<EOF > .env
+      AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+      AWS_SECRET_KEY=$AWS_SECRET_KEY
+      AWS_REGION=$AWS_REGION
+      AWS_BUCKET=$AWS_BUCKET
+      API_URL=$API_URL
+      GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+      VERCEL_TOKEN=$VERCEL_TOKEN
+      EOF
   script:
     - npm install --global vercel
-    - touch .env
     - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
     - vercel build --token=$VERCEL_TOKEN
     - vercel deploy --prebuilt  --token=$VERCEL_TOKEN > deployment-url.txt
@@ -80,11 +94,20 @@ deploy-preview:
 
 deploy_dev:
   stage: deploy
+  before_script:
+    - |
+      cat <<EOF > .env
+      AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+      AWS_SECRET_KEY=$AWS_SECRET_KEY
+      AWS_REGION=$AWS_REGION
+      AWS_BUCKET=$AWS_BUCKET
+      API_URL=$API_URL
+      GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+      EOF
   script:
     - echo "🔝🔝 Deploying to DEV environment... 🚀"
-    - touch .env
     - flutter pub get
-    - flutter build web
+    - flutter build web --release
     - mkdir -p /app/dev/usr/share/nginx/html
     - cp -r build/web/* /app/dev/usr/share/nginx/html/
     - ls -al /app/dev/usr/share/nginx/html
@@ -98,10 +121,20 @@ deploy_dev:
 
 deploy_prod:
   stage: deploy
+  before_script:
+    - |
+      cat <<EOF > .env
+      AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+      AWS_SECRET_KEY=$AWS_SECRET_KEY
+      AWS_REGION=$AWS_REGION
+      AWS_BUCKET=$AWS_BUCKET
+      API_URL=$API_URL
+      GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+      EOF
   script:
     - echo "🔝🔝 Deploying to PROD environment... 🚀"
-    - touch .env
     - flutter pub get
+    - flutter/bin/flutter config --enable-web
     - flutter build web --release
     - mkdir -p /app/prod/usr/share/nginx/html
     - cp -r build/web/* /app/prod/usr/share/nginx/html/
