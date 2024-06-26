@@ -101,7 +101,7 @@ class RoutesList extends StatelessWidget {
             child: Scrollbar(
               controller: scrollController,
               child: Padding(
-                padding: const EdgeInsets.  only(bottom: 8.0, left: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0, left: 8.0),
                 child: SingleChildScrollView(
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
