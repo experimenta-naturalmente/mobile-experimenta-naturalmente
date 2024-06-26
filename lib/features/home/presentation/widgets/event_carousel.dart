@@ -145,12 +145,16 @@ class EventCarousel extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: CachedNetworkImage(
+                width: double.infinity,
                 imageUrl: event.attachments.firstOrNull?.url ?? '',
                 fit: BoxFit.cover,
                 placeholder: (context, url) => const Center(
                   child: CircularProgressIndicator(),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                errorWidget: (context, url, error) => Image.network(
+                  event.attachments.firstOrNull?.url ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

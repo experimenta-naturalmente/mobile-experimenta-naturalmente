@@ -166,6 +166,11 @@ class TagRepository implements ITagRepository {
     await Future.delayed(const Duration(milliseconds: 250));
     return {
       const Tag(
+        tagId: 30,
+        name: 'Meia Entrada',
+        type: [ExperienceCategory(categoryId: 6, name: 'Evento')],
+      ),
+      const Tag(
         tagId: 29,
         name: 'Comida Caseira',
         type: [ExperienceCategory(categoryId: 2, name: 'Restaurante')],

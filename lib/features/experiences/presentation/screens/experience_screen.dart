@@ -24,14 +24,10 @@ class ExperiencesScreen extends StatelessWidget {
             );
           }
           if (state is ExperienceListState) {
-            return ExperienceListScreen(
-              state: state,
-            );
+            return const ExperienceListScreen();
           }
           if (state is ExperienceDetailsState) {
-            return ExperienceDetailsScreen(
-              experience: state.experience,
-            );
+            return const ExperienceDetailsScreen();
           }
           return Container();
         },

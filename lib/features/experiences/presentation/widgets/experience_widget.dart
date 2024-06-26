@@ -39,7 +39,13 @@ class ExperienceWidget extends StatelessWidget {
               width: 48,
               height: 48,
               placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+              errorWidget: (context, url, error) => Image.network(
+                experience.attachments.firstOrNull?.url ??
+                    'https://picsum.photos/200/300?random=${experience.id}',
+                fit: BoxFit.cover,
+                width: 48,
+                height: 48,
+              ),
             ),
           ),
         ),

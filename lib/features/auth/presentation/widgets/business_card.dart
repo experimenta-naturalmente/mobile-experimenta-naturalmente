@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 
@@ -36,8 +35,7 @@ class BusinessCard extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: 30.0,
-                  backgroundImage:
-                      CachedNetworkImageProvider(imageUrl?.url ?? ''),
+                  backgroundImage: Image.network(imageUrl?.url ?? '').image,
                 ),
               ),
               const SizedBox(width: 16.0),

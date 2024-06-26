@@ -35,9 +35,12 @@ class ExperienceAbout extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 14),
-              Text(
-                "Tags:",
-                style: Theme.of(context).textTheme.labelLarge,
+              Visibility(
+                visible: experience.tags.isNotEmpty,
+                child: Text(
+                  "Tags:",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
               ),
               const SizedBox(height: 8),
               Wrap(

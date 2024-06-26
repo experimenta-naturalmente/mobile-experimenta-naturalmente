@@ -11,7 +11,6 @@ abstract class Experience extends Equatable {
   final String phone;
   final String description;
   final ExperienceCategory category;
-  final List<String> timeDetails;
   final List<String> socialNetworks;
   final Set<Tag> tags;
   final Set<Attachment> attachments;
@@ -24,7 +23,6 @@ abstract class Experience extends Equatable {
     required this.phone,
     required this.description,
     required this.category,
-    required this.timeDetails,
     required this.socialNetworks,
     required this.tags,
     required this.attachments,

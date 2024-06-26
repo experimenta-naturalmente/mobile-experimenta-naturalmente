@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/experience_repository.dart';
+import 'package:turismo_rural_frontend/core/data/repositories/route_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/user_repository.dart';
 import 'package:turismo_rural_frontend/core/services/aws/aws.dart';
@@ -16,6 +17,7 @@ import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
+import 'package:turismo_rural_frontend/features/routes/bloc/route_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
@@ -64,6 +66,11 @@ class MainApp extends StatelessWidget {
         Provider<FileService>(
           create: (_) => FileService(),
         ),
+        Provider<RouteRepository>(
+          create: (_) => RouteRepository(
+            apiUri: apiUri,
+          ),
+        ),
         Provider<UserRepository>(
           create: (_) => UserRepository(apiUri: apiUri),
         ),
@@ -92,14 +99,22 @@ class MainApp extends StatelessWidget {
               create: (context) => LoginBloc(
                 userRepository:
                     Provider.of<UserRepository>(context, listen: false),
-                experienceRepository: 
+                experienceRepository:
                     Provider.of<ExperienceRepository>(context, listen: false),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => RouteBloc(
+                routeRepository:
+                    Provider.of<RouteRepository>(context, listen: false),
               ),
             ),
             BlocProvider(
               create: (context) => HomeBloc(
                 experienceRepository:
                     Provider.of<ExperienceRepository>(context, listen: false),
+                routeRepository:
+                    Provider.of<RouteRepository>(context, listen: false),
               )..add(HomeLoadData()),
             ),
           ],

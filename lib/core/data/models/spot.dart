@@ -1,11 +1,12 @@
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/models/opening_hours.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class Spot extends Experience {
-  final String openingHours;
+  final List<OpeningHours> openingHours;
 
   const Spot({
     required this.openingHours,
@@ -16,20 +17,24 @@ class Spot extends Experience {
     required super.phone,
     required super.description,
     required super.category,
-    required super.timeDetails,
     required super.socialNetworks,
     required super.tags,
     required super.attachments,
   });
 
   factory Spot.fromJsonProfile(Map<String, dynamic> json) {
+    final openingHoursJson = json['openingHours'] as List? ?? [];
+
+    final openingHours = openingHoursJson
+        .map((json) => OpeningHours.fromJson(json as Map<String, dynamic>))
+        .toList();
+
     return Spot(
-      openingHours: json['openingHours'] as String,
+      openingHours: openingHours,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
       name: decodeUtf8(json['name'] as String),
       email: json['email'] as String,
-      timeDetails: const [],
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
       category:
@@ -51,13 +56,17 @@ class Spot extends Experience {
     Map<String, dynamic> json,
     Set<ExperienceCategory> categories,
   ) {
+    final openingHoursJson = json['openingHours'] as List? ?? [];
+
+    final openingHours = openingHoursJson
+        .map((json) => OpeningHours.fromJson(json as Map<String, dynamic>))
+        .toList();
     return Spot(
-      openingHours: json['openingHours'] as String,
+      openingHours: openingHours,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
       name: decodeUtf8(json['name'] as String),
       email: json['email'] as String,
-      timeDetails: const [],
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
       category: categories.firstWhere(
@@ -86,8 +95,13 @@ class Spot extends Experience {
     Map<String, dynamic> json,
     ExperienceCategory category,
   ) {
+    final openingHoursJson = json['openingHours'] as List? ?? [];
+
+    final openingHours = openingHoursJson
+        .map((json) => OpeningHours.fromJson(json as Map<String, dynamic>))
+        .toList();
     return Spot(
-      openingHours: json['openingHours'] as String,
+      openingHours: openingHours,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
       name: decodeUtf8(json['name'] as String),
@@ -95,7 +109,6 @@ class Spot extends Experience {
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
       category: category,
-      timeDetails: const [],
       socialNetworks: const [],
       tags: (json['tags'] as List? ?? [])
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
@@ -135,7 +148,6 @@ class Spot extends Experience {
         description,
         category,
         openingHours,
-        timeDetails,
         socialNetworks,
         tags,
         attachments,

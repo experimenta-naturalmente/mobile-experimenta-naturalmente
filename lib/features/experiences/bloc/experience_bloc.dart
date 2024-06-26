@@ -14,6 +14,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     on<ExperienceCategoryChanged>(_onExperienceCategoryChanged);
     on<LoadExperienceCategories>(_onLoadExperienceCategories);
     on<ExperienceSelected>(_onExperienceSelected);
+    on<LoadExperienceDetails>(_onLoadExperienceDetails);
   }
 
   Future<void> _onLoadExperienceCategories(
@@ -55,6 +56,25 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     ExperienceSelected event,
     Emitter<ExperienceState> emit,
   ) async {
-    emit(ExperienceDetailsState(event.selectedItem));
+    emit(ExperienceDetailsLoadedState(event.selectedItem));
+  }
+
+  Future<void> _onLoadExperienceDetails(
+    LoadExperienceDetails event,
+    Emitter<ExperienceState> emit,
+  ) async {
+    emit(ExperienceDetailsLoadingState(event.experienceId));
+    try {
+      final experience = await experienceRepository.fetchSpotById(
+        event.experienceId,
+      );
+      if (experience == null) {
+        emit(const ExperienceErrorState('Experience not found'));
+        return;
+      }
+      emit(ExperienceDetailsLoadedState(experience));
+    } catch (e) {
+      emit(ExperienceErrorState(e.toString()));
+    }
   }
 }

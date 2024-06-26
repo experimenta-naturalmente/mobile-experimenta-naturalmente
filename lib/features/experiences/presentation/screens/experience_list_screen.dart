@@ -14,9 +14,7 @@ import 'package:turismo_rural_frontend/features/experiences/presentation/widgets
 import 'package:turismo_rural_frontend/features/experiences/presentation/widgets/experience_widget.dart';
 
 class ExperienceListScreen extends StatelessWidget {
-  final ExperienceListState state;
-
-  const ExperienceListScreen({required this.state});
+  const ExperienceListScreen();
 
   @override
   Widget build(BuildContext context) {

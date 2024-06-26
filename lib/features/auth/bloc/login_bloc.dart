@@ -15,6 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmit>(_onLoginSubmit);
     on<LoginToggleObscuredText>(_onLoginToggleObscuredText);
     on<LoginClear>(_onLoginClear);
+    on<LoginLoadExperiences>(_onLoginLoadExperiences);
   }
 
   Future<void> _onLoginSubmit(
@@ -38,6 +39,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       emit(LoginSubmitError(e.toString()));
+    }
+  }
+
+  Future<void> _onLoginLoadExperiences(
+    LoginLoadExperiences event,
+    Emitter<LoginState> emit,
+  ) async {
+    if (state is! ProfileSuccess) {
+      return;
+    }
+    final user = (state as ProfileSuccess).user;
+    emit(ProfileLoading(user));
+    try {
+      final Set<Spot> spotsBusiness =
+          await experienceRepository.fetchSpotsByProfileId(user.id);
+      emit(ProfileSuccess(user, spotsBusiness));
+    } catch (e) {
+      emit(ProfileError(user, e.toString()));
     }
   }
 

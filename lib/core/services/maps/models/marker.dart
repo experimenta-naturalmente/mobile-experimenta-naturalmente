@@ -1,10 +1,10 @@
-class Marker {
+class MapMarker {
   final String id;
   final double lat;
   final double lng;
   final String display;
 
-  Marker({
+  MapMarker({
     required this.id,
     required this.lat,
     required this.lng,

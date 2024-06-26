@@ -16,6 +16,8 @@ class LoginSubmit extends LoginEvent {
   List<Object> get props => [user, password];
 }
 
+class LoginLoadExperiences extends LoginEvent {}
+
 class LoginClear extends LoginEvent {}
 
 class LoginToggleObscuredText extends LoginEvent {

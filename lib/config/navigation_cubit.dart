@@ -10,6 +10,7 @@ class NavigationCubit<T> extends Cubit<NavigationState<T>> {
         currentPage: appPage,
         selectedItem: item,
         previousPage: state.currentPage,
+        previousItem: state.selectedItem,
       ),
     );
   }
@@ -19,10 +20,12 @@ class NavigationState<T> {
   final AppPage currentPage;
   final AppPage? previousPage;
   final T? selectedItem;
+  final T? previousItem;
 
   NavigationState({
     required this.currentPage,
     this.selectedItem,
     this.previousPage,
+    this.previousItem,
   });
 }

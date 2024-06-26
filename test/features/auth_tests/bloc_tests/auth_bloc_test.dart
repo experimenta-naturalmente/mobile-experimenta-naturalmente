@@ -18,7 +18,13 @@ void main() {
       userRepository =
           UserRepository(apiUri: Uri.parse('https://dummyjson.com/auth/login'));
       experienceRepository = ExperienceRepository(
-        awsS3Service: AwsS3Service(accessKey: 'accessKey', secretKey: 'secretKey', region: 'region', bucketName: 'bucketName', destDir: 'destDir'),
+        awsS3Service: AwsS3Service(
+          accessKey: 'accessKey',
+          secretKey: 'secretKey',
+          region: 'region',
+          bucketName: 'bucketName',
+          destDir: 'destDir',
+        ),
         apiUri: Uri.parse('https://dummyjson.com/experiences'),
       );
       loginBloc = LoginBloc(

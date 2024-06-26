@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
+import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
@@ -9,7 +11,9 @@ import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/screens/home.dart';
-import 'package:turismo_rural_frontend/features/maps_demo/maps_demo.dart';
+import 'package:turismo_rural_frontend/features/routes/bloc/route_bloc.dart';
+import 'package:turismo_rural_frontend/features/routes/bloc/route_event.dart';
+import 'package:turismo_rural_frontend/features/routes/presentation/screens/route_screen.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
@@ -24,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<AppPage> tabs = [
     AppPage.home,
     AppPage.experiences,
-    AppPage.register,
+    AppPage.routes,
     AppPage.login,
   ];
 
@@ -66,9 +70,9 @@ class _MainScreenState extends State<MainScreen> {
                   label: 'Experiências',
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(Icons.explore),
-                  icon: Icon(Icons.explore_outlined),
-                  label: 'Mapa',
+                  selectedIcon: Icon(FontAwesome5.map_marked),
+                  icon: Icon(FontAwesome5.map_marked_alt),
+                  label: 'Rotas',
                 ),
                 NavigationDestination(
                   selectedIcon: Icon(Icons.person),
@@ -97,18 +101,28 @@ class _MainScreenState extends State<MainScreen> {
         return const HomeScreen();
       case AppPage.experiences:
         final item = context.read<NavigationCubit>().state.selectedItem;
-        if (item != null && item is Experience) {
-          context.read<ExperienceBloc>().add(ExperienceSelected(item));
+        if (item != null) {
+          if (item is Experience) {
+            context.read<ExperienceBloc>().add(ExperienceSelected(item));
+          } else if (item is int) {
+            context.read<ExperienceBloc>().add(LoadExperienceDetails(item));
+          }
         } else {
           context.read<ExperienceBloc>().add(LoadExperienceCategories());
         }
         return const ExperiencesScreen();
-      case AppPage.maps:
-        return const MapsDemo();
       case AppPage.login:
         return const LoginScreen();
       case AppPage.register:
         return const SignUpHandler();
+      case AppPage.routes:
+        final item = context.read<NavigationCubit>().state.selectedItem;
+        if (item != null && item is TouristicRoute) {
+          context.read<RouteBloc>().add(RouteSelected(item));
+        } else {
+          context.read<RouteBloc>().add(LoadRouteList());
+        }
+        return const RouteScreen();
       default:
         return Container();
     }
@@ -116,6 +130,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<bool> navigatorReturn(BuildContext context) async {
     final currPage = context.read<NavigationCubit>().state.currentPage;
+    final prevItem = context.read<NavigationCubit>().state.previousItem;
     if (currPage == AppPage.home) {
       return true;
     } else if (currPage == AppPage.register) {
@@ -133,7 +148,19 @@ class _MainScreenState extends State<MainScreen> {
           context.read<NavigationCubit>().state.selectedItem;
       final previousPage = context.read<NavigationCubit>().state.previousPage;
       if (selectedExperience != null && previousPage != null) {
-        context.read<NavigationCubit>().navigateTo(appPage: previousPage);
+        context
+            .read<NavigationCubit>()
+            .navigateTo(appPage: previousPage, item: prevItem);
+        return false;
+      }
+    }
+    if (currPage == AppPage.routes) {
+      final selectedRoute = context.read<NavigationCubit>().state.selectedItem;
+      final previousPage = context.read<NavigationCubit>().state.previousPage;
+      if (selectedRoute != null && previousPage != null) {
+        context
+            .read<NavigationCubit>()
+            .navigateTo(appPage: previousPage, item: prevItem);
         return false;
       }
     }
@@ -173,6 +200,8 @@ class _MainScreenState extends State<MainScreen> {
         return 'Perfil';
       case AppPage.register:
         return 'Cadastro';
+      case AppPage.routes:
+        return 'Rotas';
       default:
         return '';
     }

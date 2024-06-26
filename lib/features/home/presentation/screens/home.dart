@@ -8,6 +8,7 @@ import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/widgets/event_carousel.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/widgets/home_header.dart';
+import 'package:turismo_rural_frontend/features/home/presentation/widgets/routes_list.dart';
 import 'package:turismo_rural_frontend/features/home/presentation/widgets/spots_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -86,6 +87,13 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.only(left: 6.0),
             child: SpotsList(),
           ),
+          Center(
+            child: SizedBox(
+              width: screenWidth * 0.8,
+              child: const FadedDivider(),
+            ),
+          ),
+          const RoutesList(),
         ],
       ),
     );
@@ -104,6 +112,13 @@ class HomeScreen extends StatelessWidget {
             children: [
               SizedBox(height: screenHeight * 0.03),
               const EventCarousel(),
+              Center(
+                child: SizedBox(
+                  width: screenWidth * 0.8,
+                  child: const FadedDivider(),
+                ),
+              ),
+              const RoutesList(),
               Center(
                 child: SizedBox(
                   width: screenWidth * 0.8,

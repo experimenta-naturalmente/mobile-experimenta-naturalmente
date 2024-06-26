@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
+import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
+import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
+import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 
 class SignUpPageFinish extends StatelessWidget {
   const SignUpPageFinish({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeBloc>(context).add(HomeLoadData());
+    Provider.of<ExperienceBloc>(context).add(LoadExperienceCategories());
+    Provider.of<LoginBloc>(context).add(LoginLoadExperiences());
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

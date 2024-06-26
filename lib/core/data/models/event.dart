@@ -6,11 +6,13 @@ import 'package:turismo_rural_frontend/core/utils/common.dart';
 
 class Event extends Experience {
   final String details;
-  final String time;
+  final String eventStart;
+  final String eventEnd;
 
   const Event({
     required this.details,
-    required this.time,
+    required this.eventStart,
+    required this.eventEnd,
     required super.id,
     required super.cnpj,
     required super.name,
@@ -18,7 +20,6 @@ class Event extends Experience {
     required super.phone,
     required super.description,
     required super.category,
-    required super.timeDetails,
     required super.socialNetworks,
     required super.tags,
     required super.attachments,
@@ -30,7 +31,8 @@ class Event extends Experience {
   ) {
     return Event(
       details: decodeUtf8(json['details'] as String),
-      time: json['time'] as String,
+      eventStart: json['eventStart'] as String,
+      eventEnd: json['eventEnd'] as String,
       id: json['id'] as int,
       cnpj: json['cnpj'] as String,
       name: decodeUtf8(json['name'] as String),
@@ -46,7 +48,6 @@ class Event extends Experience {
           name: 'Unknown',
         ),
       ),
-      timeDetails: const [],
       socialNetworks: const [],
       tags: (json['tags'] as List? ?? [])
           .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
@@ -63,7 +64,8 @@ class Event extends Experience {
   Map<String, dynamic> toJson() {
     return {
       'details': details,
-      'time': time,
+      'eventStart': eventStart,
+      'eventEnd': eventEnd,
       'id': id,
       'cnpj': cnpj,
       'name': name,
@@ -85,9 +87,10 @@ class Event extends Experience {
         description,
         details,
         category,
-        timeDetails,
         socialNetworks,
         tags,
         attachments,
+        eventStart,
+        eventEnd,
       ];
 }

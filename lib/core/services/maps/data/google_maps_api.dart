@@ -5,7 +5,7 @@ import 'package:turismo_rural_frontend/core/services/maps/models/marker.dart'
     as m;
 
 class GoogleMapsService implements IMapsService {
-  Marker _createMarker(m.Marker marker) {
+  Marker _createMarker(m.MapMarker marker) {
     return Marker(
       markerId: MarkerId(marker.id),
       position: LatLng(marker.lat, marker.lng),
@@ -14,11 +14,11 @@ class GoogleMapsService implements IMapsService {
   }
 
   @override
-  Widget buildMap(Set<m.Marker> markers) {
+  Future<Widget> buildMap(Set<m.MapMarker> markers) async {
     return GoogleMap(
       initialCameraPosition: const CameraPosition(
-        target: LatLng(-29.4418821, -50.595715),
-        zoom: 14.0,
+        target: LatLng(-29.454732297364615, -50.561069918049974),
+        zoom: 16.0,
       ),
       markers: markers.map(_createMarker).toSet(),
     );

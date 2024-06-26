@@ -29,3 +29,12 @@ class ExperienceSelected extends ExperienceEvent {
   @override
   List<Object> get props => [selectedItem];
 }
+
+class LoadExperienceDetails extends ExperienceEvent {
+  final int experienceId;
+
+  const LoadExperienceDetails(this.experienceId);
+
+  @override
+  List<Object> get props => [experienceId];
+}

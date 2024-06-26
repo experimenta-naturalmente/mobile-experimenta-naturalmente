@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 
-class ExperienceLocationTab extends StatefulWidget {
+class ExperienceLocationTab extends StatelessWidget {
   const ExperienceLocationTab({super.key});
-
-  @override
-  _ExperienceLocationTabState createState() => _ExperienceLocationTabState();
-}
-
-class _ExperienceLocationTabState extends State<ExperienceLocationTab> {
-  late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(-29.454732297364615, -50.561069918049974);
-
-  // ignore: use_setters_to_change_properties
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final maps = Provider.of<IMapsService>(context, listen: false);
+
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -53,17 +42,16 @@ class _ExperienceLocationTabState extends State<ExperienceLocationTab> {
                   border: Border.all(),
                 ),
                 height: screenHeight * 0.20,
-                child: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId('1'),
-                      position: _center,
-                    ),
+                child: FutureBuilder<Widget>(
+                  future: maps.buildMap({}),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text("Erro ao carregar o mapa."));
+                    } else {
+                      return snapshot.data ?? const SizedBox.shrink();
+                    }
                   },
                 ),
               ),

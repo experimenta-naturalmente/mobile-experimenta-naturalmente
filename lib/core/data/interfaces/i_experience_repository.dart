@@ -13,8 +13,8 @@ abstract class IExperienceRepository {
   Future<Set<Event>> fetchEvents();
   Future<Set<Spot>> fetchAllSpots();
   Future<Set<Spot>> fetchSpotsByProfileId(int profileId);
-  Future<Event> fetchEventById(int eventId);
-  Future<Spot> fetchSpotById(int spotId);
+  Future<Event?> fetchEventById(int eventId);
+  Future<Spot?> fetchSpotById(int spotId);
   Future<String?> uploadImage(XFile file, Function(int) onProgress);
   Future<bool> registerExperience(
     ExperienceRegistration registration,

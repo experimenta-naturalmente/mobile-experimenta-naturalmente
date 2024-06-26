@@ -20,10 +20,17 @@ class ExperienceErrorState extends ExperienceState {
   List<Object> get props => [error];
 }
 
-class ExperienceDetailsState extends ExperienceState {
-  final Experience experience;
+abstract class ExperienceDetailsState extends ExperienceState {}
 
-  const ExperienceDetailsState(this.experience);
+class ExperienceDetailsLoadingState extends ExperienceDetailsState {
+  final int experienceId;
+
+  ExperienceDetailsLoadingState(this.experienceId);
+}
+
+class ExperienceDetailsLoadedState extends ExperienceDetailsState {
+  final Experience experience;
+  ExperienceDetailsLoadedState(this.experience);
 
   @override
   List<Object> get props => [experience];

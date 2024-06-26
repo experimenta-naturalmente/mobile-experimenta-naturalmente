@@ -5,7 +5,6 @@ import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 
-
 String decodeUtf8(String input) {
   try {
     return utf8.decode(input.codeUnits);
@@ -30,6 +29,8 @@ Icon iconFromCategory({
       return Icon(FontAwesome5.hotel, color: color, size: size);
     case 'produtor rural':
       return Icon(FontAwesome5.seedling, color: color, size: size);
+    case 'loja':
+      return Icon(FontAwesome5.store, color: color, size: size);
     default:
       return Icon(Icons.help, color: color, size: size);
   }

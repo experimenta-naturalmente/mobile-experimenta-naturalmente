@@ -67,29 +67,21 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<Spot> fetchSpotById(int spotId) async {
+  Future<Spot?> fetchSpotById(int spotId) async {
     final categoriesSet = await fetchExperienceCategories();
     categoriesSet.removeWhere((element) => element.name == 'Evento');
 
     final response = await http.get(apiUri.replace(path: 'spot/$spotId'));
 
     if (response.statusCode == 200) {
-      final List<dynamic> spotsJson =
-          json.decode(response.body) as List<dynamic>;
-      final spot = spotsJson
-          .map(
-            (json) =>
-                Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
-          )
-          .first;
-      return spot;
-    } else {
-      throw Exception('Failed to load spots');
+      final spotJson = json.decode(response.body) as Map<String, dynamic>;
+      return Spot.fromJson(spotJson, categoriesSet);
     }
+    return null;
   }
 
   @override
-  Future<Event> fetchEventById(int eventId) async {
+  Future<Event?> fetchEventById(int eventId) async {
     final categoriesSet = await fetchExperienceCategories();
     final categoriesList = categoriesSet;
     categoriesList.removeWhere((element) => element.name != 'Evento');
@@ -97,18 +89,11 @@ class ExperienceRepository implements IExperienceRepository {
     final response = await http.get(apiUri.replace(path: 'event/$eventId'));
 
     if (response.statusCode == 200) {
-      final List<dynamic> spotsJson =
-          json.decode(response.body) as List<dynamic>;
-      final event = spotsJson
-          .map(
-            (json) =>
-                Event.fromJson(json as Map<String, dynamic>, categoriesList),
-          )
-          .first;
-      return event;
-    } else {
-      throw Exception('Failed to load event');
+      final eventJson = json.decode(response.body) as Map<String, dynamic>;
+      return Event.fromJson(eventJson, categoriesList.toSet());
     }
+
+    return null;
   }
 
   @override
@@ -137,7 +122,8 @@ class ExperienceRepository implements IExperienceRepository {
   @override
   Future<Set<Spot>> fetchSpotsByProfileId(int profileId) async {
     final response = await http.get(
-      apiUri.replace(path: 'spot', queryParameters: {'profileId' : '$profileId'}),
+      apiUri
+          .replace(path: 'spot', queryParameters: {'profileId': '$profileId'}),
     );
 
     if (response.statusCode == 200) {

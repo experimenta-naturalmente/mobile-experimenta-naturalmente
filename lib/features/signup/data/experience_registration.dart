@@ -80,20 +80,19 @@ class ExperienceRegistration {
       if (eventStart != null) 'eventStart': eventStart!.toIso8601String(),
       if (eventEnd != null) 'eventEnd': eventEnd!.toIso8601String(),
       'selectedTags': selectedTags.map((tag) => tag.toJson()).toList(),
-      'workingHours': workingHours.map(
-        (day, hours) => MapEntry(
-          day.toString(),
-          hours
-              .map(
-                (range) => {
-                  'start': _formatTimeOfDay(range.$1),
-                  'end': _formatTimeOfDay(range.$2),
-                },
-              )
-              .toList(),
-        ),
-      ),
+      'openingHours': workingHours.entries.expand((entry) {
+        final day = entry.key;
+        final hours = entry.value;
+        return hours.map((range) {
+          return {
+            'dayOfWeek': day.toString().split('.').last,
+            'openingHour': _formatTimeOfDay(range.$1),
+            'closingHour': _formatTimeOfDay(range.$2),
+          };
+        }).toList();
+      }).toList(),
       'attachments': attachments.map((attachment) => attachment.url).toList(),
+      'profileId': 1,
     };
   }
 
