@@ -63,7 +63,10 @@ class SignUpHandler extends StatelessWidget {
     } else if (state is SignUpPageWorkingHoursState) {
       return SignUpPageWorkingHours(state: state);
     } else if (state is SignUpPageTagSelectionState) {
-      return SignUpTagSelection(state: state);
+      return SignUpTagSelection(
+        tagRepository: context.read<SignUpBloc>().tagRepository,
+        state: state,
+      );
     } else if (state is SignUpSuccess) {
       return const SignUpPageFinish();
     }

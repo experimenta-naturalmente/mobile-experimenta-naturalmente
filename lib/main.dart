@@ -61,7 +61,9 @@ class MainApp extends StatelessWidget {
           ),
         ),
         Provider<TagRepository>(
-          create: (_) => TagRepository(),
+          create: (_) => TagRepository(
+            apiUri: apiUri,
+          ),
         ),
         Provider<FileService>(
           create: (_) => FileService(),
