@@ -28,6 +28,7 @@ dependencies:
   http: ^0.13.5
   image: ^4.2.0
   image_picker: ^1.0.7
+  intl: any
   lorem_ipsum_generator: ^0.0.3
   mask_text_input_formatter: ^2.9.0
   media_kit: ^1.1.10+1
@@ -41,7 +42,6 @@ dependencies:
       ref: master
   universal_io: ^2.2.2
   validators: ^3.0.0
-
 dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
