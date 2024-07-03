@@ -148,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              _createAccountButton(context),
+            
             ],
           ),
         ),
@@ -224,8 +224,7 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _createAccountButton(BuildContext context) {
+  /* Widget _createAccountButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Column(
@@ -244,5 +243,5 @@ class LoginScreen extends StatelessWidget {
         ],
       ),
     );
-  }
+  } */
 }
