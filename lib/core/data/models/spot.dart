@@ -1,3 +1,4 @@
+import 'package:turismo_rural_frontend/core/data/models/address.dart';
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
@@ -20,6 +21,7 @@ class Spot extends Experience {
     required super.socialNetworks,
     required super.tags,
     required super.attachments,
+    required super.address,
   });
 
   factory Spot.fromJsonProfile(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class Spot extends Experience {
       email: json['email'] as String,
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
+      address: Address.fromJson(json['address'] as Map<String, dynamic>),
       category:
           ExperienceCategory.fromJson(json['category'] as Map<String, dynamic>),
       socialNetworks: const [],
@@ -69,6 +72,7 @@ class Spot extends Experience {
       email: json['email'] as String,
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
+      address: Address.fromJson(json['address'] as Map<String, dynamic>),
       category: categories.firstWhere(
         (category) =>
             category.categoryId ==
@@ -108,6 +112,7 @@ class Spot extends Experience {
       email: json['email'] as String,
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
+      address: Address.fromJson(json['address'] as Map<String, dynamic>),
       category: category,
       socialNetworks: const [],
       tags: (json['tags'] as List? ?? [])

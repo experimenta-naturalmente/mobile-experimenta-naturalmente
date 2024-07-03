@@ -31,7 +31,9 @@ class ExperienceTabBar extends StatelessWidget {
                 ExperienceAbout(
                   experience: experience,
                 ),
-                const ExperienceLocationTab(),
+                ExperienceLocationTab(
+                  experience: experience,
+                ),
                 if (experience.category.name == "Evento")
                   EventDetails(
                     event: experience as Event,

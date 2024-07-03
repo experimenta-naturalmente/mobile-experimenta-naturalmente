@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:turismo_rural_frontend/core/data/models/address.dart';
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
@@ -10,6 +11,7 @@ abstract class Experience extends Equatable {
   final String email;
   final String phone;
   final String description;
+  final Address address;
   final ExperienceCategory category;
   final List<String> socialNetworks;
   final Set<Tag> tags;
@@ -26,5 +28,6 @@ abstract class Experience extends Equatable {
     required this.socialNetworks,
     required this.tags,
     required this.attachments,
+    required this.address,
   });
 }

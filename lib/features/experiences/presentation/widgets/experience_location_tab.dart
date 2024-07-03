@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 
 class ExperienceLocationTab extends StatelessWidget {
-  const ExperienceLocationTab({super.key});
+  final Experience experience;
+
+  const ExperienceLocationTab({super.key, required this.experience});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class ExperienceLocationTab extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "Rua Moinho Velho, 817",
+                '${experience.address.street}, ${experience.address.number}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
