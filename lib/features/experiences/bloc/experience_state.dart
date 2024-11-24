@@ -23,7 +23,7 @@ class ExperienceErrorState extends ExperienceState {
 abstract class ExperienceDetailsState extends ExperienceState {}
 
 class ExperienceDetailsLoadingState extends ExperienceDetailsState {
-  final int experienceId;
+  final String experienceId;
 
   ExperienceDetailsLoadingState(this.experienceId);
 }

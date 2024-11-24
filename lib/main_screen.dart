@@ -6,7 +6,6 @@ import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/core/widgets/shared/gradient_text.dart';
-import 'package:turismo_rural_frontend/features/auth/presentation/screens/login.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_event.dart';
 import 'package:turismo_rural_frontend/features/experiences/presentation/screens/experience_screen.dart';
@@ -14,10 +13,6 @@ import 'package:turismo_rural_frontend/features/home/presentation/screens/home.d
 import 'package:turismo_rural_frontend/features/routes/bloc/route_bloc.dart';
 import 'package:turismo_rural_frontend/features/routes/bloc/route_event.dart';
 import 'package:turismo_rural_frontend/features/routes/presentation/screens/route_screen.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_state.dart';
-import 'package:turismo_rural_frontend/features/signup/presentation/screens/signup_handler.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -29,7 +24,6 @@ class _MainScreenState extends State<MainScreen> {
     AppPage.home,
     AppPage.experiences,
     AppPage.routes,
-    AppPage.login,
   ];
 
   @override
@@ -41,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, _) async {
         if (!didPop) {
           await navigatorReturn(context);
         }
@@ -104,17 +98,13 @@ class _MainScreenState extends State<MainScreen> {
         if (item != null) {
           if (item is Experience) {
             context.read<ExperienceBloc>().add(ExperienceSelected(item));
-          } else if (item is int) {
+          } else if (item is String) {
             context.read<ExperienceBloc>().add(LoadExperienceDetails(item));
           }
         } else {
           context.read<ExperienceBloc>().add(LoadExperienceCategories());
         }
         return const ExperiencesScreen();
-      case AppPage.login:
-        return const LoginScreen();
-      case AppPage.register:
-        return const SignUpHandler();
       case AppPage.routes:
         final item = context.read<NavigationCubit>().state.selectedItem;
         if (item != null && item is TouristicRoute) {
@@ -133,17 +123,7 @@ class _MainScreenState extends State<MainScreen> {
     final prevItem = context.read<NavigationCubit>().state.previousItem;
     if (currPage == AppPage.home) {
       return true;
-    } else if (currPage == AppPage.register) {
-      final bool onInitial =
-          context.read<SignUpBloc>().state is SignUpPageInitialState;
-      if (onInitial) {
-        context.read<NavigationCubit>().navigateTo(appPage: AppPage.home);
-      } else {
-        context.read<SignUpBloc>().add(const SignUpChangePage(previous: true));
-      }
-      return false;
-    }
-    if (currPage == AppPage.experiences) {
+    } else if (currPage == AppPage.experiences) {
       final selectedExperience =
           context.read<NavigationCubit>().state.selectedItem;
       final previousPage = context.read<NavigationCubit>().state.previousPage;

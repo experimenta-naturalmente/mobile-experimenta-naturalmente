@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:turismo_rural_frontend/core/data/models/event.dart';
-import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/core/data/models/spot.dart';
+import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
 
 abstract class HomeState extends Equatable {
@@ -16,21 +14,17 @@ class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
-  final Set<Spot> featuredSpots;
-  final Set<Event> featuredEvents;
+  final Set<Experience> featuredExperiences;
   final Set<TouristicRoute> featuredRoutes;
-  final Set<ExperienceCategory> spotCategories;
 
   const HomeLoaded({
-    required this.featuredSpots,
-    required this.featuredEvents,
+    required this.featuredExperiences,
     required this.featuredRoutes,
-    required this.spotCategories,
   });
 
   @override
   List<Object> get props =>
-      [featuredSpots, featuredEvents, featuredRoutes, spotCategories];
+      [featuredExperiences, featuredRoutes];
 }
 
 class HomeError extends HomeState {

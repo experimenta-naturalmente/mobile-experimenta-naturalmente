@@ -31,7 +31,7 @@ class ExperienceSelected extends ExperienceEvent {
 }
 
 class LoadExperienceDetails extends ExperienceEvent {
-  final int experienceId;
+  final String experienceId;
 
   const LoadExperienceDetails(this.experienceId);
 

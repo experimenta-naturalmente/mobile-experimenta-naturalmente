@@ -18,11 +18,8 @@ class SpotsList extends StatelessWidget {
       return const SizedBox();
     }
     final state = context.watch<HomeBloc>().state as HomeLoaded;
-    final categories = state.spotCategories;
-    if (categories.isEmpty) {
-      return const SizedBox();
-    }
-    final spots = state.featuredSpots;
+    final spots = state.featuredExperiences.whereType<Spot>().toSet();
+    final categories = spots.map((spot) => spot.category).toSet();
     final orientation = MediaQuery.of(context).orientation;
 
     return Column(
@@ -53,9 +50,8 @@ class SpotsList extends StatelessWidget {
     ExperienceCategory category,
     Set<Spot> spots,
   ) {
-    final categorySpots = spots
-        .where((spot) => spot.category.categoryId == category.categoryId)
-        .toList();
+    final categorySpots =
+        spots.where((spot) => spot.category.id == category.id).toList();
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -150,9 +146,8 @@ class SpotsList extends StatelessWidget {
     ExperienceCategory category,
     Set<Spot> spots,
   ) {
-    final categorySpots = spots
-        .where((spot) => spot.category.categoryId == category.categoryId)
-        .toList();
+    final categorySpots =
+        spots.where((spot) => spot.category.id == category.id).toList();
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
