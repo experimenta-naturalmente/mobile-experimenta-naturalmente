@@ -20,11 +20,7 @@ class EventCarousel extends StatelessWidget {
       return const SizedBox();
     }
     final state = context.watch<HomeBloc>().state as HomeLoaded;
-    final categories = state.spotCategories;
-    if (categories.isEmpty) {
-      return const SizedBox();
-    }
-    final events = state.featuredEvents;
+    final events = state.featuredExperiences.whereType<Event>().toSet();
 
     return _buildCarousel(context, events);
   }

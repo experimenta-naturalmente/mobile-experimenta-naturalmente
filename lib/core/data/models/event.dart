@@ -4,6 +4,7 @@ import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
+import 'package:turismo_rural_frontend/core/utils/enums.dart';
 
 class Event extends Experience {
   final String details;
@@ -15,6 +16,7 @@ class Event extends Experience {
     required this.eventStart,
     required this.eventEnd,
     required super.id,
+    required super.type,
     required super.cnpj,
     required super.name,
     required super.email,
@@ -29,33 +31,25 @@ class Event extends Experience {
 
   factory Event.fromJson(
     Map<String, dynamic> json,
-    Set<ExperienceCategory> categories,
+    ExperienceCategory category,
+    Set<Tag> tags,
   ) {
     return Event(
       details: decodeUtf8(json['details'] as String),
       eventStart: json['eventStart'] as String,
       eventEnd: json['eventEnd'] as String,
-      id: json['id'] as int,
+      id: json['id'] as String,
+      type: ExperienceType.event,
       cnpj: json['cnpj'] as String,
       name: decodeUtf8(json['name'] as String),
       email: json['email'] as String,
       phone: json['phone'] as String,
       description: decodeUtf8(json['description'] as String),
       address: Address.fromJson(json['address'] as Map<String, dynamic>),
-      category: categories.firstWhere(
-        (category) =>
-            category.categoryId ==
-            (json['category'] as Map)['categoryId'] as int,
-        orElse: () => const ExperienceCategory(
-          categoryId: -1,
-          name: 'Unknown',
-        ),
-      ),
+      category: category,
       socialNetworks: const [],
-      tags: (json['tags'] as List? ?? [])
-          .map((tag) => Tag.fromJson(tag as Map<String, dynamic>))
-          .toSet(),
-      attachments: (json['attachments'] as List? ?? [])
+      tags: tags,
+      attachments: (json['attachments'] as List<dynamic>)
           .map(
             (attachment) =>
                 Attachment.fromJson(attachment as Map<String, dynamic>),
@@ -64,35 +58,21 @@ class Event extends Experience {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'details': details,
-      'eventStart': eventStart,
-      'eventEnd': eventEnd,
-      'id': id,
-      'cnpj': cnpj,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'description': description,
-      'category': {'categoryId': category.categoryId},
-      'tags': tags.map((tag) => tag.toJson()).toList(),
-    };
-  }
-
   @override
   List<Object?> get props => [
         id,
+        type,
         cnpj,
         name,
         email,
         phone,
         description,
-        details,
+        address,
         category,
         socialNetworks,
         tags,
         attachments,
+        details,
         eventStart,
         eventEnd,
       ];

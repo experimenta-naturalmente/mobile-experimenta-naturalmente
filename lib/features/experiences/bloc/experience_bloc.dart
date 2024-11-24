@@ -65,7 +65,7 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
   ) async {
     emit(ExperienceDetailsLoadingState(event.experienceId));
     try {
-      final experience = await experienceRepository.fetchSpotById(
+      final experience = await experienceRepository.fetchExperienceById(
         event.experienceId,
       );
       if (experience == null) {

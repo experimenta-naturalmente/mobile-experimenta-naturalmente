@@ -1,22 +1,13 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
-import 'package:turismo_rural_frontend/core/data/models/spot.dart';
-import 'package:turismo_rural_frontend/features/signup/data/experience_registration.dart';
 
 abstract class IExperienceRepository {
   Future<Set<ExperienceCategory>> fetchExperienceCategories();
   Future<Set<Experience>> fetchExperiencesFromCategory(
     ExperienceCategory category,
   );
-  Future<Set<Event>> fetchEvents();
-  Future<Set<Spot>> fetchAllSpots();
-  Future<Set<Spot>> fetchSpotsByProfileId(int profileId);
-  Future<Event?> fetchEventById(int eventId);
-  Future<Spot?> fetchSpotById(int spotId);
+  Future<Set<Experience>> fetchFeaturedExperiences();
+  Future<Experience?> fetchExperienceById(String id);
   Future<String?> uploadImage(XFile file, Function(int) onProgress);
-  Future<bool> registerExperience(
-    ExperienceRegistration registration,
-  );
 }

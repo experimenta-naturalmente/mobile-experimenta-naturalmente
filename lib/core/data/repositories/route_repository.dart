@@ -1,41 +1,37 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_route_repository.dart';
 import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
 
 class RouteRepository implements IRouteRepository {
-  Uri apiUri;
+  final FirebaseFirestore firestore;
+  final String routesCollection = 'routes';
 
-  RouteRepository({required this.apiUri});
+  RouteRepository({required this.firestore});
 
   @override
   Future<TouristicRoute?> fetchRouteDetails(int routeId) async {
-    final response = await http.get(apiUri.replace(path: 'route/$routeId'));
+    final doc = await firestore
+        .collection(routesCollection)
+        .doc(routeId.toString())
+        .get();
 
-    if (response.statusCode == 200) {
-      final route = TouristicRoute.fromJson(
-        json.decode(response.body) as Map<String, dynamic>,
-      );
-      return route;
-    } else {
-      return null;
+    if (doc.exists) {
+      final data = doc.data()!;
+      data['id'] = doc.id;
+      return TouristicRoute.fromJson(data);
     }
+
+    return null;
   }
 
   @override
   Future<Set<TouristicRoute>> fetchRoutes() async {
-    final response = await http.get(apiUri.replace(path: 'route'));
+    final querySnapshot = await firestore.collection(routesCollection).get();
 
-    if (response.statusCode == 200) {
-      final routes = json.decode(response.body) as List<dynamic>;
-      return routes
-          .map(
-            (route) => TouristicRoute.fromJson(route as Map<String, dynamic>),
-          )
-          .toSet();
-    } else {
-      throw Exception('Failed to load routes');
-    }
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data();
+      data['id'] = doc.id;
+      return TouristicRoute.fromJson(data);
+    }).toSet();
   }
 }
