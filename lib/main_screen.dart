@@ -24,6 +24,7 @@ class _MainScreenState extends State<MainScreen> {
     AppPage.home,
     AppPage.experiences,
     AppPage.routes,
+    // AppPage.login,
   ];
 
   @override
@@ -68,11 +69,11 @@ class _MainScreenState extends State<MainScreen> {
                   icon: Icon(FontAwesome5.map_marked_alt),
                   label: 'Rotas',
                 ),
-                NavigationDestination(
-                  selectedIcon: Icon(Icons.person),
-                  icon: Icon(Icons.person_outline),
-                  label: 'Perfil',
-                ),
+                // NavigationDestination(
+                //   selectedIcon: Icon(Icons.person),
+                //   icon: Icon(Icons.person_outline),
+                //   label: 'Perfil',
+                // ),
               ],
             ),
             body: _getPage(state.currentPage, context),
@@ -176,8 +177,8 @@ class _MainScreenState extends State<MainScreen> {
         return 'Experiências';
       case AppPage.maps:
         return 'Mapa';
-      case AppPage.login:
-        return 'Perfil';
+      // case AppPage.login:
+      //   return 'Perfil';
       case AppPage.register:
         return 'Cadastro';
       case AppPage.routes:
