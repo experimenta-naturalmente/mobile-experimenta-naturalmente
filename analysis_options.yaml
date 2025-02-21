@@ -6,19 +6,3 @@ linter:
     cancel_subscriptions : false
     avoid_print: true
     avoid_classes_with_only_static_members: false
-
-analyzer:
-  plugins:
-    - dart_code_metrics
- 
-dart_code_metrics:
-  anti-patterns:
-    - long-method
-    - long-parameter-list
-  metrics:
-    cyclomatic-complexity: 20
-    lines-of-executable-code: 50
-    number-of-parameters: 8
-    maximum-nesting-level: 4
-  metrics-exclude:
-    - test/**

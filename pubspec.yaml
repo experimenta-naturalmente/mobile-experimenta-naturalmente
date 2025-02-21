@@ -47,7 +47,6 @@ dependencies:
 dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
-  dart_code_metrics: ^5.7.0
   flutter_test:
     sdk: flutter
   husky: ^0.1.7
