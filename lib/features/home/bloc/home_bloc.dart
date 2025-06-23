@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_route_repository.dart';
+import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 
@@ -22,14 +23,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
     try {
       final experiencesFuture = experienceRepository.fetchFeaturedExperiences();
-      final routesFuture = routeRepository.fetchRoutes();
+      //final routesFuture = routeRepository.fetchRoutes();
       final experiences = await experiencesFuture;
-      final routes = await routesFuture;
+      //final routes = await routesFuture;
 
       emit(
         HomeLoaded(
           featuredExperiences: experiences,
-          featuredRoutes: routes,
+          featuredRoutes: const <TouristicRoute>{},
         ),
       );
     } catch (e) {

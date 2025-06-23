@@ -87,13 +87,13 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.only(left: 6.0),
             child: SpotsList(),
           ),
-          Center(
-            child: SizedBox(
-              width: screenWidth * 0.8,
-              child: const FadedDivider(),
-            ),
-          ),
-          const RoutesList(),
+          // Center(
+          //   child: SizedBox(
+          //     width: screenWidth * 0.8,
+          //     child: const FadedDivider(),
+          //   ),
+          // ),
+          // const RoutesList(),
         ],
       ),
     );
