@@ -23,14 +23,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
     try {
       final experiencesFuture = experienceRepository.fetchFeaturedExperiences();
-      //final routesFuture = routeRepository.fetchRoutes();
+      final routesFuture = routeRepository.fetchRoutes();
       final experiences = await experiencesFuture;
-      //final routes = await routesFuture;
+      final routes = await routesFuture;
 
       emit(
         HomeLoaded(
           featuredExperiences: experiences,
-          featuredRoutes: const <TouristicRoute>{},
+          featuredRoutes: routes,
         ),
       );
     } catch (e) {
