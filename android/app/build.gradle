@@ -26,19 +26,24 @@ if (flutterVersionName == null) {
 }
 
 def dartEnvironmentVariables = [:]
+
 if (project.hasProperty('dart-defines')) {
     dartEnvironmentVariables = project.property('dart-defines')
         .split(',')
         .collectEntries { entry ->
             def decoded = new String(entry.decodeBase64(), 'UTF-8')
-            def (key, value) = decoded.split('=')
-            [(key): value]
+            def parts = decoded.split('=')
+            if (parts.length == 2) {
+                [(parts[0]): parts[1]]
+            } else {
+                // Ignora entradas inválidas
+                [:]
+            }
         }
 }
 
-String googleMapsApiKey = dartEnvironmentVariables.containsKey('GOOGLE_MAPS_API_KEY') 
-    ? dartEnvironmentVariables['GOOGLE_MAPS_API_KEY'] 
-    : ''
+String googleMapsApiKey = dartEnvironmentVariables.get('GOOGLE_MAPS_API_KEY', '')
+String apiUrl = dartEnvironmentVariables.get('API_URL', '')
 
 android {
     namespace "com.example.turismo_rural_frontend"
