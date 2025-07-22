@@ -29,11 +29,11 @@ class HomeHeader extends StatelessWidget {
           child: Image.asset('assets/logo/logo_small.png'),
         ),
         title: Text(
-          'Turismo Rural',
+          'Experimenta São Chico',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         subtitle: Text(
-          'São Francisco de Paula',
+          'Naturalmente',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
