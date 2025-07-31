@@ -55,3 +55,4 @@ gl-code-quality-report.json
 macos/Flutter/GeneratedPluginRegistrant.swift
 linux/flutter/
 windows/flutter/
+android/app/build.gradle
