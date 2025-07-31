@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SpotDetails extends StatelessWidget {
   final Spot spot;
@@ -28,13 +29,48 @@ class SpotDetails extends StatelessWidget {
     }
   }
 
+  Future<void> _launchURL(String? url) async {
+    if (url == null || url.isEmpty) {
+      print('URL inválida no launchURL');
+      return;
+    }
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      print('URL mal formatada');
+      return;
+    }
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Não foi possível abrir o link: $url';
+    }
+  }
+
   const SpotDetails({super.key, required this.spot});
 
   @override
   Widget build(BuildContext context) {
+    if (spot.socialNetworks == null) {
+      return const SizedBox.shrink(); // não mostra nada
+    }
+    final String? instagramHandle = spot.socialNetworks!.instagram;
+    final String? facebookHandle = spot.socialNetworks!.facebook;
+    final String? whatsappNumber = spot.socialNetworks!.whatsapp;
+
+    final String? instagramUrl = (instagramHandle?.isNotEmpty ?? false)
+        ? 'https://www.instagram.com/$instagramHandle'
+        : null;
+
+    final String? facebookUrl = (facebookHandle?.isNotEmpty ?? false)
+        ? 'https://www.facebook.com/$facebookHandle'
+        : null;
+
+    final String? whatsappUrl = (whatsappNumber?.isNotEmpty ?? false)
+        ? 'https://wa.me/$whatsappNumber'
+        : null;
     return Container(
       margin: const EdgeInsets.only(top: 16),
-      alignment: AlignmentDirectional.bottomStart,
+      alignment: AlignmentDirectional.topStart,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -62,41 +98,44 @@ class SpotDetails extends StatelessWidget {
                       "${_weekdayName(openingHour.dayOfWeek)}: ${openingHour.openingHour} - ${openingHour.closingHour}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 10,
-                            right: 45,
+                        if (spot.socialNetworks!.instagram?.isNotEmpty ?? false)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              right: 45,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(FontAwesome.instagram, size: 40),
+                              onPressed: () => _launchURL(instagramUrl),
+                            ),
                           ),
-                          child: Icon(
-                            FontAwesome.instagram,
-                            size: 40,
+                        if (spot.socialNetworks!.facebook?.isNotEmpty ?? false)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(FontAwesome.facebook, size: 40),
+                              onPressed: () => _launchURL(facebookUrl),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 10,
-                            right: 10,
+                        if (spot.socialNetworks!.whatsapp?.isNotEmpty ?? false)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 45,
+                              right: 10,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(FontAwesome.whatsapp, size: 40),
+                              onPressed: () => _launchURL(whatsappUrl),
+                            ),
                           ),
-                          child: Icon(
-                            FontAwesome.facebook,
-                            size: 40,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 45,
-                            right: 10,
-                          ),
-                          child: Icon(
-                            FontAwesome.whatsapp,
-                            size: 40,
-                          ),
-                        ),
                       ],
                     ),
                   ),

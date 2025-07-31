@@ -2,6 +2,7 @@ import 'package:turismo_rural_frontend/core/data/models/address.dart';
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/models/social_networks.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
@@ -47,7 +48,10 @@ class Event extends Experience {
       description: decodeUtf8(json['description'] as String),
       address: Address.fromJson(json['address'] as Map<String, dynamic>),
       category: category,
-      socialNetworks: const [],
+      socialNetworks: json['socialNetworks'] != null
+          ? SocialNetworks.fromJson(
+              json['socialNetworks'] as Map<String, dynamic>)
+          : null,
       tags: tags,
       attachments: (json['attachments'] as List<dynamic>)
           .map(

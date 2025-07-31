@@ -3,6 +3,7 @@ import 'package:turismo_rural_frontend/core/data/models/address.dart';
 import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
+import 'package:turismo_rural_frontend/core/data/models/social_networks.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/data/models/tag.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
@@ -17,7 +18,7 @@ abstract class Experience extends Equatable {
   final String description;
   final Address? address;
   final ExperienceCategory category;
-  final List<String> socialNetworks;
+  final SocialNetworks? socialNetworks;
   final Set<Tag> tags;
   final Set<Attachment> attachments;
 

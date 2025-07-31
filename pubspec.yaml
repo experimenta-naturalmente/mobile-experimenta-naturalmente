@@ -43,6 +43,7 @@ dependencies:
       url: https://github.com/mariahbf/flutter_time_range_picker.git
       ref: master
   universal_io: ^2.2.2
+  url_launcher: ^6.2.5
   validators: ^3.0.0
 dev_dependencies:
   bloc_test: ^9.1.7
