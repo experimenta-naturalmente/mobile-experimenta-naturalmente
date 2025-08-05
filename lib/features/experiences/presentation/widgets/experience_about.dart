@@ -8,34 +8,6 @@ class ExperienceAbout extends StatelessWidget {
 
   const ExperienceAbout({super.key, required this.experience});
 
-  Future<void> _launchEmail(String email) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: email,
-      queryParameters: {
-        'subject': 'Olá',
-        'body': 'Gostaria de te perguntar ',
-      },
-    );
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    } else {
-      print('Não foi possível abrir o email.');
-    }
-  }
-
-  Future<void> _launchPhone(String phoneNumber) async {
-    final Uri phoneUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    } else {
-      print('Não foi possível fazer a chamada.');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -65,36 +37,6 @@ class ExperienceAbout extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 14),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12), // espaçamento vertical
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Text('Telefone: ${experience.phone}')),
-                    IconButton(
-                      icon: const Icon(FontAwesome.phone, size: 30),
-                      tooltip: 'Fazer Chamada',
-                      onPressed: () => _launchPhone(experience.phone!),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12), // espaçamento vertical
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Text('Email: ${experience.email}')),
-                    IconButton(
-                      icon: const Icon(FontAwesome.mail, size: 30),
-                      tooltip: 'Enviar Email',
-                      onPressed: () => _launchEmail(experience.email!),
-                    ),
-                  ],
-                ),
-              ),
               Visibility(
                 visible: experience.tags.isNotEmpty,
                 child: Text(

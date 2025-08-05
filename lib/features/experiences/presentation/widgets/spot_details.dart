@@ -46,6 +46,34 @@ class SpotDetails extends StatelessWidget {
     }
   }
 
+  Future<void> _launchEmail(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      queryParameters: {
+        'subject': 'Olá',
+        'body': 'Gostaria de te perguntar ',
+      },
+    );
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      print('Não foi possível abrir o email.');
+    }
+  }
+
+  Future<void> _launchPhone(String phoneNumber) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      print('Não foi possível fazer a chamada.');
+    }
+  }
+
   const SpotDetails({super.key, required this.spot});
 
   @override
@@ -98,6 +126,36 @@ class SpotDetails extends StatelessWidget {
                       "${_weekdayName(openingHour.dayOfWeek)}: ${openingHour.openingHour} - ${openingHour.closingHour}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12), // espaçamento vertical
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text('Telefone: ${spot.phone}')),
+                        IconButton(
+                          icon: const Icon(FontAwesome.phone, size: 30),
+                          tooltip: 'Fazer Chamada',
+                          onPressed: () => _launchPhone(spot.phone!),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12), // espaçamento vertical
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text('Email: ${spot.email}')),
+                        IconButton(
+                          icon: const Icon(FontAwesome.mail, size: 30),
+                          tooltip: 'Enviar Email',
+                          onPressed: () => _launchEmail(spot.email!),
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Row(
