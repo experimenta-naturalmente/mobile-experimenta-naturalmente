@@ -132,7 +132,11 @@ class SpotDetails extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text('Telefone: ${spot.phone}')),
+                        Expanded(
+                            child: Text(
+                          'Telefone: ${spot.phone}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        )),
                         IconButton(
                           icon: const Icon(FontAwesome.phone, size: 30),
                           tooltip: 'Fazer Chamada',
@@ -147,7 +151,11 @@ class SpotDetails extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text('Email: ${spot.email}')),
+                        Expanded(
+                            child: Text(
+                          'Email: ${spot.email}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        )),
                         IconButton(
                           icon: const Icon(FontAwesome.mail, size: 30),
                           tooltip: 'Enviar Email',
