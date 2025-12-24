@@ -12,8 +12,11 @@ class ExperienceCategory extends Equatable {
 
   factory ExperienceCategory.fromJson(Map<String, dynamic> json) {
     return ExperienceCategory(
-      id: json['id'] as String,
-      name: decodeUtf8(json['name'] as String),
+      id: json['id'] != null
+          ? (json['id'] is int ? json['id'].toString() : json['id'] as String)
+          : '',
+      name:
+          json['name'] != null ? decodeUtf8(json['name'] as String) : 'Unknown',
     );
   }
 

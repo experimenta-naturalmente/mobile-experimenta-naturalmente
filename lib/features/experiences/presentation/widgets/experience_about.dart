@@ -36,27 +36,32 @@ class ExperienceAbout extends StatelessWidget {
                 experience.description,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 14),
-              Visibility(
-                visible: experience.tags.isNotEmpty,
-                child: Text(
+              const SizedBox(height: 24),
+              if (experience.tags.isNotEmpty) ...[
+                Text(
                   "Tags:",
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 6,
-                children: experience.tags.map((tag) {
-                  return Chip(
-                    backgroundColor: Colors.green.shade50,
-                    label: Text(
-                      tag.name,
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  );
-                }).toList(),
-              ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: experience.tags.map((tag) {
+                    return Chip(
+                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                      label: Text(
+                        tag.name,
+                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+              ],
             ],
           ),
         ),

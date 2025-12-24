@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 
 class ExperienceWidget extends StatelessWidget {
@@ -32,24 +33,35 @@ class ExperienceWidget extends StatelessWidget {
           radius: 24,
           backgroundColor: Colors.transparent,
           child: ClipOval(
-            child: CachedNetworkImage(
-              imageUrl: experience.attachments.firstOrNull?.url ??
-                  'https://picsum.photos/200/300?random=${experience.id}',
-              fit: BoxFit.cover,
-              width: 48,
-              height: 48,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Image.network(
-                experience.attachments.firstOrNull?.url ??
-                    'https://picsum.photos/200/300?random=${experience.id}',
-                fit: BoxFit.cover,
-                width: 48,
-                height: 48,
-              ),
-            ),
+            child: _buildImage(experience.attachments.firstOrNull),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildImage(Attachment? att) {
+    if (att != null && att.hasBytes) {
+      return Image.memory(
+        att.bytes!,
+        fit: BoxFit.cover,
+        width: 48,
+        height: 48,
+      );
+    }
+
+    final url = att?.url ?? '';
+    if (url.isEmpty) {
+      return const Icon(Icons.image_not_supported);
+    }
+
+    return CachedNetworkImage(
+      imageUrl: url,
+      fit: BoxFit.cover,
+      width: 48,
+      height: 48,
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) => const Icon(Icons.broken_image),
     );
   }
 }

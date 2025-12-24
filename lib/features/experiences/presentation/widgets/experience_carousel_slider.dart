@@ -15,8 +15,6 @@ class ExperienceCarouselSlider extends StatefulWidget {
 }
 
 class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
-  CarouselSliderController carouselController = CarouselSliderController();
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -39,7 +37,6 @@ class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
         },
         blendMode: BlendMode.dstIn,
         child: CarouselSlider.builder(
-          carouselController: carouselController,
           itemCount: widget.experience.attachments.length,
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             final attachment = widget.experience.attachments.elementAt(index);
@@ -84,17 +81,41 @@ class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: CachedNetworkImage(
-          imageUrl: attachment.url,
-          width: double.infinity,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          errorWidget: (context, url, error) => Image.network(
-            attachment.url,
-            fit: BoxFit.contain,
-          ),
+        child: _buildAttachmentImage(attachment),
+      ),
+    );
+  }
+
+  Widget _buildAttachmentImage(Attachment attachment) {
+    if (attachment.hasBytes) {
+      return Image.memory(
+        attachment.bytes!,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      );
+    }
+
+    final url = attachment.url;
+    if (url.isEmpty) {
+      return Container(
+        color: Colors.grey.shade200,
+        child: const Center(
+          child: Icon(Icons.image_not_supported, size: 48),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      errorWidget: (context, url, error) => Container(
+        color: Colors.grey.shade200,
+        child: const Center(
+          child: Icon(Icons.broken_image, size: 48),
         ),
       ),
     );

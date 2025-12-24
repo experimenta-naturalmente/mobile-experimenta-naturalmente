@@ -19,12 +19,20 @@ class RouteItem {
 
   factory RouteItem.fromJson(Map<String, dynamic> json) {
     return RouteItem(
-      routeId: json['routeExperienceId'] as int,
-      experienceId: json['experienceId'] as int,
-      title: decodeUtf8(json['title'] as String),
-      description: decodeUtf8(json['description'] as String),
-      order: json['orderIndex'] as int,
-      image: json['image'] as String,
+      routeId: json['routeExperienceId'] is int
+          ? json['routeExperienceId'] as int
+          : int.tryParse(json['routeExperienceId']?.toString() ?? '') ?? 0,
+      experienceId: json['experienceId'] is int
+          ? json['experienceId'] as int
+          : int.tryParse(json['experienceId']?.toString() ?? '') ?? 0,
+      title: json['title'] != null ? decodeUtf8(json['title'] as String) : '',
+      description: json['description'] != null
+          ? decodeUtf8(json['description'] as String)
+          : '',
+      order: json['orderIndex'] is int
+          ? json['orderIndex'] as int
+          : int.tryParse(json['orderIndex']?.toString() ?? '') ?? 0,
+      image: json['image']?.toString() ?? '',
     );
   }
 

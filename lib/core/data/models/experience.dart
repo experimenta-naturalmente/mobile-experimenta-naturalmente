@@ -49,7 +49,7 @@ abstract class Experience extends Equatable {
 
     switch (type) {
       case ExperienceType.spot:
-        return Spot.fromJson(json, category, tags);
+        return Spot.fromJsonCategorized(json, category);
       case ExperienceType.event:
         return Event.fromJson(json, category, tags);
       default:

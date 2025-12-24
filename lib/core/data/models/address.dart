@@ -14,9 +14,12 @@ class Address extends Equatable {
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      street: decodeUtf8(json['street'] as String),
-      number: json['number'] as int,
-      zipCode: decodeUtf8(json['zipCode'] as String),
+      street: json['street'] != null
+          ? decodeUtf8(json['street'] as String)
+          : 'Unknown',
+      number: json['number'] as int? ?? 0,
+      zipCode:
+          json['zipCode'] != null ? decodeUtf8(json['zipCode'] as String) : '',
     );
   }
 

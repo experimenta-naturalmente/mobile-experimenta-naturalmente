@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:turismo_rural_frontend/core/data/interfaces/i_route_repository.dart';
 import 'package:turismo_rural_frontend/core/data/models/touristic_route.dart';
+import 'package:turismo_rural_frontend/core/repositories_config.dart';
 
 class RouteRepository implements IRouteRepository {
   final FirebaseFirestore firestore;
@@ -26,12 +29,17 @@ class RouteRepository implements IRouteRepository {
 
   @override
   Future<Set<TouristicRoute>> fetchRoutes() async {
-    final querySnapshot = await firestore.collection(routesCollection).get();
+    try {
+      final snapshot = await firestore.collection(routesCollection).get();
 
-    return querySnapshot.docs.map((doc) {
-      final data = doc.data();
-      data['id'] = doc.id;
-      return TouristicRoute.fromJson(data);
-    }).toSet();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id; // ensure id is present
+        return TouristicRoute.fromJson(data);
+      }).toSet();
+    } catch (e) {
+      print('Rotas não disponíveis: $e');
+      return {};
+    }
   }
 }

@@ -18,40 +18,31 @@ class ExperienceDetailsScreen extends StatelessWidget {
         BlocBuilder<ExperienceBloc, ExperienceState>(
           builder: (context, state) {
             if (state is ExperienceDetailsLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
             final experience =
                 (state as ExperienceDetailsLoadedState).experience;
             return Column(
               children: [
                 Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   alignment: AlignmentDirectional.bottomStart,
                   child: Text(
                     experience.name,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          fontSize: getFontSize(
-                            context,
-                            experience.name,
-                          ),
-                        ),
+                      fontSize: getFontSize(context, experience.name),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: screenHeight * 0.3,
                   width: double.infinity,
-                  child: ExperienceCarouselSlider(
-                    experience: experience,
-                  ),
+                  child: ExperienceCarouselSlider(experience: experience),
                 ),
-                Expanded(
-                  child: ExperienceTabBar(
-                    experience: experience,
-                  ),
-                ),
+                Expanded(child: ExperienceTabBar(experience: experience)),
                 // child: const ExperienceTabBar(),
               ],
             );

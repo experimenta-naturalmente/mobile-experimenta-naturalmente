@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
@@ -119,6 +120,7 @@ class EventCarousel extends StatelessWidget {
     double eventHeight,
     double eventWidth,
   ) {
+    final Attachment? att = event.attachments.firstOrNull;
     return GestureDetector(
       onTap: () {
         context
@@ -140,18 +142,7 @@ class EventCarousel extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                width: double.infinity,
-                imageUrl: event.attachments.firstOrNull?.url ?? '',
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => Image.network(
-                  event.attachments.firstOrNull?.url ?? '',
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: _buildAttachmentImage(att, eventWidth, eventHeight),
             ),
           ),
           SizedBox(height: eventHeight * 0.04),
@@ -167,6 +158,41 @@ class EventCarousel extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAttachmentImage(Attachment? att, double w, double h) {
+    if (att != null && att.hasBytes) {
+      return Image.memory(
+        att.bytes!,
+        width: w,
+        height: h,
+        fit: BoxFit.cover,
+      );
+    }
+
+    final url = att?.url ?? '';
+    if (url.isEmpty) {
+      return Container(
+        color: Colors.grey.shade200,
+        width: w,
+        height: h,
+        child: const Icon(Icons.image_not_supported),
+      );
+    }
+
+    return CachedNetworkImage(
+      width: w,
+      height: h,
+      imageUrl: url,
+      fit: BoxFit.cover,
+      placeholder: (context, _) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      errorWidget: (context, _, __) => Container(
+        color: Colors.grey.shade200,
+        child: const Icon(Icons.broken_image),
       ),
     );
   }

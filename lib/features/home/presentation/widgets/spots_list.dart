@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
+import 'package:turismo_rural_frontend/core/data/models/attachment.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/utils/common.dart';
@@ -269,21 +270,10 @@ class SpotsList extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: cardHeight * 0.35,
-                          backgroundImage: Image.network(
-                            spot.attachments.firstOrNull?.url ??
-                                'https://picsum.photos/200/300?random=${spot.hashCode}?blur',
-                          ).image,
-                        ),
+                      _buildSpotAvatar(
+                        context,
+                        spot.attachments.firstOrNull,
+                        cardHeight * 0.35,
                       ),
                     ],
                   ),
@@ -303,6 +293,60 @@ class SpotsList extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSpotAvatar(
+    BuildContext context,
+    Attachment? att,
+    double radius,
+  ) {
+    final border = Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+          width: 2.0,
+        ),
+      ),
+    );
+
+    if (att != null && att.hasBytes) {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          border,
+          CircleAvatar(
+            radius: radius,
+            backgroundImage: MemoryImage(att.bytes!),
+          ),
+        ],
+      );
+    }
+
+    final url = att?.url ?? '';
+    if (url.isEmpty) {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          border,
+          CircleAvatar(
+            radius: radius,
+            child: const Icon(Icons.image_not_supported),
+          ),
+        ],
+      );
+    }
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        border,
+        CircleAvatar(
+          radius: radius,
+          backgroundImage: NetworkImage(url),
+        ),
+      ],
     );
   }
 }

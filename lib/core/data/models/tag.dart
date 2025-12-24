@@ -17,7 +17,7 @@ class Tag extends Equatable {
   List<Object?> get props => [name, type];
 
   factory Tag.fromJson(Map<String, dynamic> json) {
-    final categoryJsonList = json['categories'] as List<dynamic>;
+    final categoryJsonList = json['categories'] as List? ?? [];
 
     final List<ExperienceCategory> categoryList = categoryJsonList
         .map(
@@ -27,8 +27,10 @@ class Tag extends Equatable {
         .toList();
 
     return Tag(
-      id: json['id'] as String,
-      name: decodeUtf8(json['name'] as String),
+      id: json['id'] != null
+          ? (json['id'] is int ? json['id'].toString() : json['id'] as String)
+          : '',
+      name: json['name'] != null ? decodeUtf8(json['name'] as String) : '',
       type: categoryList,
     );
   }

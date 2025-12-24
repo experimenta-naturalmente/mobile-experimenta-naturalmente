@@ -22,9 +22,13 @@ class TouristicRoute {
         .toList();
 
     return TouristicRoute(
-      routeId: json['id'] as int,
-      name: decodeUtf8(json['name'] as String),
-      description: decodeUtf8(json['description'] as String),
+      routeId: json['id'] is int
+          ? json['id'] as int
+          : int.tryParse(json['id']?.toString() ?? '') ?? 0,
+      name: json['name'] != null ? decodeUtf8(json['name'] as String) : '',
+      description: json['description'] != null
+          ? decodeUtf8(json['description'] as String)
+          : '',
       experienceList: experienceList,
     );
   }

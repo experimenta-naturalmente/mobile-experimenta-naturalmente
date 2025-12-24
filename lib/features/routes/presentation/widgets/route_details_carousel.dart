@@ -16,7 +16,6 @@ class RouteDetailsCarousel extends StatefulWidget {
 }
 
 class _RouteDetailsCarouselState extends State<RouteDetailsCarousel> {
-  CarouselSliderController carouselController = CarouselSliderController();
   late RouteItem currentRouteItem;
   int currentRouteIndex = 0;
 
@@ -48,7 +47,6 @@ class _RouteDetailsCarouselState extends State<RouteDetailsCarousel> {
           },
           blendMode: BlendMode.dstIn,
           child: CarouselSlider.builder(
-            carouselController: carouselController,
             itemCount: widget.routeItemList.length,
             itemBuilder: (BuildContext context, int index, int pageViewIndex) {
               final routeItem = widget.routeItemList.elementAt(index);

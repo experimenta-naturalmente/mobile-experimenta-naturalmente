@@ -14,9 +14,15 @@ class SocialNetworks extends Equatable {
 
   factory SocialNetworks.fromJson(Map<String, dynamic> json) {
     return SocialNetworks(
-      instagram: decodeUtf8(json['instagram'] as String),
-      facebook: decodeUtf8(json['facebook'] as String),
-      whatsapp: decodeUtf8(json['whatsapp'] as String),
+      instagram: json['instagram'] != null
+          ? decodeUtf8(json['instagram'] as String)
+          : null,
+      facebook: json['facebook'] != null
+          ? decodeUtf8(json['facebook'] as String)
+          : null,
+      whatsapp: json['whatsapp'] != null
+          ? decodeUtf8(json['whatsapp'] as String)
+          : null,
     );
   }
 
