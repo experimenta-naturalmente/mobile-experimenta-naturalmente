@@ -34,13 +34,17 @@ class ExperienceTabBar extends StatelessWidget {
                 ExperienceLocationTab(
                   experience: experience,
                 ),
-                if (experience.category.name == "Evento")
+                if (experience is Event)
                   EventDetails(
                     event: experience as Event,
                   )
-                else
+                else if (experience is Spot)
                   SpotDetails(
                     spot: experience as Spot,
+                  )
+                else
+                  const Center(
+                    child: Text('Tipo de experiência não suportado'),
                   ),
               ],
             ),

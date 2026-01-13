@@ -19,6 +19,18 @@ class EventDetails extends StatelessWidget {
     }
   }
 
+  String _formatDateTime(String dateTimeStr) {
+    try {
+      if (dateTimeStr.isEmpty) {
+        return 'Data não disponível';
+      }
+      final dateTime = DateTime.parse(dateTimeStr);
+      return DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
+    } catch (e) {
+      return 'Data inválida';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const String instagramUrl = 'https://www.instagram.com/teste';
@@ -47,12 +59,12 @@ class EventDetails extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "Início: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(event.eventStart))}",
+                "Início: ${_formatDateTime(event.eventStart)}",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                "Fim: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(event.eventEnd))}",
+                "Fim: ${_formatDateTime(event.eventEnd)}",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),

@@ -36,6 +36,16 @@ class ExperienceRepository implements IExperienceRepository {
     final experiences = querySnapshot.docs.map((doc) {
       final data = doc.data();
       data['id'] = doc.id;
+
+      // Se o campo 'type' não existir, determina pelo nome da categoria
+      if (data['type'] == null) {
+        if (category.name == 'Evento') {
+          data['type'] = 'event';
+        } else {
+          data['type'] = 'spot';
+        }
+      }
+
       return Experience.fromJson(data, category, const {});
     }).toSet();
 
@@ -77,6 +87,16 @@ class ExperienceRepository implements IExperienceRepository {
         (c) => c.id == categoryId,
         orElse: () => const ExperienceCategory(id: 'unknown', name: 'Unknown'),
       );
+
+      // Se o campo 'type' não existir, determina pelo nome da categoria
+      if (data['type'] == null) {
+        if (category.name == 'Evento') {
+          data['type'] = 'event';
+        } else {
+          data['type'] = 'spot';
+        }
+      }
+
       return Experience.fromJson(data, category, const {});
     }).toSet();
 
@@ -192,7 +212,23 @@ class ExperienceRepository implements IExperienceRepository {
         category = const ExperienceCategory(id: '0', name: 'Unknown');
       }
       data['id'] = doc.id;
-      return Spot.fromJsonCategorized(data, category);
+
+      // Se o campo 'type' não existir, determina pelo nome da categoria
+      if (data['type'] == null) {
+        if (category.name == 'Evento') {
+          data['type'] = 'event';
+        } else {
+          data['type'] = 'spot';
+        }
+      }
+
+      // Usa Experience.fromJson para criar o tipo correto
+      final experience = Experience.fromJson(data, category, const {});
+
+      // Se for um Spot, retorna, senão retorna null
+      if (experience is Spot) {
+        return experience;
+      }
     }
     return null;
   }

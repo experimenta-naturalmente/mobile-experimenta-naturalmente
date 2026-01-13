@@ -61,26 +61,9 @@ class RoutesList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: screenWidth * 0.07, top: 18),
-          child: RichText(
-            text: TextSpan(
-              style: textTheme,
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 12),
-                    child: Icon(
-                      FontAwesome5.map_marked_alt,
-                      color: textTheme!.color,
-                      size: screenWidth > 600 ? 28 : 24,
-                    ),
-                  ),
-                ),
-                const TextSpan(
-                  text: 'Rotas Turísticas',
-                ),
-              ],
-            ),
+          child: Text(
+            'Rotas Turísticas',
+            style: textTheme!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 10),
@@ -159,26 +142,9 @@ class RoutesList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: screenWidth * 0.07, top: 18),
-          child: RichText(
-            text: TextSpan(
-              style: textTheme,
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 12),
-                    child: Icon(
-                      FontAwesome5.map_marked_alt,
-                      color: textTheme!.color,
-                      size: screenWidth > 600 ? 28 : 24,
-                    ),
-                  ),
-                ),
-                const TextSpan(
-                  text: 'Rotas Turísticas',
-                ),
-              ],
-            ),
+          child: Text(
+            'Rotas Turísticas',
+            style: textTheme!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 10),

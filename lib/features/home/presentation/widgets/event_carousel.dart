@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,55 @@ import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 
-class EventCarousel extends StatelessWidget {
+class EventCarousel extends StatefulWidget {
   const EventCarousel({
     super.key,
   });
+
+  @override
+  State<EventCarousel> createState() => _EventCarouselState();
+}
+
+class _EventCarouselState extends State<EventCarousel> {
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
+  Timer? _autoPlayTimer;
+  bool _isPaused = false;
+  int _currentIndex = 0;
+
+  @override
+  void dispose() {
+    _autoPlayTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startAutoPlay(int itemCount) {
+    _autoPlayTimer?.cancel();
+    if (!_isPaused && itemCount > 0) {
+      _autoPlayTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+        if (!_isPaused && mounted) {
+          _carouselController.nextPage(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  void _pauseAutoPlay() {
+    setState(() {
+      _isPaused = true;
+    });
+    _autoPlayTimer?.cancel();
+  }
+
+  void _resumeAutoPlay(int itemCount) {
+    setState(() {
+      _isPaused = false;
+    });
+    _startAutoPlay(itemCount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +67,27 @@ class EventCarousel extends StatelessWidget {
       return const SizedBox();
     }
     final state = context.watch<HomeBloc>().state as HomeLoaded;
-    final events = state.featuredExperiences.whereType<Event>().toSet();
+    final events = state.featuredExperiences.whereType<Event>().toList();
+
+    if (events.isEmpty) {
+      return const SizedBox();
+    }
+
+    // Inicia autoplay quando há eventos
+    if (_autoPlayTimer == null || !_autoPlayTimer!.isActive) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _startAutoPlay(events.length);
+      });
+    }
 
     return _buildCarousel(context, events);
   }
 
-  Widget _buildCarousel(BuildContext context, Set<Event> events) {
-    final orientation = MediaQuery.of(context).orientation;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final eventHeight = orientation == Orientation.portrait
-        ? screenHeight * 0.22
-        : screenHeight * 0.5;
+  Widget _buildCarousel(BuildContext context, List<Event> events) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final eventWidth = eventHeight * 16 / 9;
-    if (events.isEmpty) {
-      return const SizedBox();
-    }
+    final imageWidth = screenWidth * 0.75;
+    final imageHeight = imageWidth * 0.6; // Proporção 5:3
+
     final textTheme = screenWidth > 600
         ? Theme.of(context).textTheme.headlineMedium
         : Theme.of(context).textTheme.headlineSmall;
@@ -46,67 +97,44 @@ class EventCarousel extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05,
+            horizontal: screenWidth * 0.05,
           ),
-          child: Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  style: textTheme,
-                  children: [
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 2, right: 4),
-                        child: iconFromCategory(
-                          experienceCategory: events.first.category,
-                          color: textTheme!.color,
-                          size: screenWidth > 600 ? 28 : 24,
-                        ),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: "Eventos",
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: Text(
+            "Eventos",
+            style: textTheme!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        ShaderMask(
-          shaderCallback: (Rect rect) {
-            return LinearGradient(
-              colors: [
-                Colors.transparent,
-                Theme.of(context).colorScheme.surface,
-                Theme.of(context).colorScheme.surface,
-                Colors.transparent,
-              ],
-              stops: const [0.0, 0.1, 0.9, 1.0],
-            ).createShader(rect);
-          },
-          blendMode: BlendMode.dstIn,
+        const SizedBox(height: 16),
+        GestureDetector(
+          onLongPressStart: (_) => _pauseAutoPlay(),
+          onLongPressEnd: (_) => _resumeAutoPlay(events.length),
           child: CarouselSlider.builder(
+            carouselController: _carouselController,
             itemCount: events.length,
             itemBuilder: (BuildContext context, int index, int pageViewIndex) {
-              final event = events.elementAt(index);
+              final event = events[index];
               return Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: MediaQuery.of(context).size.width * 0.01,
-                ),
-                child: OverflowBox(
-                  maxHeight: double.infinity,
-                  maxWidth: double.infinity,
-                  child: _buildItem(context, event, eventHeight, eventWidth),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _buildItem(context, event, imageWidth, imageHeight),
               );
             },
             options: CarouselOptions(
-              height: eventHeight * 1.1 + 60,
-              viewportFraction: eventWidth / MediaQuery.of(context).size.width,
-              enlargeCenterPage: true,
+              height:
+                  imageHeight + 80, // altura da imagem + espaço para legenda
+              viewportFraction:
+                  0.85, // Mostra 85% da imagem atual com espaço visível
+              enlargeCenterPage:
+                  false, // Desativa ampliação para manter proporções
+              autoPlay: false, // Desativado porque controlamos manualmente
+              enableInfiniteScroll: events.length > 1,
+              scrollDirection: Axis.horizontal,
+              padEnds:
+                  false, // Remove padding nas extremidades para rolagem infinita contínua
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
             ),
           ),
         ),
@@ -117,8 +145,8 @@ class EventCarousel extends StatelessWidget {
   Widget _buildItem(
     BuildContext context,
     Event event,
-    double eventHeight,
-    double eventWidth,
+    double imageWidth,
+    double imageHeight,
   ) {
     final Attachment? att = event.attachments.firstOrNull;
     return GestureDetector(
@@ -128,32 +156,43 @@ class EventCarousel extends StatelessWidget {
             .navigateTo(appPage: AppPage.experiences, item: event);
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: eventWidth,
-            height: eventHeight,
+            width: imageWidth,
+            height: imageHeight,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: Theme.of(context).colorScheme.outline,
                 width: 2,
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: _buildAttachmentImage(att, eventWidth, eventHeight),
+              borderRadius: BorderRadius.circular(10),
+              child: _buildAttachmentImage(att, imageWidth, imageHeight),
             ),
           ),
-          SizedBox(height: eventHeight * 0.04),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Center(
-              child: Text(
-                event.name,
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-                softWrap: true,
+          const SizedBox(height: 12),
+          Container(
+            width: imageWidth,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: RichText(
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyMedium,
+                children: [
+                  TextSpan(
+                    text: event.name.toLowerCase().replaceFirst(
+                        event.name[0].toLowerCase(),
+                        event.name[0].toUpperCase()),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: ': ${event.description}',
+                  ),
+                ],
               ),
             ),
           ),

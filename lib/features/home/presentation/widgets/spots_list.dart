@@ -20,7 +20,11 @@ class SpotsList extends StatelessWidget {
     }
     final state = context.watch<HomeBloc>().state as HomeLoaded;
     final spots = state.featuredExperiences.whereType<Spot>().toSet();
-    final categories = spots.map((spot) => spot.category).toSet();
+    // Filtra categorias que não são "Evento"
+    final categories = spots
+        .map((spot) => spot.category)
+        .where((category) => category.name != "Evento")
+        .toSet();
     final orientation = MediaQuery.of(context).orientation;
 
     return Column(
@@ -77,26 +81,9 @@ class SpotsList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: screenWidth * 0.05, top: 18),
-          child: RichText(
-            text: TextSpan(
-              style: textTheme,
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 12),
-                    child: iconFromCategory(
-                      experienceCategory: category,
-                      color: textTheme!.color,
-                      size: screenWidth > 600 ? 28 : 24,
-                    ),
-                  ),
-                ),
-                TextSpan(
-                  text: category.name,
-                ),
-              ],
-            ),
+          child: Text(
+            category.name,
+            style: textTheme!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 10),
@@ -175,26 +162,9 @@ class SpotsList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: screenWidth * 0.05, top: 18),
-          child: RichText(
-            text: TextSpan(
-              style: textTheme,
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 12),
-                    child: iconFromCategory(
-                      experienceCategory: category,
-                      color: textTheme!.color,
-                      size: screenWidth > 600 ? 28 : 24,
-                    ),
-                  ),
-                ),
-                TextSpan(
-                  text: category.name,
-                ),
-              ],
-            ),
+          child: Text(
+            category.name,
+            style: textTheme!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 10),

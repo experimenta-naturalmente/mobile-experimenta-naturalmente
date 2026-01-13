@@ -16,6 +16,7 @@ enum AppPage {
   login,
   register,
   experiences,
+  favorite,
   maps,
   routes,
 }

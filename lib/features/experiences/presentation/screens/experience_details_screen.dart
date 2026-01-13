@@ -31,10 +31,13 @@ class ExperienceDetailsScreen extends StatelessWidget {
                   ),
                   alignment: AlignmentDirectional.bottomStart,
                   child: Text(
-                    experience.name,
+                    experience.name.toLowerCase().replaceFirst(
+                          experience.name[0].toLowerCase(),
+                          experience.name[0].toUpperCase(),
+                        ),
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontSize: getFontSize(context, experience.name),
-                    ),
+                          fontSize: getFontSize(context, experience.name),
+                        ),
                   ),
                 ),
                 SizedBox(

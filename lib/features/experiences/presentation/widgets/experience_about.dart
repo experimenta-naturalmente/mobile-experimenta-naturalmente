@@ -26,7 +26,10 @@ class ExperienceAbout extends StatelessWidget {
                     child: const Icon(Icons.sticky_note_2_outlined),
                   ),
                   Text(
-                    experience.name,
+                    experience.name.toLowerCase().replaceFirst(
+                          experience.name[0].toLowerCase(),
+                          experience.name[0].toUpperCase(),
+                        ),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -48,14 +51,19 @@ class ExperienceAbout extends StatelessWidget {
                   runSpacing: 8,
                   children: experience.tags.map((tag) {
                     return Chip(
-                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
                       label: Text(
                         tag.name,
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     );
                   }).toList(),
