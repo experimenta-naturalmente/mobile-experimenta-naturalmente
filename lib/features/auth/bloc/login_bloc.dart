@@ -31,8 +31,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
       if (user.id != -1) {
         emit(ProfileLoading(user));
-        final Set<Spot> spotsBusiness =
-            await experienceRepository.fetchSpotsByProfileId(user.id);
+        Set<Spot> spotsBusiness = {};
+        try {
+          spotsBusiness =
+              await experienceRepository.fetchSpotsByProfileId(user.id);
+        } catch (_) {
+          spotsBusiness = {};
+        }
         emit(ProfileSuccess(user, spotsBusiness));
       } else {
         emit(const LoginSubmitError('Erro na autenticação'));

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:turismo_rural_frontend/core/data/interfaces/i_route_repository.dart';
@@ -25,17 +26,20 @@ class RouteRepository implements IRouteRepository {
 
   @override
   Future<Set<TouristicRoute>> fetchRoutes() async {
-    final response = await http.get(apiUri.replace(path: 'route'));
+    try {
+      final response = await http.get(apiUri.replace(path: 'route'));
+      if (response.statusCode != 200) {
+        throw Exception('Falha ao carregar rotas (HTTP ${response.statusCode})');
+      }
 
-    if (response.statusCode == 200) {
       final routes = json.decode(response.body) as List<dynamic>;
       return routes
           .map(
             (route) => TouristicRoute.fromJson(route as Map<String, dynamic>),
           )
           .toSet();
-    } else {
-      throw Exception('Failed to load routes');
+    } on SocketException {
+      throw Exception('Sem conexão com a internet ao carregar rotas.');
     }
   }
 }

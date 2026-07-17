@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/config/themes.dart';
@@ -9,21 +11,21 @@ import 'package:turismo_rural_frontend/core/data/repositories/experience_reposit
 import 'package:turismo_rural_frontend/core/data/repositories/route_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/tag_repository.dart';
 import 'package:turismo_rural_frontend/core/data/repositories/user_repository.dart';
-import 'package:turismo_rural_frontend/core/services/aws/aws.dart';
 import 'package:turismo_rural_frontend/core/services/file/file_service.dart';
 import 'package:turismo_rural_frontend/core/services/maps/data/google_maps_api.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/experiences/bloc/experience_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
-import 'package:turismo_rural_frontend/features/home/bloc/home_event.dart';
 import 'package:turismo_rural_frontend/features/routes/bloc/route_bloc.dart';
 import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
-import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 import 'package:turismo_rural_frontend/main_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await dotenv.load();
+  GoogleFonts.config.allowRuntimeFetching = false;
   runApp(MainApp());
 }
 
@@ -43,22 +45,8 @@ class MainApp extends StatelessWidget {
         Provider<IMapsService>(
           create: (_) => GoogleMapsService(),
         ),
-        Provider<AwsS3Service>(
-          create: (_) {
-            return AwsS3Service(
-              accessKey: dotenv.env['AWS_ACCESS_KEY'] ?? '',
-              secretKey: dotenv.env['AWS_SECRET_KEY'] ?? '',
-              region: dotenv.env['AWS_REGION'] ?? '',
-              bucketName: dotenv.env['AWS_BUCKET'] ?? '',
-              destDir: 'uploads',
-            );
-          },
-        ),
-        ProxyProvider<AwsS3Service, ExperienceRepository>(
-          update: (_, awsS3Service, __) => ExperienceRepository(
-            awsS3Service: awsS3Service,
-            apiUri: apiUri,
-          ),
+        Provider<ExperienceRepository>(
+          create: (_) => ExperienceRepository(apiUri: apiUri),
         ),
         Provider<TagRepository>(
           create: (_) => TagRepository(
@@ -95,7 +83,7 @@ class MainApp extends StatelessWidget {
                     Provider.of<ExperienceRepository>(context, listen: false),
                 tagRepository:
                     Provider.of<TagRepository>(context, listen: false),
-              )..add(LoadSignUp()),
+              ),
             ),
             BlocProvider(
               create: (context) => LoginBloc(
@@ -117,7 +105,7 @@ class MainApp extends StatelessWidget {
                     Provider.of<ExperienceRepository>(context, listen: false),
                 routeRepository:
                     Provider.of<RouteRepository>(context, listen: false),
-              )..add(HomeLoadData()),
+              ),
             ),
           ],
           child: MaterialApp(

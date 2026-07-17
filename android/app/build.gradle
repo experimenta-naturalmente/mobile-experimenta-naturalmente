@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    id "com.google.gms.google-services"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -22,7 +23,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def dartEnvironmentVariables = []
+def dartEnvironmentVariables = [:]
 if (project.hasProperty('dart-defines')) {
     dartEnvironmentVariables = project.property('dart-defines')
         .split(',')
@@ -31,7 +32,20 @@ if (project.hasProperty('dart-defines')) {
             [(pair.first()): pair.last()]
         }
 }
+
+// Prioriza --dart-define e faz fallback para o .env (mesmo arquivo usado pelo flutter_dotenv em runtime)
 String googleMapsApiKey = dartEnvironmentVariables.containsKey('GOOGLE_MAPS_API_KEY') ? dartEnvironmentVariables.GOOGLE_MAPS_API_KEY : ''
+if (googleMapsApiKey?.isEmpty()) {
+    def envFile = file("${rootProject.projectDir}/../.env")
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            def trimmed = line.trim()
+            if (trimmed.startsWith('GOOGLE_MAPS_API_KEY')) {
+                googleMapsApiKey = trimmed.substring(trimmed.indexOf('=') + 1).trim()
+            }
+        }
+    }
+}
 
 android {
     namespace "com.example.turismo_rural_frontend"
@@ -56,7 +70,7 @@ android {
         applicationId "com.example.turismo_rural_frontend"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName        

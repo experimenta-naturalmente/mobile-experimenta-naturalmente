@@ -16,7 +16,7 @@ class RouteDetailsCarousel extends StatefulWidget {
 }
 
 class _RouteDetailsCarouselState extends State<RouteDetailsCarousel> {
-  CarouselController carouselController = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
   late RouteItem currentRouteItem;
   int currentRouteIndex = 0;
 

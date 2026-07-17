@@ -26,6 +26,9 @@ class ExperienceDetailsLoadingState extends ExperienceDetailsState {
   final int experienceId;
 
   ExperienceDetailsLoadingState(this.experienceId);
+
+  @override
+  List<Object> get props => [experienceId];
 }
 
 class ExperienceDetailsLoadedState extends ExperienceDetailsState {
@@ -45,6 +48,9 @@ class ExperienceListLoadingState extends ExperienceListState {
   final Set<ExperienceCategory> categories;
 
   ExperienceListLoadingState(this.selectedCategory, this.categories);
+
+  @override
+  List<Object> get props => [selectedCategory, categories];
 }
 
 class ExperienceListLoadSuccessState extends ExperienceListState {
@@ -59,5 +65,5 @@ class ExperienceListLoadSuccessState extends ExperienceListState {
   );
 
   @override
-  List<Object> get props => [experiences];
+  List<Object> get props => [experiences, selectedCategory, categories];
 }

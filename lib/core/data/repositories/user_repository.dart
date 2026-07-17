@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:http/http.dart' as http;
 import 'package:turismo_rural_frontend/core/data/interfaces/i_user_repository.dart';
 import 'package:turismo_rural_frontend/core/data/models/user.dart';
@@ -24,35 +25,27 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<User> loginUser(String username, String password) async {
-    await Future.delayed(const Duration(seconds: 2));
-    final url = Uri.parse('https://dummyjson.com/auth/login');
-
-    final body = jsonEncode({
-      'username': username,
-      'password': password,
-    });
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body,
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
-
-      final user = User(
-        id: responseData['id'] as int,
-        name: responseData['username'] as String,
-        email: responseData['email'] as String,
-        cpf: '9201934098',
-        phone: '9201934098',
+    try {
+      final userCredential = await firebase_auth.FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: username,
+        password: password,
       );
-      return user;
-    } else {
-      throw Exception('Failed to login');
+
+      final firebaseUser = userCredential.user;
+      if (firebaseUser == null) {
+        throw Exception('User not found');
+      }
+
+      return User(
+        id: firebaseUser.uid.hashCode,
+        name: firebaseUser.displayName ?? username,
+        email: firebaseUser.email ?? '',
+        cpf: '',
+        phone: '',
+      );
+    } catch (e) {
+      throw Exception('Failed to login: $e');
     }
   }
 }

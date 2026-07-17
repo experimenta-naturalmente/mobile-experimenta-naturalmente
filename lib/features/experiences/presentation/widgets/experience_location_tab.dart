@@ -3,15 +3,28 @@ import 'package:provider/provider.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/services/maps/maps.dart';
 
-class ExperienceLocationTab extends StatelessWidget {
+class ExperienceLocationTab extends StatefulWidget {
   final Experience experience;
 
   const ExperienceLocationTab({super.key, required this.experience});
 
   @override
+  State<ExperienceLocationTab> createState() => _ExperienceLocationTabState();
+}
+
+class _ExperienceLocationTabState extends State<ExperienceLocationTab> {
+  late final Future<Widget> _mapFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _mapFuture = context.read<IMapsService>().buildMap(const {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final experience = widget.experience;
     final screenHeight = MediaQuery.of(context).size.height;
-    final maps = Provider.of<IMapsService>(context, listen: false);
 
     return SingleChildScrollView(
       child: Container(
@@ -46,7 +59,7 @@ class ExperienceLocationTab extends StatelessWidget {
                 ),
                 height: screenHeight * 0.20,
                 child: FutureBuilder<Widget>(
-                  future: maps.buildMap({}),
+                  future: _mapFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());

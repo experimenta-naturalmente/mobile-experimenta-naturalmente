@@ -190,17 +190,34 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     emit(SignUpLoading());
-    try {
-      if (categoriesCache.isEmpty) {
-        categoriesCache =
-            await experienceRepository.fetchExperienceCategories();
+    if (categoriesCache.isEmpty) {
+      try {
+        categoriesCache = await experienceRepository.fetchExperienceCategories();
+      } catch (_) {
+        categoriesCache = _defaultCategories();
       }
-      await _initTags();
-      registration.clear();
-      emit(SignUpPageInitialState());
-    } catch (e) {
-      emit(SignUpError(error: e.toString()));
     }
+
+    if (categoriesCache.isEmpty) {
+      categoriesCache = _defaultCategories();
+    }
+
+    try {
+      await _initTags();
+    } catch (_) {
+      availableTags = {};
+      selectedTagsCache = {};
+    }
+
+    registration.clear();
+    emit(SignUpPageInitialState());
+  }
+
+  Set<ExperienceCategory> _defaultCategories() {
+    return {
+      const ExperienceCategory(categoryId: 1, name: 'Experiencia'),
+      const ExperienceCategory(categoryId: 2, name: 'Evento'),
+    };
   }
 
   Future<void> _onSignUpChangePage(

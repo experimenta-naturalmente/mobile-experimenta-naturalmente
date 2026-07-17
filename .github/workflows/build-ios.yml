@@ -1,0 +1,79 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: Build iOS (unsigned)
+    runs-on: macos-latest
+    environment: Produção
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Create .env
+        run: |
+          cat <<EOF > .env
+          API_URL=${{ secrets.API_URL }}
+          GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
+          EOF
+
+      - name: Generate iOS platform files
+        run: flutter create --platforms=ios .
+
+      - name: Configure iOS project (Google Maps key, ATS, Podfile)
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          set -e
+          APP_DELEGATE=ios/Runner/AppDelegate.swift
+          INFO_PLIST=ios/Runner/Info.plist
+          PODFILE=ios/Podfile
+
+          # Injeta a chave do Google Maps no AppDelegate (idempotente)
+          if ! grep -q "import GoogleMaps" "$APP_DELEGATE"; then
+            perl -0pi -e 's/import Flutter/import Flutter\nimport GoogleMaps/' "$APP_DELEGATE"
+          fi
+          if ! grep -q "GMSServices.provideAPIKey" "$APP_DELEGATE"; then
+            perl -0pi -e "s/GeneratedPluginRegistrant\.register\(with: self\)/GMSServices.provideAPIKey(\"$GOOGLE_MAPS_API_KEY\")\n    GeneratedPluginRegistrant.register(with: self)/" "$APP_DELEGATE"
+          fi
+
+          # google_maps_flutter_ios exige iOS 14+
+          if grep -q "platform :ios" "$PODFILE"; then
+            perl -pi -e "s/^#?\s*platform :ios.*/platform :ios, '14.0'/" "$PODFILE"
+          else
+            printf "platform :ios, '14.0'\n%s" "$(cat "$PODFILE")" > "$PODFILE"
+          fi
+
+          echo "----- AppDelegate.swift -----"
+          cat "$APP_DELEGATE"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package unsigned IPA
+        run: |
+          set -e
+          mkdir -p build/Payload
+          cp -r build/ios/iphoneos/Runner.app build/Payload/
+          (cd build && zip -qr app-unsigned.ipa Payload)
+          rm -rf build/Payload
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-unsigned-ipa
+          path: build/app-unsigned.ipa
+          if-no-files-found: error

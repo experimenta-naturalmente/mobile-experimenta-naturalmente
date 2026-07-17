@@ -15,7 +15,7 @@ class ExperienceCarouselSlider extends StatefulWidget {
 }
 
 class _ExperienceCarouselSliderState extends State<ExperienceCarouselSlider> {
-  CarouselController carouselController = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {

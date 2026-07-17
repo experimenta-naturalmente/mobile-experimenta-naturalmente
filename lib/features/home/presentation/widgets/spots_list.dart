@@ -9,8 +9,27 @@ import 'package:turismo_rural_frontend/core/widgets/shared/faded_divider.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_bloc.dart';
 import 'package:turismo_rural_frontend/features/home/bloc/home_state.dart';
 
-class SpotsList extends StatelessWidget {
+class SpotsList extends StatefulWidget {
   const SpotsList({super.key});
+
+  @override
+  State<SpotsList> createState() => _SpotsListState();
+}
+
+class _SpotsListState extends State<SpotsList> {
+  final Map<int, ScrollController> _scrollControllers = {};
+
+  ScrollController _controllerFor(int categoryId) {
+    return _scrollControllers.putIfAbsent(categoryId, () => ScrollController());
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _scrollControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +92,7 @@ class SpotsList extends StatelessWidget {
     final scrolls = categorySpots.length > 2;
     final fadeStops = scrolls ? [0.0, 0.9, 1.0] : [0.0, 1.0, 1.0];
 
-    final ScrollController scrollController = ScrollController();
+    final scrollController = _controllerFor(category.categoryId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +191,7 @@ class SpotsList extends StatelessWidget {
     final scrolls = screenWidth / adjustedCardWidth < categorySpots.length / 2;
     final fadeStops = scrolls ? [0.0, 0.9, 1.0] : [0.0, 1.0, 1.0];
 
-    final ScrollController scrollController = ScrollController();
+    final scrollController = _controllerFor(category.categoryId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

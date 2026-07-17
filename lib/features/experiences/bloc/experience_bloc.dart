@@ -25,6 +25,10 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
     try {
       final Set<ExperienceCategory> categories =
           await experienceRepository.fetchExperienceCategories();
+      if (categories.isEmpty) {
+        emit(const ExperienceErrorState('Nenhuma categoria disponível.'));
+        return;
+      }
       add(ExperienceCategoryChanged(categories.first, categories));
     } catch (e) {
       emit(ExperienceErrorState(e.toString()));

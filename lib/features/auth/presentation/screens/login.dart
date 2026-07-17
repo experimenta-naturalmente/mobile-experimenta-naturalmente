@@ -8,56 +8,68 @@ import 'package:turismo_rural_frontend/features/auth/bloc/login_bloc.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_event.dart';
 import 'package:turismo_rural_frontend/features/auth/bloc/login_state.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/screens/user_profile_screen.dart';
+import 'package:turismo_rural_frontend/features/auth/presentation/screens/signup_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  Future<void> _saveLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_logged_in', true);
+  }
 
   @override
   Widget build(BuildContext context) {
     final usernameController = TextEditingController();
     final passwordController = TextEditingController();
 
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state is LoginSubmitError) {
-          _showErrorDialog(context, state.error, passwordController);
-        }
-      },
-      child: BlocBuilder<LoginBloc, LoginState>(
-        builder: (BuildContext context, LoginState state) {
+    return Scaffold(
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) async {
+          if (state is LoginSubmitError) {
+            _showErrorDialog(context, state.error, passwordController);
+          }
           if (state is ProfileState) {
-            return UserProfileScreen(user: state.user);
+            await _saveLogin();
           }
-          if (state is LoginSubmitLoading) {
-            return Stack(
-              children: [
-                _buildLoginPage(
-                  context,
-                  usernameController,
-                  passwordController,
-                  true,
-                ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: ColoredBox(
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                ),
-                const LoadingIndicator(),
-              ],
-            );
-          }
-          var obscuredPassword = true;
-          if (state is LoginInitial) {
-            obscuredPassword = state.obscuredPassword;
-          }
-          return _buildLoginPage(
-            context,
-            usernameController,
-            passwordController,
-            obscuredPassword,
-          );
         },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (BuildContext context, LoginState state) {
+            if (state is ProfileState) {
+              return UserProfileScreen(user: state.user);
+            }
+            if (state is LoginSubmitLoading) {
+              return Stack(
+                children: [
+                  _buildLoginPage(
+                    context,
+                    usernameController,
+                    passwordController,
+                    true,
+                  ),
+                  BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: ColoredBox(
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                  const LoadingIndicator(),
+                ],
+              );
+            }
+            var obscuredPassword = true;
+            if (state is LoginInitial) {
+              obscuredPassword = state.obscuredPassword;
+            }
+            return _buildLoginPage(
+              context,
+              usernameController,
+              passwordController,
+              obscuredPassword,
+            );
+          },
+        ),
       ),
     );
   }
@@ -148,7 +160,41 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            
+              SizedBox(height: screenHeight * 0.03),
+              _buildSignupLink(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignupLink(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignupScreen(),
+            ),
+          );
+        },
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.bodyMedium,
+            children: [
+              TextSpan(
+                text: 'Ainda não tem uma conta?\n',
+              ),
+              TextSpan(
+                text: 'Cadastre-se aqui',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -178,8 +224,9 @@ class LoginScreen extends StatelessWidget {
   ) {
     return TextFormField(
       controller: controller,
+      keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
-        labelText: 'Usuário',
+        labelText: 'Email',
         filled: true,
         border: OutlineInputBorder(),
       ),
@@ -214,7 +261,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _forgotPasswordButton(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.center,
       child: TextButton(
         onPressed: () {},
         child: Text(

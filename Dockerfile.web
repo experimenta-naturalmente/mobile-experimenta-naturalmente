@@ -1,0 +1,22 @@
+# Build da versão web do app Flutter e empacotamento em Nginx.
+FROM ghcr.io/cirruslabs/flutter:stable AS build
+
+WORKDIR /app
+
+COPY pubspec.yaml pubspec.lock ./
+RUN flutter pub get
+
+COPY . .
+
+# .env é asset do app (flutter_dotenv). Preenchido no build via ARGs.
+ARG API_URL
+ARG GOOGLE_MAPS_API_KEY
+RUN printf "API_URL = %s\nGOOGLE_MAPS_API_KEY = %s\n" "$API_URL" "$GOOGLE_MAPS_API_KEY" > .env
+
+RUN flutter pub get
+RUN flutter build web --release
+
+FROM nginx:alpine
+COPY --from=build /app/build/web /usr/share/nginx/html
+COPY nginx.web.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

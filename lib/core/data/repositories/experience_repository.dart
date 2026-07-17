@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:turismo_rural_frontend/core/data/interfaces/i_experience_repository.dart';
@@ -7,53 +9,57 @@ import 'package:turismo_rural_frontend/core/data/models/event.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience.dart';
 import 'package:turismo_rural_frontend/core/data/models/experience_category.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
-import 'package:turismo_rural_frontend/core/services/aws/aws.dart';
 import 'package:turismo_rural_frontend/features/signup/data/experience_registration.dart';
 
 class ExperienceRepository implements IExperienceRepository {
-  AwsS3Service awsS3Service;
   Uri apiUri;
 
-  ExperienceRepository({required this.awsS3Service, required this.apiUri});
+  ExperienceRepository({required this.apiUri});
 
   @override
   Future<Set<Experience>> fetchExperiencesFromCategory(
     ExperienceCategory category,
   ) async {
-    if (category.name == 'Evento') {
-      return fetchEvents();
-    } else {
-      final response = await http.get(
-        apiUri.replace(path: 'spot'),
-      );
-
-      if (response.statusCode == 200) {
-        final categoriesSet = await fetchExperienceCategories();
-
-        final List<dynamic> spotsJson =
-            json.decode(response.body) as List<dynamic>;
-        final spots = spotsJson
-            .map(
-              (json) =>
-                  Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
-            )
-            .where(
-              (element) => element.category.categoryId == category.categoryId,
-            )
-            .toSet();
-
-        return spots;
-      } else {
-        throw Exception('Failed to load ${category.name} experiences.');
+    try {
+      if (category.name == 'Evento') {
+        return fetchEvents();
       }
+
+      final response = await http.get(apiUri.replace(path: 'spot'));
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Falha ao carregar experiências de ${category.name} '
+          '(HTTP ${response.statusCode})',
+        );
+      }
+
+      final categoriesSet = await fetchExperienceCategories();
+      final List<dynamic> spotsJson =
+          json.decode(response.body) as List<dynamic>;
+      return spotsJson
+          .map(
+            (json) =>
+                Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
+          )
+          .where(
+            (element) => element.category.categoryId == category.categoryId,
+          )
+          .toSet();
+    } on SocketException {
+      throw Exception('Sem conexão com a internet ao carregar experiências.');
     }
   }
 
   @override
   Future<Set<ExperienceCategory>> fetchExperienceCategories() async {
-    final response = await http.get(apiUri.replace(path: 'category'));
+    try {
+      final response = await http.get(apiUri.replace(path: 'category'));
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Falha ao carregar categorias (HTTP ${response.statusCode})',
+        );
+      }
 
-    if (response.statusCode == 200) {
       final List<dynamic> categoriesJson =
           json.decode(response.body) as List<dynamic>;
       return categoriesJson
@@ -61,8 +67,8 @@ class ExperienceRepository implements IExperienceRepository {
             (json) => ExperienceCategory.fromJson(json as Map<String, dynamic>),
           )
           .toSet();
-    } else {
-      throw Exception('Failed to load categories');
+    } on SocketException {
+      throw Exception('Sem conexão com a internet ao carregar categorias.');
     }
   }
 
@@ -98,24 +104,25 @@ class ExperienceRepository implements IExperienceRepository {
 
   @override
   Future<Set<Spot>> fetchAllSpots() async {
-    final categoriesSet = await fetchExperienceCategories();
-    categoriesSet.removeWhere((element) => element.name == 'Evento');
+    try {
+      final categoriesSet = await fetchExperienceCategories();
+      categoriesSet.removeWhere((element) => element.name == 'Evento');
 
-    final response = await http.get(apiUri.replace(path: 'spot'));
+      final response = await http.get(apiUri.replace(path: 'spot'));
+      if (response.statusCode != 200) {
+        throw Exception('Falha ao carregar spots (HTTP ${response.statusCode})');
+      }
 
-    if (response.statusCode == 200) {
       final List<dynamic> spotsJson =
           json.decode(response.body) as List<dynamic>;
-      final spots = spotsJson
+      return spotsJson
           .map(
             (json) =>
                 Spot.fromJson(json as Map<String, dynamic>, categoriesSet),
           )
           .toSet();
-
-      return spots;
-    } else {
-      throw Exception('Failed to load spots');
+    } on SocketException {
+      throw Exception('Sem conexão com a internet ao carregar experiências.');
     }
   }
 
@@ -143,19 +150,26 @@ class ExperienceRepository implements IExperienceRepository {
 
   @override
   Future<Set<Event>> fetchEvents() async {
-    final categoriesSet = await fetchExperienceCategories();
+    try {
+      final categoriesSet = await fetchExperienceCategories();
 
-    final response = await http.get(apiUri.replace(path: 'event'));
+      final response = await http.get(apiUri.replace(path: 'event'));
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Falha ao carregar eventos (HTTP ${response.statusCode})',
+        );
+      }
 
-    if (response.statusCode == 200) {
       final List<dynamic> eventsJson =
           json.decode(response.body) as List<dynamic>;
-      final events = eventsJson.map(
-        (json) => Event.fromJson(json as Map<String, dynamic>, categoriesSet),
-      );
-      return events.toSet();
-    } else {
-      throw Exception('Failed to load events');
+      return eventsJson
+          .map(
+            (json) =>
+                Event.fromJson(json as Map<String, dynamic>, categoriesSet),
+          )
+          .toSet();
+    } on SocketException {
+      throw Exception('Sem conexão com a internet ao carregar eventos.');
     }
   }
 
@@ -187,11 +201,29 @@ class ExperienceRepository implements IExperienceRepository {
   Future<String?> uploadImage(
     XFile file,
     Function(int) onProgress,
-  ) {
-    final upload = awsS3Service.uploadImageToS3(
-      file: file,
-      onProgress: onProgress,
+  ) async {
+    final bytes = await file.readAsBytes();
+    final formData = FormData.fromMap({
+      'file': MultipartFile.fromBytes(bytes, filename: file.name),
+    });
+
+    final response = await Dio().post(
+      apiUri.replace(path: 'upload').toString(),
+      data: formData,
+      onSendProgress: (sent, total) {
+        if (total > 0) {
+          onProgress(((sent / total) * 100).round());
+        }
+      },
     );
-    return upload;
+
+    final data = response.data;
+    if (data is Map && data['url'] != null) {
+      return data['url'].toString();
+    }
+    if (data is String && data.isNotEmpty) {
+      return data;
+    }
+    return null;
   }
 }

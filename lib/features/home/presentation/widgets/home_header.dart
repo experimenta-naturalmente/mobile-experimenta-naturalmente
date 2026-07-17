@@ -26,7 +26,7 @@ class HomeHeader extends StatelessWidget {
         tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
         leading: CircleAvatar(
           radius: 30.0,
-          child: Image.asset('assets/logo/logo_small.png'),
+          child: Image.asset('assets/logo/logo.png'),
         ),
         title: Text(
           'Turismo Rural',

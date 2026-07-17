@@ -4,6 +4,8 @@ import 'package:turismo_rural_frontend/config/navigation_cubit.dart';
 import 'package:turismo_rural_frontend/core/data/models/spot.dart';
 import 'package:turismo_rural_frontend/core/utils/enums.dart';
 import 'package:turismo_rural_frontend/features/auth/presentation/widgets/business_card.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_bloc.dart';
+import 'package:turismo_rural_frontend/features/signup/bloc/signup_event.dart';
 
 class ProfileBusiness extends StatelessWidget {
   final Set<Spot> spotsBusiness;
@@ -90,12 +92,16 @@ class ProfileBusiness extends StatelessWidget {
   }
 
   Widget _buildAddBusinessButton(BuildContext context) {
-    return ElevatedButton.icon(
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      ),
       onPressed: () {
+        context.read<SignUpBloc>().add(LoadSignUp());
         context.read<NavigationCubit>().navigateTo(appPage: AppPage.register);
       },
-      icon: const Icon(Icons.add),
-      label: const Text(
+      child: const Text(
         'Cadastrar Experiência',
       ),
     );

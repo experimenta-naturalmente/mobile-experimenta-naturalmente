@@ -13,6 +13,25 @@ class SignUpPageInitial extends StatelessWidget {
     final categories = context.read<SignUpBloc>().categoriesCache;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    if (categories.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Nao foi possivel carregar as categorias.',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Tente novamente em alguns instantes.',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      );
+    }
+
     registration.category = registration.category ?? categories.first;
 
     return Column(
